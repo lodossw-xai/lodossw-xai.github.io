@@ -75,6 +75,12 @@ function Navigation({
                 >
                   {data.navigation.nav.advisors}
                 </a>
+                <Link
+                  className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
+                  to="/board"
+                >
+                  게시판
+                </Link>
               </>
             ) : (
               <>
@@ -101,6 +107,12 @@ function Navigation({
                   to="/#advisors"
                 >
                   {data.navigation.nav.advisors}
+                </Link>
+                <Link
+                  className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
+                  to="/board"
+                >
+                  게시판
                 </Link>
               </>
             )}
@@ -199,6 +211,13 @@ function Navigation({
               >
                 {data.navigation.nav.advisors}
               </a>
+              <Link
+                className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
+                to="/board"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                게시판
+              </Link>
             </>
           ) : (
             <>
@@ -229,6 +248,13 @@ function Navigation({
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {data.navigation.nav.advisors}
+              </Link>
+              <Link
+                className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
+                to="/board"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                게시판
               </Link>
             </>
           )}
