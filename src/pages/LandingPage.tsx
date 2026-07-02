@@ -185,12 +185,12 @@ function LandingPage(): ReactElement {
             {/* Demo Card */}
             <div className="relative z-10 flex justify-center lg:justify-end h-full">
               <div className="relative w-full max-w-lg">
-                <div className="relative bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-2xl animate-float transition-transform duration-500 hover:scale-[1.02]">
-                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-ai-blue/20 to-ai-green/20 blur-lg opacity-50 dark:opacity-30"></div>
+                <div className="relative bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-slate-700/30 rounded-2xl p-6 shadow-2xl shadow-blue-500/10 animate-float transition-all duration-500 hover:scale-[1.02] hover:shadow-blue-500/20">
+                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-ai-blue/30 via-transparent to-ai-green/30 blur-xl opacity-40 dark:opacity-20"></div>
 
                   <div className="relative">
                     {/* Window Controls */}
-                    <div className="flex items-center gap-2 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
+                    <div className="flex items-center gap-2 mb-6 border-b border-gray-100/80 dark:border-slate-800 pb-4">
                       <div className="w-3 h-3 rounded-full bg-red-400"></div>
                       <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                       <div className="w-3 h-3 rounded-full bg-green-400"></div>
@@ -200,12 +200,12 @@ function LandingPage(): ReactElement {
                     <div className="space-y-6">
                       {/* User Message */}
                       <div className="flex gap-4">
-                        <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex-shrink-0 flex items-center justify-center">
+                        <div className="w-10 h-10 bg-gray-100 dark:bg-slate-800 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner">
                           <span className="material-symbols-outlined text-gray-500">
                             person
                           </span>
                         </div>
-                        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-2xl rounded-tl-none flex-1">
+                        <div className="bg-gray-100/90 dark:bg-slate-800/80 p-4 rounded-2xl rounded-tl-none flex-1 shadow-sm">
                           <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed">
                             2024년 개정된 조특법상 R&D 세액공제 적용 요건이
                             어떻게 되나요?
@@ -220,19 +220,19 @@ function LandingPage(): ReactElement {
                             smart_toy
                           </span>
                         </div>
-                        <div className="bg-blue-50/80 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 p-4 rounded-2xl rounded-tr-none flex-1">
+                        <div className="bg-gradient-to-br from-blue-50/90 to-blue-50/50 dark:from-blue-950/30 dark:to-blue-950/10 border border-blue-100/70 dark:border-blue-800/30 p-4 rounded-2xl rounded-tr-none flex-1 shadow-sm">
                           <div className="flex items-center gap-2 mb-2">
                             <div className="h-1.5 w-1.5 bg-ai-green rounded-full animate-pulse"></div>
                             <span className="text-xs font-bold text-ai-blue dark:text-blue-300 uppercase">
                               AI Analysis
                             </span>
                           </div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
+                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed mb-3 font-display">
                             조세특례제한법 제10조 개정안에 따라 신성장·원천기술
                             관련 비용 인정 범위가 확대되었습니다...
                           </p>
                           <div className="flex flex-wrap gap-2">
-                            <span className="text-xs bg-white dark:bg-black/50 px-2 py-1 rounded border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center gap-1">
+                            <span className="text-xs bg-white/80 dark:bg-slate-900/80 backdrop-blur-xs px-2 py-1 rounded border border-gray-200/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 flex items-center gap-1">
                               <span className="material-symbols-outlined text-[10px]">
                                 link
                               </span>{' '}
@@ -628,31 +628,31 @@ function LandingPage(): ReactElement {
         </div>
       </section>
 
-      {/* FAQ Section
-      <section className="py-24 bg-surface-light dark:bg-background-dark">
+      {/* FAQ Section */}
+      <section className="py-24 bg-surface-light dark:bg-background-dark/50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-display font-extrabold text-3xl text-center text-gray-900 dark:text-white mb-16 reveal-text">
             {data.faq.title.text}
-            <span className="text-ai-green">{data.faq.title.highlight}</span>
+            <span className="text-ai-blue ml-2">{data.faq.title.highlight}</span>
           </h2>
 
           <div className="space-y-4">
             {data.faq.items.map((item, index) => (
               <details
                 key={index}
-                className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm"
+                className="group bg-white dark:bg-surface-dark/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800/80 shadow-sm transition-all duration-300 hover:border-ai-blue/30"
               >
                 <summary className="flex justify-between items-center p-6 cursor-pointer list-none select-none">
-                  <span className="font-bold text-lg text-gray-900 dark:text-white">
+                  <span className="font-bold text-lg text-gray-800 dark:text-gray-200 group-open:text-ai-blue transition-colors duration-200">
                     {item.question}
                   </span>
-                  <span className="transition-transform duration-300 group-open:rotate-180 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
-                    <span className="material-symbols-outlined text-gray-500">
+                  <span className="transition-transform duration-300 group-open:rotate-180 bg-gray-50 dark:bg-slate-800 rounded-full p-1 border border-gray-200/50 dark:border-slate-700/50">
+                    <span className="material-symbols-outlined text-gray-500 group-open:text-ai-blue">
                       keyboard_arrow_down
                     </span>
                   </span>
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 dark:text-gray-400 leading-relaxed">
+                <div className="px-6 pb-6 text-gray-600 dark:text-gray-400 leading-relaxed border-t border-gray-50 dark:border-slate-800/50 pt-4">
                   {item.answer}
                 </div>
               </details>
@@ -660,7 +660,6 @@ function LandingPage(): ReactElement {
           </div>
         </div>
       </section>
-       */}
 
       {/* Partners Section - Rolling Banner */}
       <section className="py-12 bg-white dark:bg-black/40 border-y border-gray-100 dark:border-gray-800 overflow-hidden">
