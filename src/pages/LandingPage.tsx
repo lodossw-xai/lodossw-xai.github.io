@@ -10,9 +10,12 @@ import ContactSection from '../components/layout/ContactSection';
 import Footer from '../components/layout/Footer';
 import Navigation from '../components/layout/Navigation';
 import partnersData from '../data/partners.json';
+import historyData from '../data/history.json';
 import { useLocalizedData } from '../hooks/useLocalizedData';
+import useLanguageStore from '../store/languageStore';
 
 function LandingPage(): ReactElement {
+  const { language } = useLanguageStore();
   const data = useLocalizedData();
 
   // Initialize dark mode state from current DOM state
@@ -334,6 +337,53 @@ function LandingPage(): ReactElement {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* History Timeline Section */}
+      <section className="py-24 bg-white dark:bg-surface-dark/30 relative overflow-hidden" id="history">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <span className="text-ai-blue text-sm font-bold tracking-widest uppercase mb-4 block">
+              {language === 'ko' ? '연혁 및 로드맵' : 'HISTORY & ROADMAP'}
+            </span>
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-6">
+              {language === 'ko' ? 'XAI Korea가 걸어온 길' : 'Our Journey'}
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
+              {language === 'ko'
+                ? 'AI 기반 규제 기술(RegTech) 시장의 혁신을 이끄는 저희의 발자취와 미래 비전입니다.'
+                : 'Our footprints and future vision leading the innovation of AI-based RegTech.'}
+            </p>
+          </div>
+
+          {/* 세로 타임라인 라인 */}
+          <div className="relative wrap overflow-hidden p-4 md:p-10 h-full">
+            <div className="border-2-2 absolute border-opacity-20 border-ai-blue h-full border left-4 md:left-1/2"></div>
+            
+            {historyData.map((item, index) => {
+              const isLeft = index % 2 === 0;
+              return (
+                <div key={index} className={`mb-8 flex justify-between items-center w-full ${isLeft ? 'md:flex-row-reverse' : ''} flex-col md:flex-row relative`}>
+                  {/* 데스크톱 빈 공간 채우기 */}
+                  <div className="order-1 md:w-5/12 hidden md:block"></div>
+                  
+                  {/* 중앙 포인트 도트 */}
+                  <div className="z-20 flex items-center order-1 bg-ai-blue shadow-xl w-6 h-6 md:w-8 md:h-8 rounded-full border-4 border-white dark:border-slate-900 absolute left-1 md:relative md:left-auto">
+                  </div>
+                  
+                  {/* 마일스톤 카드 */}
+                  <div className="order-1 bg-slate-50 dark:bg-slate-900/40 border border-gray-100 dark:border-slate-800 rounded-2xl w-full md:w-5/12 ml-8 md:ml-0 px-6 py-6 shadow-sm hover:border-ai-blue/40 transition duration-300">
+                    <span className="text-ai-blue font-bold text-xs md:text-sm block mb-1">{item.date}</span>
+                    <h4 className="mb-2 font-bold text-base md:text-lg text-gray-900 dark:text-white">{item.title}</h4>
+                    <p className="text-xs md:text-sm leading-relaxed text-gray-600 dark:text-gray-400 keep-all">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

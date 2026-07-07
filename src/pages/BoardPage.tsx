@@ -4,8 +4,10 @@ import Toast from '../components/common/Toast';
 import Footer from '../components/layout/Footer';
 import Navigation from '../components/layout/Navigation';
 import { useBoardStore } from '../store/useBoardStore';
+import useLanguageStore from '../store/languageStore';
 
 function BoardPage(): ReactElement {
+  const { language } = useLanguageStore();
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     return document.documentElement.classList.contains('dark');
@@ -49,7 +51,7 @@ function BoardPage(): ReactElement {
   const handleWriteSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !author.trim() || !content.trim()) {
-      showToast('모든 빈칸을 채워주세요.');
+      showToast(language === 'ko' ? '모든 빈칸을 채워주세요.' : 'Please fill in all blanks.');
       return;
     }
     addPost(title, content, author, category);
@@ -58,14 +60,18 @@ function BoardPage(): ReactElement {
     setContent('');
     setCategory('notice');
     setViewMode('list');
-    showToast('글이 성공적으로 등록되었습니다.');
+    showToast(language === 'ko' ? '글이 성공적으로 등록되었습니다.' : 'Post successfully created.');
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm('정말 이 게시글을 삭제하시겠습니까?')) {
+    const confirmMessage = language === 'ko' 
+      ? '정말 이 게시글을 삭제하시겠습니까?' 
+      : 'Are you sure you want to delete this post?';
+      
+    if (window.confirm(confirmMessage)) {
       deletePost(id);
       setViewMode('list');
-      showToast('게시글이 삭제되었습니다.');
+      showToast(language === 'ko' ? '게시글이 삭제되었습니다.' : 'Post deleted.');
     }
   };
 
@@ -77,10 +83,12 @@ function BoardPage(): ReactElement {
         {/* Header Title */}
         <div className="mb-12 text-center">
           <h1 className="font-display font-extrabold text-4xl lg:text-5xl mb-4 text-transparent bg-clip-text bg-gradient-to-r from-ai-blue to-ai-green">
-            XAI Korea Board
+            {language === 'ko' ? 'XAI Korea 게시판' : 'XAI Korea Board'}
           </h1>
           <p className="text-gray-500 dark:text-gray-400">
-            세무·법률 AI의 최신 동향과 XAI Korea의 새로운 소식을 만나보세요.
+            {language === 'ko' 
+              ? '세무·법률 AI의 최신 동향과 XAI Korea의 새로운 소식을 만나보세요.' 
+              : 'Discover the latest trends in tax/legal AI and news from XAI Korea.'}
           </p>
         </div>
 
@@ -97,7 +105,7 @@ function BoardPage(): ReactElement {
                     : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
                 }`}
               >
-                전체보기
+                {language === 'ko' ? '전체보기' : 'Show All'}
               </button>
               <button
                 onClick={() => setActiveTab('notice')}
@@ -107,7 +115,7 @@ function BoardPage(): ReactElement {
                     : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
                 }`}
               >
-                공지사항
+                {language === 'ko' ? '공지사항' : 'Notices'}
               </button>
               <button
                 onClick={() => setActiveTab('qna')}
@@ -126,7 +134,7 @@ function BoardPage(): ReactElement {
               <div className="relative w-full sm:max-w-md">
                 <input
                   type="text"
-                  placeholder="검색어를 입력하세요..."
+                  placeholder={language === 'ko' ? '검색어를 입력하세요...' : 'Enter search terms...'}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-slate-50 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-800 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-hidden focus:ring-2 focus:ring-ai-blue/50 focus:border-ai-blue transition"
@@ -142,7 +150,7 @@ function BoardPage(): ReactElement {
                 className="w-full sm:w-auto bg-primary hover:bg-primary-hover text-white font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">edit</span>
-                글쓰기
+                {language === 'ko' ? '글쓰기' : 'Write'}
               </button>
             </div>
 
@@ -152,7 +160,9 @@ function BoardPage(): ReactElement {
                 <span className="material-symbols-outlined text-5xl text-gray-300 dark:text-gray-700 mb-4 block">
                   feed
                 </span>
-                <p className="text-gray-500 dark:text-gray-400">게시글이 존재하지 않습니다.</p>
+                <p className="text-gray-500 dark:text-gray-400">
+                  {language === 'ko' ? '게시글이 존재하지 않습니다.' : 'No posts found.'}
+                </p>
               </div>
             ) : (
               <div className="grid gap-6">
@@ -175,7 +185,7 @@ function BoardPage(): ReactElement {
                               : 'bg-purple-50 dark:bg-purple-950/40 text-purple-500'
                           }`}
                         >
-                          {post.category === 'notice' ? '공지사항' : 'Q&A'}
+                          {post.category === 'notice' ? (language === 'ko' ? '공지사항' : 'Notice') : 'Q&A'}
                         </span>
                         <h3 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-ai-blue transition-colors">
                           {post.title}
@@ -211,7 +221,7 @@ function BoardPage(): ReactElement {
                       : 'bg-purple-50 dark:bg-purple-950/40 text-purple-500'
                   }`}
                 >
-                  {selectedPost.category === 'notice' ? '공지사항' : 'Q&A'}
+                  {selectedPost.category === 'notice' ? (language === 'ko' ? '공지사항' : 'Notice') : 'Q&A'}
                 </span>
                 <h2 className="font-bold text-2xl lg:text-3xl text-gray-900 dark:text-white">
                   {selectedPost.title}
@@ -237,14 +247,14 @@ function BoardPage(): ReactElement {
                 className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition cursor-pointer"
               >
                 <span className="material-symbols-outlined">arrow_back</span>
-                목록으로
+                {language === 'ko' ? '목록으로' : 'Back to List'}
               </button>
               <button
                 onClick={() => handleDelete(selectedPost.id)}
                 className="flex items-center gap-2 text-red-500 hover:text-red-600 font-medium transition cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[18px]">delete</span>
-                삭제하기
+                {language === 'ko' ? '삭제하기' : 'Delete'}
               </button>
             </div>
           </div>
@@ -253,12 +263,14 @@ function BoardPage(): ReactElement {
         {/* 3. WRITE VIEW */}
         {viewMode === 'write' && (
           <div className="bg-white dark:bg-slate-900/40 border border-gray-100 dark:border-slate-800/80 rounded-2xl p-8 shadow-sm max-w-2xl mx-auto">
-            <h2 className="font-bold text-2xl text-gray-900 dark:text-white mb-6">게시글 작성</h2>
+            <h2 className="font-bold text-2xl text-gray-900 dark:text-white mb-6">
+              {language === 'ko' ? '게시글 작성' : 'Create Post'}
+            </h2>
             <form onSubmit={handleWriteSubmit} className="space-y-6">
               {/* Category Selection */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                  카테고리
+                  {language === 'ko' ? '카테고리' : 'Category'}
                 </label>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-slate-900/40 px-4 py-3 border border-gray-200 dark:border-slate-800 rounded-xl text-sm font-medium flex-1 justify-center transition hover:border-ai-blue/40">
@@ -269,7 +281,7 @@ function BoardPage(): ReactElement {
                       onChange={() => setCategory('notice')}
                       className="text-ai-blue focus:ring-ai-blue"
                     />
-                    <span>공지사항</span>
+                    <span>{language === 'ko' ? '공지사항' : 'Notice'}</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-slate-900/40 px-4 py-3 border border-gray-200 dark:border-slate-800 rounded-xl text-sm font-medium flex-1 justify-center transition hover:border-ai-blue/40">
                     <input
@@ -286,39 +298,39 @@ function BoardPage(): ReactElement {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  제목
+                  {language === 'ko' ? '제목' : 'Title'}
                 </label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="제목을 입력하세요"
+                  placeholder={language === 'ko' ? '제목을 입력하세요' : 'Enter title'}
                   className="w-full bg-slate-50 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-800 rounded-xl py-3 px-4 text-sm focus:outline-hidden focus:ring-2 focus:ring-ai-blue/50 focus:border-ai-blue transition"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  작성자
+                  {language === 'ko' ? '작성자' : 'Author'}
                 </label>
                 <input
                   type="text"
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
-                  placeholder="이름을 입력하세요"
+                  placeholder={language === 'ko' ? '이름을 입력하세요' : 'Enter author name'}
                   className="w-full bg-slate-50 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-800 rounded-xl py-3 px-4 text-sm focus:outline-hidden focus:ring-2 focus:ring-ai-blue/50 focus:border-ai-blue transition"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  내용
+                  {language === 'ko' ? '내용' : 'Content'}
                 </label>
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   rows={8}
-                  placeholder="내용을 입력하세요"
+                  placeholder={language === 'ko' ? '내용을 입력하세요' : 'Enter content'}
                   className="w-full bg-slate-50 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-800 rounded-xl py-3 px-4 text-sm focus:outline-hidden focus:ring-2 focus:ring-ai-blue/50 focus:border-ai-blue transition resize-none"
                 />
               </div>
@@ -329,13 +341,13 @@ function BoardPage(): ReactElement {
                   onClick={() => setViewMode('list')}
                   className="py-3 px-6 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-xl text-sm font-semibold transition cursor-pointer"
                 >
-                  취소
+                  {language === 'ko' ? '취소' : 'Cancel'}
                 </button>
                 <button
                   type="submit"
                   className="py-3 px-8 bg-primary hover:bg-primary-hover text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-blue-500/20 cursor-pointer"
                 >
-                  등록
+                  {language === 'ko' ? '등록' : 'Submit'}
                 </button>
               </div>
             </form>
