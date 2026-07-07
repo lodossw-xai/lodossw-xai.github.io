@@ -5,8 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#FFD700',
-        'primary-hover': '#E6C200',
+        primary: '#3B82F6', // 세련된 인텔리전트 블루 (신뢰성 강화)
+        'primary-hover': '#2563EB', // 호버 시 어두운 블루
         'background-light': '#FFFFFF',
         'background-dark': '#0F172A',
         'surface-light': '#F8FAFC',
