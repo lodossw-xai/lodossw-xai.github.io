@@ -34,12 +34,12 @@ function Navigation({
             className="shrink-0 flex items-center gap-2 cursor-pointer"
           >
             <img
-              src="/assets/images/logo/logo-light.png"
+              src={`${import.meta.env.BASE_URL}assets/images/logo/logo-light.png`}
               alt="XAI Korea Logo"
               className="h-12 w-auto dark:hidden"
             />
             <img
-              src="/assets/images/logo/logo-dark.png"
+              src={`${import.meta.env.BASE_URL}assets/images/logo/logo-dark.png`}
               alt="XAI Korea Logo"
               className="h-12 w-auto hidden dark:block"
             />

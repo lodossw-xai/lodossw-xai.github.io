@@ -398,7 +398,7 @@ function LandingPage(): ReactElement {
                 <img
                   alt="Accountant analyzing data"
                   className="w-full rounded-2xl grayscale hover:grayscale-0 transition duration-500"
-                  src="/assets/images/main/processing_01.png"
+                  src={`${import.meta.env.BASE_URL}assets/images/main/processing_01.png`}
                 />
               </div>
             </div>
@@ -521,7 +521,7 @@ function LandingPage(): ReactElement {
                 <img
                   alt="Data processing"
                   className="absolute -bottom-10 -left-10 w-40 h-40 object-cover rounded-full border-4 border-white dark:border-gray-800 shadow-lg"
-                  src="/assets/images/main/processing.png"
+                  src={`${import.meta.env.BASE_URL}assets/images/main/processing.png`}
                 />
               </div>
             </div>
@@ -558,7 +558,7 @@ function LandingPage(): ReactElement {
                   <img
                     alt={member.name}
                     className="w-32 h-32 rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-500 border-4 border-gray-100 dark:border-gray-700"
-                    src={member.image}
+                    src={`${import.meta.env.BASE_URL}${member.image.replace(/^\//, '')}`}
                   />
                 </div>
                 <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-1">
@@ -618,7 +618,7 @@ function LandingPage(): ReactElement {
                       <img
                         alt={advisor.name}
                         className="w-20 h-20 rounded-full object-cover ring-3 ring-gray-100 dark:ring-gray-700 group-hover:ring-primary mb-4 transition-all duration-300"
-                        src={advisor.image}
+                        src={`${import.meta.env.BASE_URL}${advisor.image.replace(/^\//, '')}`}
                       />
                       <h4 className="font-bold text-gray-900 dark:text-white text-base mb-1">
                         {advisor.name}
@@ -746,7 +746,7 @@ function LandingPage(): ReactElement {
                         {partner.mark ? (
                           <>
                             <img
-                              src={partner.mark}
+                              src={`${import.meta.env.BASE_URL}${partner.mark ? partner.mark.replace(/^\//, '') : ''}`}
                               alt={partner.name}
                               className="h-10 w-auto object-contain"
                             />
@@ -756,7 +756,7 @@ function LandingPage(): ReactElement {
                           </>
                         ) : (
                           <img
-                            src={partner.image}
+                            src={`${import.meta.env.BASE_URL}${partner.image ? partner.image.replace(/^\//, '') : ''}`}
                             alt={partner.name}
                             className="h-16 w-auto object-contain"
                           />
