@@ -34,12 +34,12 @@ function Navigation({
             className="shrink-0 flex items-center gap-2 cursor-pointer"
           >
             <img
-              src="/assets/images/logo/logo-light.png"
+              src={`${import.meta.env.BASE_URL}assets/images/logo/logo-light.png`}
               alt="XAI Korea Logo"
               className="h-12 w-auto dark:hidden"
             />
             <img
-              src="/assets/images/logo/logo-dark.png"
+              src={`${import.meta.env.BASE_URL}assets/images/logo/logo-dark.png`}
               alt="XAI Korea Logo"
               className="h-12 w-auto hidden dark:block"
             />
@@ -65,6 +65,12 @@ function Navigation({
                 </a>
                 <a
                   className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
+                  href="#history"
+                >
+                  {language === 'ko' ? '연혁' : 'History'}
+                </a>
+                <a
+                  className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
                   href="#team"
                 >
                   {data.navigation.nav.team}
@@ -75,6 +81,18 @@ function Navigation({
                 >
                   {data.navigation.nav.advisors}
                 </a>
+                <Link
+                  className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
+                  to="/board"
+                >
+                  {language === 'ko' ? '게시판' : 'Board'}
+                </Link>
+                <Link
+                  className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
+                  to="/news"
+                >
+                  {language === 'ko' ? '뉴스' : 'News'}
+                </Link>
               </>
             ) : (
               <>
@@ -92,6 +110,12 @@ function Navigation({
                 </Link>
                 <Link
                   className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
+                  to="/#history"
+                >
+                  {language === 'ko' ? '연혁' : 'History'}
+                </Link>
+                <Link
+                  className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
                   to="/#team"
                 >
                   {data.navigation.nav.team}
@@ -101,6 +125,18 @@ function Navigation({
                   to="/#advisors"
                 >
                   {data.navigation.nav.advisors}
+                </Link>
+                <Link
+                  className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
+                  to="/board"
+                >
+                  {language === 'ko' ? '게시판' : 'Board'}
+                </Link>
+                <Link
+                  className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition"
+                  to="/news"
+                >
+                  {language === 'ko' ? '뉴스' : 'News'}
                 </Link>
               </>
             )}
@@ -187,6 +223,13 @@ function Navigation({
               </a>
               <a
                 className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
+                href="#history"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {language === 'ko' ? '연혁' : 'History'}
+              </a>
+              <a
+                className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
                 href="#team"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -199,6 +242,20 @@ function Navigation({
               >
                 {data.navigation.nav.advisors}
               </a>
+              <Link
+                className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
+                to="/board"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {language === 'ko' ? '게시판' : 'Board'}
+              </Link>
+              <Link
+                className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
+                to="/news"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {language === 'ko' ? '뉴스' : 'News'}
+              </Link>
             </>
           ) : (
             <>
@@ -218,6 +275,13 @@ function Navigation({
               </Link>
               <Link
                 className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
+                to="/#history"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {language === 'ko' ? '연혁' : 'History'}
+              </Link>
+              <Link
+                className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
                 to="/#team"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -229,6 +293,20 @@ function Navigation({
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {data.navigation.nav.advisors}
+              </Link>
+              <Link
+                className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
+                to="/board"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {language === 'ko' ? '게시판' : 'Board'}
+              </Link>
+              <Link
+                className="block text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-primary font-medium transition py-2"
+                to="/news"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {language === 'ko' ? '뉴스' : 'News'}
               </Link>
             </>
           )}

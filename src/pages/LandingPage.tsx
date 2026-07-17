@@ -10,9 +10,12 @@ import ContactSection from '../components/layout/ContactSection';
 import Footer from '../components/layout/Footer';
 import Navigation from '../components/layout/Navigation';
 import partnersData from '../data/partners.json';
+import historyData from '../data/history.json';
 import { useLocalizedData } from '../hooks/useLocalizedData';
+import useLanguageStore from '../store/languageStore';
 
 function LandingPage(): ReactElement {
+  const { language } = useLanguageStore();
   const data = useLocalizedData();
 
   // Initialize dark mode state from current DOM state
@@ -185,12 +188,12 @@ function LandingPage(): ReactElement {
             {/* Demo Card */}
             <div className="relative z-10 flex justify-center lg:justify-end h-full">
               <div className="relative w-full max-w-lg">
-                <div className="relative bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-2xl animate-float transition-transform duration-500 hover:scale-[1.02]">
-                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-ai-blue/20 to-ai-green/20 blur-lg opacity-50 dark:opacity-30"></div>
+                <div className="relative bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-slate-700/30 rounded-2xl p-6 shadow-2xl shadow-blue-500/10 animate-float transition-all duration-500 hover:scale-[1.02] hover:shadow-blue-500/20">
+                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-ai-blue/30 via-transparent to-ai-green/30 blur-xl opacity-40 dark:opacity-20"></div>
 
                   <div className="relative">
                     {/* Window Controls */}
-                    <div className="flex items-center gap-2 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
+                    <div className="flex items-center gap-2 mb-6 border-b border-gray-100/80 dark:border-slate-800 pb-4">
                       <div className="w-3 h-3 rounded-full bg-red-400"></div>
                       <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                       <div className="w-3 h-3 rounded-full bg-green-400"></div>
@@ -200,12 +203,12 @@ function LandingPage(): ReactElement {
                     <div className="space-y-6">
                       {/* User Message */}
                       <div className="flex gap-4">
-                        <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex-shrink-0 flex items-center justify-center">
+                        <div className="w-10 h-10 bg-gray-100 dark:bg-slate-800 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner">
                           <span className="material-symbols-outlined text-gray-500">
                             person
                           </span>
                         </div>
-                        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-2xl rounded-tl-none flex-1">
+                        <div className="bg-gray-100/90 dark:bg-slate-800/80 p-4 rounded-2xl rounded-tl-none flex-1 shadow-sm">
                           <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed">
                             2024년 개정된 조특법상 R&D 세액공제 적용 요건이
                             어떻게 되나요?
@@ -220,19 +223,19 @@ function LandingPage(): ReactElement {
                             smart_toy
                           </span>
                         </div>
-                        <div className="bg-blue-50/80 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 p-4 rounded-2xl rounded-tr-none flex-1">
+                        <div className="bg-gradient-to-br from-blue-50/90 to-blue-50/50 dark:from-blue-950/30 dark:to-blue-950/10 border border-blue-100/70 dark:border-blue-800/30 p-4 rounded-2xl rounded-tr-none flex-1 shadow-sm">
                           <div className="flex items-center gap-2 mb-2">
                             <div className="h-1.5 w-1.5 bg-ai-green rounded-full animate-pulse"></div>
                             <span className="text-xs font-bold text-ai-blue dark:text-blue-300 uppercase">
                               AI Analysis
                             </span>
                           </div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
+                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed mb-3 font-display">
                             조세특례제한법 제10조 개정안에 따라 신성장·원천기술
                             관련 비용 인정 범위가 확대되었습니다...
                           </p>
                           <div className="flex flex-wrap gap-2">
-                            <span className="text-xs bg-white dark:bg-black/50 px-2 py-1 rounded border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center gap-1">
+                            <span className="text-xs bg-white/80 dark:bg-slate-900/80 backdrop-blur-xs px-2 py-1 rounded border border-gray-200/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 flex items-center gap-1">
                               <span className="material-symbols-outlined text-[10px]">
                                 link
                               </span>{' '}
@@ -338,6 +341,53 @@ function LandingPage(): ReactElement {
         </div>
       </section>
 
+      {/* History Timeline Section */}
+      <section className="py-24 bg-white dark:bg-surface-dark/30 relative overflow-hidden" id="history">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <span className="text-ai-blue text-sm font-bold tracking-widest uppercase mb-4 block">
+              {language === 'ko' ? '연혁 및 로드맵' : 'HISTORY & ROADMAP'}
+            </span>
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-6">
+              {language === 'ko' ? 'XAI Korea가 걸어온 길' : 'Our Journey'}
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
+              {language === 'ko'
+                ? 'AI 기반 규제 기술(RegTech) 시장의 혁신을 이끄는 저희의 발자취와 미래 비전입니다.'
+                : 'Our footprints and future vision leading the innovation of AI-based RegTech.'}
+            </p>
+          </div>
+
+          {/* 세로 타임라인 라인 */}
+          <div className="relative wrap overflow-hidden p-4 md:p-10 h-full">
+            <div className="border-2-2 absolute border-opacity-20 border-ai-blue h-full border left-4 md:left-1/2"></div>
+            
+            {historyData.map((item, index) => {
+              const isLeft = index % 2 === 0;
+              return (
+                <div key={index} className={`mb-8 flex justify-between items-center w-full ${isLeft ? 'md:flex-row-reverse' : ''} flex-col md:flex-row relative`}>
+                  {/* 데스크톱 빈 공간 채우기 */}
+                  <div className="order-1 md:w-5/12 hidden md:block"></div>
+                  
+                  {/* 중앙 포인트 도트 */}
+                  <div className="z-20 flex items-center order-1 bg-ai-blue shadow-xl w-6 h-6 md:w-8 md:h-8 rounded-full border-4 border-white dark:border-slate-900 absolute left-1 md:relative md:left-auto">
+                  </div>
+                  
+                  {/* 마일스톤 카드 */}
+                  <div className="order-1 bg-slate-50 dark:bg-slate-900/40 border border-gray-100 dark:border-slate-800 rounded-2xl w-full md:w-5/12 ml-8 md:ml-0 px-6 py-6 shadow-sm hover:border-ai-blue/40 transition duration-300">
+                    <span className="text-ai-blue font-bold text-xs md:text-sm block mb-1">{item.date}</span>
+                    <h4 className="mb-2 font-bold text-base md:text-lg text-gray-900 dark:text-white">{item.title}</h4>
+                    <p className="text-xs md:text-sm leading-relaxed text-gray-600 dark:text-gray-400 keep-all">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Process Steps & Accuracy Section */}
       <section className="py-24 bg-white dark:bg-surface-dark/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -348,7 +398,7 @@ function LandingPage(): ReactElement {
                 <img
                   alt="Accountant analyzing data"
                   className="w-full rounded-2xl grayscale hover:grayscale-0 transition duration-500"
-                  src="/assets/images/main/processing_01.png"
+                  src={`${import.meta.env.BASE_URL}assets/images/main/processing_01.png`}
                 />
               </div>
             </div>
@@ -471,7 +521,7 @@ function LandingPage(): ReactElement {
                 <img
                   alt="Data processing"
                   className="absolute -bottom-10 -left-10 w-40 h-40 object-cover rounded-full border-4 border-white dark:border-gray-800 shadow-lg"
-                  src="/assets/images/main/processing.png"
+                  src={`${import.meta.env.BASE_URL}assets/images/main/processing.png`}
                 />
               </div>
             </div>
@@ -508,7 +558,7 @@ function LandingPage(): ReactElement {
                   <img
                     alt={member.name}
                     className="w-32 h-32 rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-500 border-4 border-gray-100 dark:border-gray-700"
-                    src={member.image}
+                    src={`${import.meta.env.BASE_URL}${member.image.replace(/^\//, '')}`}
                   />
                 </div>
                 <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-1">
@@ -568,7 +618,7 @@ function LandingPage(): ReactElement {
                       <img
                         alt={advisor.name}
                         className="w-20 h-20 rounded-full object-cover ring-3 ring-gray-100 dark:ring-gray-700 group-hover:ring-primary mb-4 transition-all duration-300"
-                        src={advisor.image}
+                        src={`${import.meta.env.BASE_URL}${advisor.image.replace(/^\//, '')}`}
                       />
                       <h4 className="font-bold text-gray-900 dark:text-white text-base mb-1">
                         {advisor.name}
@@ -628,31 +678,31 @@ function LandingPage(): ReactElement {
         </div>
       </section>
 
-      {/* FAQ Section
-      <section className="py-24 bg-surface-light dark:bg-background-dark">
+      {/* FAQ Section */}
+      <section className="py-24 bg-surface-light dark:bg-background-dark/50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-display font-extrabold text-3xl text-center text-gray-900 dark:text-white mb-16 reveal-text">
             {data.faq.title.text}
-            <span className="text-ai-green">{data.faq.title.highlight}</span>
+            <span className="text-ai-blue ml-2">{data.faq.title.highlight}</span>
           </h2>
 
           <div className="space-y-4">
             {data.faq.items.map((item, index) => (
               <details
                 key={index}
-                className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm"
+                className="group bg-white dark:bg-surface-dark/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800/80 shadow-sm transition-all duration-300 hover:border-ai-blue/30"
               >
                 <summary className="flex justify-between items-center p-6 cursor-pointer list-none select-none">
-                  <span className="font-bold text-lg text-gray-900 dark:text-white">
+                  <span className="font-bold text-lg text-gray-800 dark:text-gray-200 group-open:text-ai-blue transition-colors duration-200">
                     {item.question}
                   </span>
-                  <span className="transition-transform duration-300 group-open:rotate-180 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
-                    <span className="material-symbols-outlined text-gray-500">
+                  <span className="transition-transform duration-300 group-open:rotate-180 bg-gray-50 dark:bg-slate-800 rounded-full p-1 border border-gray-200/50 dark:border-slate-700/50">
+                    <span className="material-symbols-outlined text-gray-500 group-open:text-ai-blue">
                       keyboard_arrow_down
                     </span>
                   </span>
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 dark:text-gray-400 leading-relaxed">
+                <div className="px-6 pb-6 text-gray-600 dark:text-gray-400 leading-relaxed border-t border-gray-50 dark:border-slate-800/50 pt-4">
                   {item.answer}
                 </div>
               </details>
@@ -660,7 +710,6 @@ function LandingPage(): ReactElement {
           </div>
         </div>
       </section>
-       */}
 
       {/* Partners Section - Rolling Banner */}
       <section className="py-12 bg-white dark:bg-black/40 border-y border-gray-100 dark:border-gray-800 overflow-hidden">
@@ -697,7 +746,7 @@ function LandingPage(): ReactElement {
                         {partner.mark ? (
                           <>
                             <img
-                              src={partner.mark}
+                              src={`${import.meta.env.BASE_URL}${partner.mark ? partner.mark.replace(/^\//, '') : ''}`}
                               alt={partner.name}
                               className="h-10 w-auto object-contain"
                             />
@@ -707,7 +756,7 @@ function LandingPage(): ReactElement {
                           </>
                         ) : (
                           <img
-                            src={partner.image}
+                            src={`${import.meta.env.BASE_URL}${partner.image ? partner.image.replace(/^\//, '') : ''}`}
                             alt={partner.name}
                             className="h-16 w-auto object-contain"
                           />

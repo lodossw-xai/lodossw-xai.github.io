@@ -44,7 +44,7 @@ const transformTemplates = (mode: string) => ({
 export default defineConfig(({ mode }) => {
   return {
     // GitHub Pages 배포 시 경로 설정
-    base: '/',
+    base: '/lodossw-xai.github.io/',
     plugins: [react(), transformTemplates(mode)],
     resolve: {
       alias: {
