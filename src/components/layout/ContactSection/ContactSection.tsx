@@ -91,7 +91,7 @@ function ContactSection(): ReactElement {
                   ></iframe>
                   {/* Map overlay button */}
                   <a
-                    href="https://maps.google.com/?q=경기도+성남시+분당구+판교로+289번길+20"
+                    href="https://maps.google.com/?q=경기도+성남시+금토로80번길+40+B동+배민스퀘어+301호"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-black transition z-10"

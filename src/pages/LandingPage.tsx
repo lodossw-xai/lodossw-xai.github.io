@@ -1,741 +1,691 @@
-/**
- * Landing Page - XAI Korea One Page Template
- * Constitution I: Functional Component
- * Based on html/code.html design
- */
-import type { ReactElement } from 'react';
-import { useEffect, useState } from 'react';
-import Toast from '../components/common/Toast';
-import ContactSection from '../components/layout/ContactSection';
-import Footer from '../components/layout/Footer';
-import Navigation from '../components/layout/Navigation';
-import partnersData from '../data/partners.json';
-import { useLocalizedData } from '../hooks/useLocalizedData';
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactElement } from 'react'
+import { Link } from 'react-router-dom'
+import '../styles/redesign.css'
 
-function LandingPage(): ReactElement {
-  const data = useLocalizedData();
+type Language = 'ko' | 'en'
+type SubmissionState = 'idle' | 'sending' | 'sent' | 'error'
+type SectionId = 'top' | 'solutions' | 'work' | 'process' | 'experts' | 'contact' | 'location'
 
-  // Initialize dark mode state from current DOM state
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    // Check if we're in browser environment
-    if (typeof window === 'undefined') return false;
-    return document.documentElement.classList.contains('dark');
-  });
-
-  // State for toast notification
-  const [toast, setToast] = useState<{ isOpen: boolean; message: string }>({
-    isOpen: false,
-    message: '',
-  });
-
-  const showNotification = (message: string) => {
-    setToast({ isOpen: true, message });
-  };
-
-  // Sync with system preference changes
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e: MediaQueryListEvent): void => {
-      // Only auto-switch if no user preference is stored
-      if (localStorage.getItem('darkMode') === null) {
-        setIsDarkMode(e.matches);
-        document.documentElement.classList.toggle('dark', e.matches);
-      }
-    };
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  // Dark mode toggle handler
-  const handleDarkModeToggle = (): void => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    document.documentElement.classList.toggle('dark', newDarkMode);
-    localStorage.setItem('darkMode', String(newDarkMode));
-  };
-
-  return (
-    <div className="min-h-screen">
-      {/* Navigation */}
-      <Navigation
-        isDarkMode={isDarkMode}
-        onToggleDarkMode={handleDarkModeToggle}
-      />
-
-      {/* Hero Section */}
-      <section
-        className="min-h-screen relative flex items-center pt-28 pb-32 md:pt-20 md:pb-0 overflow-hidden bg-white dark:bg-[#0B1120] group"
-        id="home"
-      >
-        {/* Animated Background */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-tech-grid dark:bg-tech-grid-dark bg-[length:50px_50px] animate-flow-grid opacity-40"></div>
-          <div className="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] bg-ai-blue/10 rounded-full blur-[100px] animate-pulse-slow"></div>
-          <div
-            className="absolute -bottom-[20%] -left-[10%] w-[800px] h-[800px] bg-ai-green/10 rounded-full blur-[100px] animate-pulse-slow"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          {/* Particles */}
-          <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-ai-blue rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)] animate-particle-drift group-hover:duration-[8s]"></div>
-          <div className="absolute top-1/3 left-1/3 w-1 h-1 bg-ai-green rounded-full shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-particle-drift-delayed group-hover:duration-[8s]"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-2 h-2 bg-ai-blue rounded-full shadow-[0_0_12px_rgba(59,130,246,0.8)] animate-particle-drift"
-            style={{ animationDelay: '1s' }}
-          ></div>
-          <div
-            className="absolute bottom-1/3 right-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)] animate-particle-drift"
-            style={{ animationDelay: '4s' }}
-          ></div>
-        </div>
-
-        {/* Interactive Grid - Desktop only */}
-        <div className="absolute inset-0 grid grid-cols-6 md:grid-cols-12 grid-rows-6 z-0 pointer-events-auto opacity-0 md:opacity-100">
-          {Array.from({ length: 72 }).map((_, i) => (
-            <div
-              key={i}
-              className={`hover-grid-cell ${i >= 36 ? 'hidden md:block' : ''}`}
-            ></div>
-          ))}
-        </div>
-
-        {/* Hero Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative w-full z-10 pointer-events-none">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center pointer-events-auto">
-            <div className="mb-12 lg:mb-0">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ai-blue/10 border border-ai-blue/30 backdrop-blur-sm text-ai-blue dark:text-blue-300 text-sm font-semibold mb-6">
-                <span className="material-symbols-outlined text-sm animate-pulse">
-                  hub
-                </span>
-                <span>{data.hero.badge}</span>
-              </div>
-
-              <h1 className="font-display font-extrabold text-5xl lg:text-7xl text-gray-900 dark:text-white leading-tight mb-8">
-                {data.hero.title.line1}
-                <br />
-                <span className="relative inline-block">
-                  <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-ai-blue to-ai-green">
-                    {data.hero.title.line2}
-                  </span>
-                </span>
-              </h1>
-
-              <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-lg leading-relaxed keep-all">
-                {data.hero.description}
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a
-                  className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-black font-bold text-lg py-4 px-8 rounded-lg transition shadow-xl shadow-yellow-500/20 group"
-                  href="#contact"
-                >
-                  {data.hero.cta.primary}
-                  <span className="material-symbols-outlined group-hover:translate-x-1 transition">
-                    arrow_forward
-                  </span>
-                </a>
-                <a
-                  className="flex items-center justify-center gap-2 bg-white/50 dark:bg-surface-dark/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-ai-blue dark:hover:border-ai-blue text-gray-900 dark:text-white font-semibold text-lg py-4 px-8 rounded-lg transition cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    showNotification(
-                      data.language === 'ko' ? '준비중입니다.' : 'Coming soon.'
-                    );
-                  }}
-                  href="#"
-                >
-                  <span className="material-symbols-outlined">play_circle</span>
-                  {data.hero.cta.secondary}
-                </a>
-              </div>
-
-              {/* GitHub & Hugging Face Links - Terminal Style */}
-              <div className="flex flex-wrap items-center gap-6 mt-6 font-mono text-sm">
-                <a
-                  href="https://github.com/xaikorea"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition group"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                  </svg>
-                  <span className="group-hover:underline">xaikorea</span>
-                </a>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <a
-                  href="https://huggingface.co/datasets/xaikorea0/taxia-korean-tax-laws"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition group"
-                >
-                  <span className="grayscale group-hover:grayscale-0 transition">
-                    🤗
-                  </span>
-                  <span className="group-hover:underline">
-                    taxia-korean-tax-laws
-                  </span>
-                </a>
-              </div>
-            </div>
-
-            {/* Demo Card */}
-            <div className="relative z-10 flex justify-center lg:justify-end h-full">
-              <div className="relative w-full max-w-lg">
-                <div className="relative bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-2xl animate-float transition-transform duration-500 hover:scale-[1.02]">
-                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-ai-blue/20 to-ai-green/20 blur-lg opacity-50 dark:opacity-30"></div>
-
-                  <div className="relative">
-                    {/* Window Controls */}
-                    <div className="flex items-center gap-2 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
-                      <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                    </div>
-
-                    {/* Chat Messages */}
-                    <div className="space-y-6">
-                      {/* User Message */}
-                      <div className="flex gap-4">
-                        <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex-shrink-0 flex items-center justify-center">
-                          <span className="material-symbols-outlined text-gray-500">
-                            person
-                          </span>
-                        </div>
-                        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-2xl rounded-tl-none flex-1">
-                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed">
-                            2024년 개정된 조특법상 R&D 세액공제 적용 요건이
-                            어떻게 되나요?
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* AI Response */}
-                      <div className="flex gap-4 flex-row-reverse">
-                        <div className="w-10 h-10 bg-gradient-to-br from-ai-blue to-ai-green rounded-full flex-shrink-0 flex items-center justify-center shadow-lg shadow-blue-500/30">
-                          <span className="material-symbols-outlined text-white">
-                            smart_toy
-                          </span>
-                        </div>
-                        <div className="bg-blue-50/80 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 p-4 rounded-2xl rounded-tr-none flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="h-1.5 w-1.5 bg-ai-green rounded-full animate-pulse"></div>
-                            <span className="text-xs font-bold text-ai-blue dark:text-blue-300 uppercase">
-                              AI Analysis
-                            </span>
-                          </div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
-                            조세특례제한법 제10조 개정안에 따라 신성장·원천기술
-                            관련 비용 인정 범위가 확대되었습니다...
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            <span className="text-xs bg-white dark:bg-black/50 px-2 py-1 rounded border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center gap-1">
-                              <span className="material-symbols-outlined text-[10px]">
-                                link
-                              </span>{' '}
-                              국세청 고시
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Accuracy Badge */}
-                <div className="absolute -right-6 top-1/2 bg-white/95 dark:bg-slate-800/95 backdrop-blur border border-gray-200 dark:border-gray-600 p-3 rounded-xl shadow-xl animate-float-delayed flex items-center gap-3 z-20">
-                  <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-lg">
-                    <span className="material-symbols-outlined text-green-600 dark:text-green-400">
-                      verified
-                    </span>
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      정확도 (Accuracy)
-                    </div>
-                    <div className="text-lg font-bold text-gray-900 dark:text-white">
-                      99.9%
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Down Indicator */}
-        <a
-          href="#services"
-          className="absolute bottom-1 md:bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce opacity-50 hover:opacity-100 transition-opacity z-20 cursor-pointer"
-        >
-          <span className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-            SCROLL DOWN
-          </span>
-          <span className="material-symbols-outlined text-gray-400 dark:text-gray-600">
-            keyboard_arrow_down
-          </span>
-        </a>
-      </section>
-
-      {/* Services Section */}
-      <section
-        className="py-24 bg-surface-light dark:bg-background-dark"
-        id="services"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-6 leading-snug reveal-text">
-              <span className="text-ai-blue">
-                {data.services.title.highlight}
-              </span>
-              <span
-                dangerouslySetInnerHTML={{ __html: data.services.title.main }}
-              />
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 text-lg keep-all">
-              {data.services.description}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {data.services.cards.map((card, index) => (
-              <div
-                key={index}
-                className={`interactive-card p-8 rounded-2xl transition group h-full ${
-                  card.isPopular
-                    ? 'bg-gradient-to-br from-white to-gray-50 dark:from-surface-dark dark:to-black border-2 border-primary shadow-xl relative overflow-hidden'
-                    : 'bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-700 hover:border-primary dark:hover:border-primary'
-                }`}
-              >
-                {card.isPopular && card.badge && (
-                  <div className="absolute top-0 right-0 bg-primary text-xs font-bold px-3 py-1 rounded-bl-lg text-black">
-                    {card.badge}
-                  </div>
-                )}
-                <div
-                  className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${
-                    card.isPopular
-                      ? 'bg-black dark:bg-gray-800'
-                      : 'bg-primary/20 dark:bg-primary/10'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-primary text-3xl">
-                    {card.icon}
-                  </span>
-                </div>
-                <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-3">
-                  {card.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed keep-all">
-                  {card.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process Steps & Accuracy Section */}
-      <section className="py-24 bg-white dark:bg-surface-dark/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Process Steps */}
-          <div className="flex flex-col lg:flex-row items-center gap-16 mb-32">
-            <div className="lg:w-1/2 order-2 lg:order-1">
-              <div className="bg-primary rounded-3xl p-1 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[12px_12px_0px_0px_rgba(255,255,255,0.1)] transform rotate-1 hover:rotate-0 transition duration-500">
-                <img
-                  alt="Accountant analyzing data"
-                  className="w-full rounded-2xl grayscale hover:grayscale-0 transition duration-500"
-                  src="/assets/images/main/processing_01.png"
-                />
-              </div>
-            </div>
-
-            <div className="lg:w-1/2 order-1 lg:order-2">
-              <div className="inline-block p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30 mb-6">
-                <span className="material-symbols-outlined text-yellow-700 dark:text-yellow-400 text-3xl">
-                  psychology
-                </span>
-              </div>
-              <h2 className="font-display font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-6 leading-tight reveal-text">
-                {data.services.process.title.line1}
-                <br />
-                {data.services.process.title.line2}
-                <span className="text-ai-green">
-                  {data.services.process.title.highlight}
-                </span>
-                {data.services.process.title.line3}
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-lg mb-10 keep-all">
-                {data.services.process.description}
-              </p>
-
-              <ul className="space-y-6">
-                {data.services.process.steps.map((step, index) => (
-                  <li
-                    key={index}
-                    className={`flex items-center gap-6 p-4 rounded-xl ${
-                      index === 1
-                        ? 'bg-primary shadow-xl transform translate-x-4'
-                        : 'bg-surface-light dark:bg-background-dark border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition'
-                    }`}
-                  >
-                    <span
-                      className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
-                        index === 1
-                          ? 'bg-white text-black'
-                          : 'bg-black text-white'
-                      }`}
-                    >
-                      {index + 1}
-                    </span>
-                    <span
-                      className={`font-bold text-lg ${
-                        index === 1
-                          ? 'text-black'
-                          : 'text-gray-800 dark:text-gray-200'
-                      }`}
-                    >
-                      {step}
-                    </span>
-                    {index === 1 && (
-                      <span className="ml-auto material-symbols-outlined text-black">
-                        arrow_forward
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Accuracy Section */}
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            <div className="lg:w-1/2">
-              <h2 className="font-display font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-6 leading-tight reveal-text">
-                {data.services.accuracy.title.line1}
-                <br />
-                <span className="text-ai-blue">
-                  {data.services.accuracy.title.highlight}
-                </span>
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-lg mb-10 keep-all">
-                {data.services.accuracy.description}
-              </p>
-
-              <div className="space-y-6">
-                {data.services.accuracy.features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className="mt-1 bg-green-100 dark:bg-green-900/30 p-1 rounded-full">
-                      <span className="material-symbols-outlined text-green-600 dark:text-green-400 text-xl">
-                        {feature.icon}
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-lg text-gray-900 dark:text-white mb-1">
-                        {feature.title}
-                      </h4>
-                      <p className="text-gray-500 dark:text-gray-400">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="lg:w-1/2 relative w-full">
-              <div className="bg-white dark:bg-background-dark border-2 border-gray-900 dark:border-gray-600 rounded-2xl p-8 relative shadow-[12px_12px_0px_0px_#FFD700]">
-                <div className="absolute -top-6 -right-6 text-6xl animate-bounce">
-                  ✨
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="col-span-2 h-20 bg-gray-100 dark:bg-gray-800 rounded-xl animate-pulse"></div>
-                  <div className="h-20 bg-gray-100 dark:bg-gray-800 rounded-xl animate-pulse delay-75"></div>
-                  <div className="h-20 bg-primary/20 rounded-xl border border-primary flex items-center justify-center">
-                    <span className="text-primary font-bold flex items-center gap-2">
-                      <span className="material-symbols-outlined animate-spin">
-                        sync
-                      </span>
-                      {data.services.accuracy.processing}
-                    </span>
-                  </div>
-                  <div className="col-span-2 h-32 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
-                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded mb-3"></div>
-                    <div className="w-3/4 h-2 bg-gray-200 dark:bg-gray-600 rounded mb-3"></div>
-                    <div className="w-1/2 h-2 bg-gray-200 dark:bg-gray-600 rounded"></div>
-                  </div>
-                </div>
-                <img
-                  alt="Data processing"
-                  className="absolute -bottom-10 -left-10 w-40 h-40 object-cover rounded-full border-4 border-white dark:border-gray-800 shadow-lg"
-                  src="/assets/images/main/processing.png"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section
-        className="py-24 bg-surface-light dark:bg-background-dark"
-        id="team"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <span className="text-ai-blue text-sm font-bold tracking-widest uppercase mb-4 block">
-              {data.team.badge}
-            </span>
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-4">
-              {data.team.title}
-            </h2>
-            <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto">
-              {data.team.description}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {data.team.members.map((member, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-surface-dark rounded-2xl p-8 text-center shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-shadow duration-300"
-              >
-                <div className="relative w-32 h-32 mx-auto mb-6">
-                  <img
-                    alt={member.name}
-                    className="w-32 h-32 rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-500 border-4 border-gray-100 dark:border-gray-700"
-                    src={member.image}
-                  />
-                </div>
-                <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-1">
-                  {member.name}
-                </h3>
-                <p className="text-ai-blue text-sm font-semibold uppercase tracking-wide mb-4">
-                  {member.role}
-                </p>
-                <div className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed space-y-1">
-                  {member.bio.map((line, bioIndex) => (
-                    <p key={bioIndex}>{line}</p>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Advisors Section - Rolling Banner */}
-      <section
-        className="py-24 bg-surface-light dark:bg-background-dark border-y border-gray-200 dark:border-gray-800 overflow-hidden"
-        id="advisors"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center font-display font-extrabold text-3xl md:text-4xl text-gray-900 dark:text-white mb-16 reveal-text">
-            <span className="text-ai-blue">
-              {data.advisors.title.highlight}
-            </span>
-            {data.advisors.title.main}
-          </h2>
-        </div>
-
-        {/* Rolling Banner Container */}
-        <div className="relative">
-          {/* Gradient Overlay - Left */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-surface-light dark:from-background-dark to-transparent z-10 pointer-events-none"></div>
-          {/* Gradient Overlay - Right */}
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-surface-light dark:from-background-dark to-transparent z-10 pointer-events-none"></div>
-
-          {/* Scrolling Track */}
-          <div className="flex gap-6 scroll-track">
-            {/* Original Cards + Duplicates for seamless loop */}
-            {[...Array(2)].map((_, setIndex) => (
-              <div key={setIndex} className="flex gap-6">
-                {data.advisors.items.map((advisor, index) => (
-                  <div
-                    key={index}
-                    className="w-[220px] shrink-0 bg-white dark:bg-surface-dark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 relative hover:shadow-lg hover:border-primary dark:hover:border-primary transition-all duration-300 group"
-                  >
-                    {advisor.isHead && (
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-primary text-black px-3 py-0.5 text-[10px] font-bold rounded-full shadow-md whitespace-nowrap">
-                        HEAD ADVISOR
-                      </div>
-                    )}
-                    <div className="flex flex-col items-center text-center">
-                      <img
-                        alt={advisor.name}
-                        className="w-20 h-20 rounded-full object-cover ring-3 ring-gray-100 dark:ring-gray-700 group-hover:ring-primary mb-4 transition-all duration-300"
-                        src={advisor.image}
-                      />
-                      <h4 className="font-bold text-gray-900 dark:text-white text-base mb-1">
-                        {advisor.name}
-                      </h4>
-                      <p
-                        className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium"
-                        dangerouslySetInnerHTML={{ __html: advisor.role }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 bg-yellow-50 dark:bg-yellow-900/10 border-y border-yellow-100 dark:border-yellow-900/30">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-display font-extrabold text-3xl md:text-5xl text-gray-900 dark:text-white mb-6 leading-tight reveal-text">
-            {data.navigation.cta.title.line1}
-            <span className="text-ai-blue">
-              {data.navigation.cta.title.highlight}
-            </span>
-            {data.navigation.cta.title.line2}
-            <br />
-            {data.navigation.cta.title.line3}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-lg mb-12">
-            {data.navigation.cta.description}
-          </p>
-
-          <div className="bg-primary rounded-2xl p-8 md:p-10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group">
-            <div className="relative z-10 text-left">
-              <h3 className="font-bold text-2xl text-black mb-2">
-                {data.navigation.cta.enterprise.title}
-              </h3>
-              <p className="text-black/80 font-medium">
-                {data.navigation.cta.enterprise.description}
-              </p>
-            </div>
-            <div className="relative z-10 w-full md:w-auto">
-              <a
-                className="block text-center bg-black hover:bg-gray-800 text-white font-bold py-4 px-10 rounded-xl transition border border-transparent hover:border-gray-600 shadow-lg"
-                href="#contact"
-              >
-                {data.navigation.cta.enterprise.button}
-              </a>
-            </div>
-            <div className="absolute -right-6 -bottom-6 opacity-10 pointer-events-none transform group-hover:scale-110 transition duration-700">
-              <span className="material-symbols-outlined text-9xl text-black">
-                rocket_launch
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section
-      <section className="py-24 bg-surface-light dark:bg-background-dark">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display font-extrabold text-3xl text-center text-gray-900 dark:text-white mb-16 reveal-text">
-            {data.faq.title.text}
-            <span className="text-ai-green">{data.faq.title.highlight}</span>
-          </h2>
-
-          <div className="space-y-4">
-            {data.faq.items.map((item, index) => (
-              <details
-                key={index}
-                className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm"
-              >
-                <summary className="flex justify-between items-center p-6 cursor-pointer list-none select-none">
-                  <span className="font-bold text-lg text-gray-900 dark:text-white">
-                    {item.question}
-                  </span>
-                  <span className="transition-transform duration-300 group-open:rotate-180 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
-                    <span className="material-symbols-outlined text-gray-500">
-                      keyboard_arrow_down
-                    </span>
-                  </span>
-                </summary>
-                <div className="px-6 pb-6 text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {item.answer}
-                </div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-       */}
-
-      {/* Partners Section - Rolling Banner */}
-      <section className="py-12 bg-white dark:bg-black/40 border-y border-gray-100 dark:border-gray-800 overflow-hidden">
-        {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-          <p className="text-center text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-            업계 최고의 파트너들과 함께합니다
-          </p>
-        </div> */}
-        <div className="relative">
-          {/* Gradient Overlay - Left */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-white dark:from-[#0B1120] to-transparent z-10 pointer-events-none"></div>
-          {/* Gradient Overlay - Right */}
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-white dark:from-[#0B1120] to-transparent z-10 pointer-events-none"></div>
-
-          {/* Partners List */}
-          {(() => {
-            return (
-              <div className="flex gap-16 scroll-track-3">
-                {[...Array(3)].map((_, setIndex) => (
-                  <div key={setIndex} className="flex gap-16 items-center">
-                    {partnersData.map((partner, pIndex) => (
-                      <a
-                        key={`${setIndex}-${pIndex}`}
-                        href={partner.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex shrink-0 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300 ${
-                          partner.mark
-                            ? 'flex-col items-center gap-1'
-                            : 'items-center justify-center'
-                        }`}
-                        title={partner.name}
-                      >
-                        {partner.mark ? (
-                          <>
-                            <img
-                              src={partner.mark}
-                              alt={partner.name}
-                              className="h-10 w-auto object-contain"
-                            />
-                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                              {partner.name}
-                            </span>
-                          </>
-                        ) : (
-                          <img
-                            src={partner.image}
-                            alt={partner.name}
-                            className="h-16 w-auto object-contain"
-                          />
-                        )}
-                      </a>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            );
-          })()}
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <ContactSection />
-
-      {/* Footer */}
-      <Footer />
-
-      {/* Toast Notification */}
-      <Toast
-        isOpen={toast.isOpen}
-        message={toast.message}
-        onClose={() => setToast((prev) => ({ ...prev, isOpen: false }))}
-      />
-    </div>
-  );
+type InquiryFormData = {
+  name: string
+  company: string
+  email: string
+  phone: string
+  inquiryType: string
+  budget: string
+  message: string
 }
 
-export default LandingPage;
+const CONTACT_API_URL = import.meta.env.VITE_CONTACT_API_URL as string | undefined
+const HERO_VIDEO_URL = 'https://videos.pexels.com/video-files/3202364/3202364-hd_1920_1080_25fps.mp4'
+const MAP_ADDRESS = '경기도 성남시 금토로80번길 40 B동 배민스퀘어 301호'
+const MAP_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(MAP_ADDRESS)}&z=16&output=embed&hl=ko`
+const MAP_LINK_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_ADDRESS)}`
+const serviceVisuals = [
+  '/assets/images/main/processing.png',
+  '/assets/images/og-image.png',
+  '/assets/images/main/processing_01.png',
+] as const
+const serviceHoverVisuals = [
+  '/assets/images/main/processing_01.png',
+  '/assets/images/main/processing.png',
+  '/assets/images/og-image.png',
+] as const
+const globalNavigation = [
+  ['HOME', '/'],
+  ['ABOUT', '/about'],
+  ['WORK', '/work'],
+  ['CAREERS', '/careers'],
+  ['CONTACT', '/contact'],
+] as const
+const menuPreviewVisuals: Record<string, string> = {
+  '/': '/assets/images/main/processing_01.png',
+  '/about': '/assets/images/main/processing.png',
+  '/work': '/assets/images/og-image.png',
+  '/careers': '/assets/images/members/kim_jh.webp',
+  '/contact': '/assets/images/partners/gbsa.png',
+}
+const sectionIndicator: ReadonlyArray<{ id: SectionId; label: string }> = [
+  { id: 'top', label: 'Intro' },
+  { id: 'solutions', label: 'Evidence' },
+  { id: 'work', label: 'Work' },
+  { id: 'process', label: 'Process' },
+  { id: 'experts', label: 'Network' },
+  { id: 'contact', label: 'Contact' },
+  { id: 'location', label: 'Location' },
+]
+
+const copy = {
+  ko: {
+    languageLabel: '언어 선택',
+    nav: [['솔루션', '#solutions'], ['활용 사례', '#work'], ['진행 방식', '#process'], ['전문가', '#experts'], ['문의', '#contact']],
+    menu: '메뉴 열기',
+    closeMenu: '메뉴 닫기',
+    skip: '본문으로 바로가기',
+    heroKicker: 'EXPLAINABLE INTELLIGENCE FOR WORK',
+    heroTitle: <>AI가 답하면,<br /><em>근거</em>가 함께 와야 합니다.</>,
+    heroText: 'XAI Korea는 규정·판례·내부 문서를 읽고, 출처가 추적되는 답변과 업무 흐름을 설계합니다.',
+    primaryCta: '프로젝트 문의하기',
+    secondaryCta: '활용 사례 보기',
+    heroMetric: '12.4k',
+    heroMetricLabel: '검증 가능한 근거',
+    heroQuery: '“최근 개정 규정을 반영해 고객사 리스크를 알려줘.”',
+    evidenceEyebrow: 'WHY XAI KOREA',
+    evidenceTitle: <>답변이 아니라<br /><em>의사결정의 근거</em>를 만듭니다.</>,
+    evidenceText: '업무 현장에서는 빠른 응답만으로 충분하지 않습니다. 누가, 어떤 자료를 바탕으로, 언제 검토했는지까지 설명 가능한 흐름을 구축합니다.',
+    evidencePoints: [
+      ['원문에 연결되는 답변', '결론마다 문서·조항·판례 등 확인 가능한 출처를 연결합니다.'],
+      ['현장에 맞춘 지식 구조', '공개 정보와 조직 내부 문서를 권한 기준으로 함께 탐색합니다.'],
+      ['변화에 맞춘 지속 운영', '개정과 신규 데이터를 반영하며 결과 품질을 점검합니다.'],
+    ],
+    casesEyebrow: 'SELECTED WORK',
+    casesTitle: <>복잡한 지식을<br />실행 가능한 다음 단계로.</>,
+    cases: [
+      { label: 'Research', title: '연구 정보 탐색', text: '흩어진 논문과 보고서에서 질문에 맞는 근거를 신속히 찾아 맥락과 함께 제시합니다.', stat: '85%', statLabel: '리서치 시간 절감', tag: 'Academic intelligence' },
+      { label: 'Review', title: '문서 검토 지원', text: '계약·규정·내부 문서를 비교하고, 검토자가 확인할 수 있는 쟁점과 출처를 정리합니다.', stat: '3.2×', statLabel: '검토 처리량 향상', tag: 'Document intelligence' },
+      { label: 'Governance', title: 'AI 거버넌스', text: '설명·감사·권한 관리를 중심으로 신뢰할 수 있는 업무용 AI 운영 체계를 설계합니다.', stat: '100%', statLabel: '추적 가능한 응답', tag: 'Trusted AI operations' },
+    ],
+    servicesEyebrow: 'WHAT WE BUILD',
+    servicesTitle: <>업무의 맥락을 이해하는<br />AI 운영 체계.</>,
+    services: [
+      ['01', '지식 탐색 시스템', '자연어 질문을 조직의 문서·데이터·외부 기준과 연결해 신뢰도 높은 답을 만듭니다.'],
+      ['02', '검토·판단 보조', '비교, 요약, 쟁점 추출을 넘어 사람이 확인해야 할 근거와 다음 행동을 제안합니다.'],
+      ['03', '신뢰 가능한 AI 운영', '권한, 출처, 평가, 개선 주기를 하나의 운영 경험으로 설계합니다.'],
+    ],
+    partnerTitle: '함께 지식을 더 정확하게 만드는 파트너',
+    processEyebrow: 'HOW WE WORK',
+    processTitle: <>빠르게 시작하고,<br /><em>검증하며 확장합니다.</em></>,
+    process: [
+      ['01', '업무를 진단합니다', '사용자, 질문, 자료, 리스크와 현재 업무 흐름을 함께 파악합니다.'],
+      ['02', '근거를 설계합니다', '출처 체계와 권한 기준을 정하고, 검증 가능한 답변 구조를 만듭니다.'],
+      ['03', '작게 검증합니다', '실제 질문과 자료로 답변 품질과 사용성을 빠르게 확인합니다.'],
+      ['04', '운영으로 확장합니다', '평가와 개선 주기를 갖춰 팀의 일상 업무에 자연스럽게 안착시킵니다.'],
+    ],
+    principlesEyebrow: 'TRUST BY DESIGN',
+    principlesTitle: <>신뢰는 기능이 아니라<br /><em>운영 방식</em>에서 시작됩니다.</>,
+    principlesText: '도입 이후에도 설명 가능성과 업무 적합성을 지킬 수 있도록, 처음부터 다음 기준을 설계에 담습니다.',
+    principles: [
+      ['01', '사람의 확인 지점', '중요한 판단에는 사람이 검토하고 승인할 수 있는 흐름을 남깁니다.'],
+      ['02', '출처 우선의 답변', '답변의 핵심은 근거와 함께 확인할 수 있도록 구조화합니다.'],
+      ['03', '역할 기반 접근', '업무별 권한과 민감도에 맞춰 지식의 접근 범위를 설정합니다.'],
+      ['04', '측정 가능한 품질', '정확도·근거성·유용성을 실제 질문으로 지속 점검합니다.'],
+      ['05', '안전한 기본값', '개인·조직의 정보를 최소한으로 다루는 원칙을 우선합니다.'],
+      ['06', '변화에 맞춘 개선', '문서와 규정, 사용 방식의 변화에 맞춰 지식을 갱신합니다.'],
+    ],
+    expertsEyebrow: 'PEOPLE & NETWORK',
+    expertsTitle: '도메인과 기술 사이를 연결하는 팀',
+    expertsText: 'AI, 법·제도, 연구, 비즈니스 현장의 전문가들과 함께 문제의 언어를 제품의 경험으로 바꿉니다.',
+    expertCards: [['AI Strategy', '도입 전략과 데이터 구조'], ['Domain Expertise', '규정·연구·산업의 맥락'], ['Product Operations', '현장 안착과 지속 개선']],
+    contactEyebrow: 'START A CONVERSATION',
+    contactTitle: <>다음 업무의 기준을<br /><em>함께 설계해 볼까요?</em></>,
+    contactText: '아래 내용을 남겨 주세요. 검토 후 가장 적합한 방식으로 연락드리겠습니다.',
+    contactInfo: { officeLabel: '본사 위치', officeAddress: '경기도 성남시 금토로80번길 40, B동 배민스퀘어 301호', phoneLabel: '고객센터', phone: '+82)10-3253-5409 · 평일 09:00–18:00', emailLabel: '이메일' },
+    form: {
+      name: '이름', company: '회사/기관명', email: '이메일', phone: '연락처', type: '관심 분야', budget: '예상 범위', message: '현재 해결하고 싶은 문제',
+      namePlaceholder: '홍길동', companyPlaceholder: '회사 또는 기관명', emailPlaceholder: 'name@company.com', phonePlaceholder: '010-0000-0000', messagePlaceholder: '현재 업무 흐름, 참고 자료, 기대하는 결과를 편하게 알려 주세요.',
+      selectDefault: '선택해 주세요', types: ['지식 탐색 시스템', '문서 검토 지원', 'AI 거버넌스', '기타'], budgets: ['미정 / 논의 필요', 'PoC·파일럿', '정식 구축', '운영 고도화'],
+      send: '문의 내용 보내기', sending: '전송 중...', sent: '문의 메일을 열었습니다. 내용을 확인한 뒤 전송해 주세요.', apiSent: '문의가 전달되었습니다. 빠르게 검토 후 연락드리겠습니다.', error: '전송에 실패했습니다. 잠시 후 다시 시도하거나 contact@xaikorea.ai.kr로 연락해 주세요.',
+    },
+    footer: '설명 가능한 AI로, 더 신뢰할 수 있는 업무를 만듭니다.',
+    rights: '© 2025 XAI Korea. All rights reserved.',
+    privacy: '개인정보처리방침', terms: '이용약관',
+  },
+  en: {
+    languageLabel: 'Language',
+    nav: [['Solutions', '#solutions'], ['Work', '#work'], ['Process', '#process'], ['Experts', '#experts'], ['Contact', '#contact']],
+    menu: 'Open menu',
+    closeMenu: 'Close menu',
+    skip: 'Skip to content',
+    heroKicker: 'EXPLAINABLE INTELLIGENCE FOR WORK',
+    heroTitle: <>When AI answers,<br />the <em>evidence</em> should arrive too.</>,
+    heroText: 'XAI Korea designs traceable answers and work flows from regulations, cases, and your organization’s knowledge.',
+    primaryCta: 'Start a project',
+    secondaryCta: 'See our work',
+    heroMetric: '12.4k',
+    heroMetricLabel: 'verifiable references',
+    heroQuery: '“Show the client risk with the latest regulatory changes.”',
+    evidenceEyebrow: 'WHY XAI KOREA',
+    evidenceTitle: <>We create the basis for<br /><em>better decisions.</em></>,
+    evidenceText: 'Fast answers are not enough at work. We build flows that make sources, review history, and responsibility clear.',
+    evidencePoints: [
+      ['Answers linked to the original source', 'Every conclusion connects to a document, clause, case, or other verifiable reference.'],
+      ['Knowledge structured for your work', 'Public information and internal knowledge are searched together under clear permissions.'],
+      ['Operations that follow change', 'New information and regulatory updates are reflected while answer quality is continuously reviewed.'],
+    ],
+    casesEyebrow: 'SELECTED WORK',
+    casesTitle: <>Turn complex knowledge into<br />the next practical action.</>,
+    cases: [
+      { label: 'Research', title: 'Research intelligence', text: 'Find relevant evidence across papers and reports, then present it in the context of the question.', stat: '85%', statLabel: 'less research time', tag: 'Academic intelligence' },
+      { label: 'Review', title: 'Document review', text: 'Compare contracts, policies, and internal documents with issues and sources ready for human review.', stat: '3.2×', statLabel: 'more review throughput', tag: 'Document intelligence' },
+      { label: 'Governance', title: 'AI governance', text: 'Design an operational system for trustworthy AI around explanation, auditability, and access control.', stat: '100%', statLabel: 'traceable responses', tag: 'Trusted AI operations' },
+    ],
+    servicesEyebrow: 'WHAT WE BUILD',
+    servicesTitle: <>An AI operating system<br />that understands work context.</>,
+    services: [
+      ['01', 'Knowledge discovery', 'Connect natural-language questions with organizational documents, data, and external standards.'],
+      ['02', 'Review and decision support', 'Move beyond summaries: surface the evidence, issues, and next action a reviewer needs.'],
+      ['03', 'Trustworthy AI operations', 'Unify permissions, sources, evaluation, and improvement in one operating experience.'],
+    ],
+    partnerTitle: 'Partners making knowledge more precise, together',
+    processEyebrow: 'HOW WE WORK',
+    processTitle: <>Start quickly,<br /><em>validate, then scale.</em></>,
+    process: [
+      ['01', 'Diagnose the work', 'We map the users, questions, source materials, risks, and flow you already have.'],
+      ['02', 'Design the evidence', 'We define sources, permissions, and the structure of a verifiable answer.'],
+      ['03', 'Validate in a small loop', 'We test quality and usability with the questions and materials that matter.'],
+      ['04', 'Scale into operations', 'We establish evaluation and improvement practices for dependable everyday use.'],
+    ],
+    principlesEyebrow: 'TRUST BY DESIGN',
+    principlesTitle: <>Trust begins not with a feature,<br />but with an <em>operating practice.</em></>,
+    principlesText: 'We build these principles into the work from the start, so explainability and fit are maintained after launch.',
+    principles: [
+      ['01', 'Human review points', 'Leave clear moments for people to review and approve important decisions.'],
+      ['02', 'Evidence-first answers', 'Structure each answer so its essential basis can be checked with the source.'],
+      ['03', 'Role-based access', 'Set the scope of knowledge access around the task, role, and sensitivity.'],
+      ['04', 'Measurable quality', 'Keep checking accuracy, evidence, and usefulness with real questions.'],
+      ['05', 'Secure by default', 'Start with the principle of handling personal and organizational data minimally.'],
+      ['06', 'Improvement with change', 'Refresh knowledge as documents, regulations, and work practices evolve.'],
+    ],
+    expertsEyebrow: 'PEOPLE & NETWORK',
+    expertsTitle: 'A team connecting domain knowledge and technology',
+    expertsText: 'We work with specialists in AI, policy, research, and business to turn the language of a problem into a product experience.',
+    expertCards: [['AI Strategy', 'Adoption strategy and data structure'], ['Domain Expertise', 'Policy, research, and industry context'], ['Product Operations', 'Adoption and continual improvement']],
+    contactEyebrow: 'START A CONVERSATION',
+    contactTitle: <>Let’s design a stronger<br /><em>standard for work.</em></>,
+    contactText: 'Tell us a little about your challenge. We will review it and suggest the best way to begin.',
+    contactInfo: { officeLabel: 'Head office', officeAddress: '301, Building B, Baemin Square, 40 Geumto-ro 80beon-gil, Seongnam-si, Gyeonggi-do, Republic of Korea', phoneLabel: 'Customer service', phone: '+82)10-3253-5409 · Weekdays 09:00–18:00', emailLabel: 'Email' },
+    form: {
+      name: 'Name', company: 'Company / organization', email: 'Email', phone: 'Phone', type: 'Area of interest', budget: 'Expected scope', message: 'What would you like to solve?',
+      namePlaceholder: 'Your name', companyPlaceholder: 'Company or organization', emailPlaceholder: 'name@company.com', phonePlaceholder: '+82 10 0000 0000', messagePlaceholder: 'Tell us about your current flow, source materials, and desired outcome.',
+      selectDefault: 'Select an option', types: ['Knowledge discovery', 'Document review', 'AI governance', 'Other'], budgets: ['Undecided / let’s discuss', 'PoC / pilot', 'Full implementation', 'Operational enhancement'],
+      send: 'Send inquiry', sending: 'Sending...', sent: 'Your email client is open. Please review the message and send it.', apiSent: 'Your inquiry has been sent. We will be in touch shortly.', error: 'We could not send your inquiry. Please try again or email contact@xaikorea.ai.kr.',
+    },
+    footer: 'Explainable AI for work you can trust.',
+    rights: '© 2025 XAI Korea. All rights reserved.',
+    privacy: 'Privacy policy', terms: 'Terms of use',
+  },
+} as const
+
+function isSuccessfulResponse(value: unknown): value is { success: true } {
+  return typeof value === 'object' && value !== null && 'success' in value && (value as { success?: unknown }).success === true
+}
+
+export default function LandingPage(): ReactElement {
+  const [language, setLanguage] = useState<Language>('ko')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [activeCase, setActiveCase] = useState(0)
+  const [activeSection, setActiveSection] = useState<SectionId>('top')
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isCasePaused, setIsCasePaused] = useState(false)
+  const [isVideoPaused, setIsVideoPaused] = useState(false)
+  const [isVideoReady, setIsVideoReady] = useState(false)
+  const [menuPreview, setMenuPreview] = useState(menuPreviewVisuals['/about'] ?? serviceVisuals[0])
+  const [submission, setSubmission] = useState<SubmissionState>('idle')
+  const [formData, setFormData] = useState<InquiryFormData>({ name: '', company: '', email: '', phone: '', inquiryType: '', budget: '', message: '' })
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const menuPanelRef = useRef<HTMLDivElement>(null)
+  const heroVideoRef = useRef<HTMLVideoElement>(null)
+  const videoUserPausedRef = useRef(false)
+  const content = copy[language]
+  const activeStudy = content.cases[activeCase] ?? content.cases[0]
+  const contactEndpoint = typeof CONTACT_API_URL === 'string' && CONTACT_API_URL.trim().length > 0 ? CONTACT_API_URL : undefined
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape' && menuOpen) {
+        setMenuOpen(false)
+        menuButtonRef.current?.focus()
+      }
+      if (event.key === 'Tab' && menuOpen) {
+        const focusable = menuPanelRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+        if (focusable === undefined || focusable.length === 0) {
+          return
+        }
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last?.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first?.focus()
+        }
+      }
+    }
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden'
+      window.requestAnimationFrame(() => {
+        menuPanelRef.current?.querySelector<HTMLElement>('nav a')?.focus()
+      })
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [menuOpen])
+
+  useEffect(() => {
+    let animationFrame = 0
+    const updateScrollState = (): void => {
+      window.cancelAnimationFrame(animationFrame)
+      animationFrame = window.requestAnimationFrame(() => {
+        const maximumScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1)
+        const progress = Math.min(Math.max(window.scrollY / maximumScroll, 0), 1)
+        document.documentElement.style.setProperty('--ra-scroll-progress', String(progress))
+        document.documentElement.style.setProperty(
+          '--ra-hero-shift',
+          `${String(Math.min(window.scrollY * 0.16, 120))}px`,
+        )
+        setIsScrolled(window.scrollY > 72)
+      })
+    }
+
+    updateScrollState()
+    window.addEventListener('scroll', updateScrollState, { passive: true })
+    window.addEventListener('resize', updateScrollState)
+    return () => {
+      window.cancelAnimationFrame(animationFrame)
+      window.removeEventListener('scroll', updateScrollState)
+      window.removeEventListener('resize', updateScrollState)
+    }
+  }, [])
+
+  useEffect(() => {
+    const revealTargets = document.querySelectorAll<HTMLElement>('.ra-section, .ra-partners, .ra-location')
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-inview')
+          revealObserver.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' })
+
+    revealTargets.forEach((target) => {
+      target.classList.add('ra-will-reveal')
+      revealObserver.observe(target)
+    })
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      const visibleEntry = entries.find((entry) => entry.isIntersecting)
+      if (visibleEntry?.target.id !== undefined && visibleEntry.target.id !== '') {
+        setActiveSection(visibleEntry.target.id as SectionId)
+      }
+    }, { rootMargin: '-34% 0px -55% 0px', threshold: 0 })
+
+    sectionIndicator.forEach(({ id }) => {
+      const section = document.getElementById(id)
+      if (section !== null) {
+        sectionObserver.observe(section)
+      }
+    })
+
+    return () => {
+      revealObserver.disconnect()
+      sectionObserver.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isCasePaused || menuOpen || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+    const timer = window.setInterval(() => {
+      setActiveCase((current) => (current + 1) % content.cases.length)
+    }, 5600)
+    return () => {
+      window.clearInterval(timer)
+    }
+  }, [content.cases.length, isCasePaused, menuOpen])
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (reducedMotion.matches) {
+      videoUserPausedRef.current = true
+      heroVideoRef.current?.pause()
+      setIsVideoPaused(true)
+    }
+
+    const handleVisibility = (): void => {
+      const video = heroVideoRef.current
+      if (video === null) {
+        return
+      }
+      if (document.hidden) {
+        video.pause()
+      } else if (!videoUserPausedRef.current && !reducedMotion.matches) {
+        void video.play().catch(() => {
+          setIsVideoPaused(true)
+        })
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
+  }, [])
+
+  const closeMenu = (): void => {
+    setMenuOpen(false)
+  }
+
+  const toggleVideo = async (): Promise<void> => {
+    const video = heroVideoRef.current
+    if (video === null) {
+      return
+    }
+    if (video.paused) {
+      try {
+        await video.play()
+        videoUserPausedRef.current = false
+        setIsVideoPaused(false)
+      } catch {
+        setIsVideoPaused(true)
+      }
+    } else {
+      video.pause()
+      videoUserPausedRef.current = true
+      setIsVideoPaused(true)
+    }
+  }
+
+  const scrollToTop = (): void => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
+    const field = event.target.name as keyof InquiryFormData
+    setFormData((current) => ({ ...current, [field]: event.target.value }))
+  }
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault()
+    setSubmission('sending')
+
+    if (contactEndpoint !== undefined) {
+      try {
+        const response = await fetch(contactEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...formData, language, source: 'website-contact-form' }),
+        })
+        const data: unknown = await response.json().catch(() => null)
+        if (!response.ok || !isSuccessfulResponse(data)) {
+          throw new Error('Contact request failed')
+        }
+        setSubmission('sent')
+        setFormData({ name: '', company: '', email: '', phone: '', inquiryType: '', budget: '', message: '' })
+      } catch {
+        setSubmission('error')
+      }
+      return
+    }
+
+    const inquirySubject = formData.inquiryType !== '' ? formData.inquiryType : formData.company !== '' ? formData.company : 'Project inquiry'
+    const subject = encodeURIComponent(`[XAI Korea] ${inquirySubject}`)
+    const body = encodeURIComponent([
+      `Name: ${formData.name}`,
+      `Company: ${formData.company}`,
+      `Email: ${formData.email}`,
+      `Phone: ${formData.phone}`,
+      `Area: ${formData.inquiryType}`,
+      `Scope: ${formData.budget}`,
+      '', formData.message,
+    ].join('\n'))
+    window.location.href = `mailto:contact@xaikorea.ai.kr?subject=${subject}&body=${body}`
+    setSubmission('sent')
+  }
+
+  return (
+    <div className="ra-site">
+      <a className="ra-skip-link" href="#main-content">{content.skip}</a>
+      <div className="ra-scroll-progress" aria-hidden="true"><span /></div>
+
+      <header className={`ra-header ${menuOpen ? 'is-menu-open' : ''} ${isScrolled ? 'is-scrolled' : ''} ${activeSection === 'experts' ? 'is-over-dark' : ''}`}>
+        <div className="ra-shell ra-header__inner">
+          <Link className="ra-brand" to="/" aria-label="XAI Korea home">
+            <span className="ra-brand__mark" aria-hidden="true"><img src="/assets/images/logo/xaikorea-corporate.png" alt="" /></span>
+            <span>XAI</span><b>KOREA</b>
+          </Link>
+          <nav className="ra-desktop-nav" aria-label="Main navigation">
+            {globalNavigation.slice(1).map(([label, target]) => <Link to={target} key={target}>{label}</Link>)}
+          </nav>
+          <div className="ra-header__tools">
+            <div className="ra-language" aria-label={content.languageLabel}>
+               <button className={language === 'ko' ? 'is-active' : ''} onClick={() => { setLanguage('ko') }} aria-pressed={language === 'ko'}>KO</button>
+              <span>/</span>
+               <button className={language === 'en' ? 'is-active' : ''} onClick={() => { setLanguage('en') }} aria-pressed={language === 'en'}>EN</button>
+            </div>
+            <button ref={menuButtonRef} className={`ra-menu-button ${menuOpen ? 'is-open' : ''}`} type="button" aria-label={menuOpen ? content.closeMenu : content.menu} aria-controls="mobile-navigation" aria-expanded={menuOpen} onClick={() => { setMenuOpen((current) => !current) }}>
+              <i /><i />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <nav className={`ra-section-indicator ${isScrolled ? 'is-visible' : ''}`} aria-label={language === 'ko' ? '현재 섹션' : 'Current section'}>
+        {sectionIndicator.map(({ id, label }, index) => <a key={id} href={`#${id}`} className={activeSection === id ? 'is-active' : ''} aria-current={activeSection === id ? 'location' : undefined}><span>0{index + 1}</span><b>{label}</b></a>)}
+      </nav>
+
+      <div ref={menuPanelRef} id="mobile-navigation" className={`ra-mobile-menu ${menuOpen ? 'is-open' : ''}`} aria-hidden={!menuOpen}>
+        <div className="ra-shell">
+          <div className="ra-menu-layout">
+            <div className="ra-menu-intro">
+              <div className="ra-menu-preview" aria-hidden="true"><img src={menuPreview} alt="" /></div>
+              <p>{language === 'ko' ? '설명 가능한 AI로 더 신뢰할 수 있는 업무를 만듭니다.' : 'Explainable intelligence for work you can trust.'}</p>
+              <div>
+                <span>PROJECT REQUEST</span>
+                <a href="mailto:contact@xaikorea.ai.kr">contact@xaikorea.ai.kr</a>
+              </div>
+              <div>
+                <span>CONSULTATION</span>
+                <a href="#contact" onClick={() => { closeMenu() }}>{language === 'ko' ? '프로젝트 문의하기' : 'Start a project'} ↗</a>
+              </div>
+            </div>
+            <nav aria-label="Mobile navigation">
+              {globalNavigation.map(([label, target], index) => <Link to={target} className={target === '/' ? 'is-current' : ''} onPointerEnter={() => { setMenuPreview(menuPreviewVisuals[target] ?? serviceVisuals[0]) }} onFocus={() => { setMenuPreview(menuPreviewVisuals[target] ?? serviceVisuals[0]) }} onClick={() => { closeMenu() }} key={target}><span>0{index + 1}</span>{label}</Link>)}
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <main id="main-content">
+        <section id="top" className="ra-hero" aria-labelledby="hero-title" data-section={language === 'ko' ? '소개' : 'ALL ABOUT'}>
+          <span className="ra-vertical-label" aria-hidden="true">{language === 'ko' ? '소개' : 'ALL ABOUT'}</span>
+          <img className="ra-hero__image" src="/assets/images/main/processing_01.png" alt="" decoding="async" />
+          <video ref={heroVideoRef} className={`ra-hero__video ${isVideoReady ? 'is-ready' : ''}`} autoPlay muted loop playsInline preload="metadata" poster="/assets/images/main/processing_01.png" aria-hidden="true" tabIndex={-1} onCanPlay={() => { setIsVideoReady(true) }} onPlay={() => { setIsVideoPaused(false) }} onPause={() => { setIsVideoPaused(true) }}>
+            <source src={HERO_VIDEO_URL} type="video/mp4" />
+          </video>
+          <div className="ra-hero__veil" />
+          <div className="ra-shell ra-hero__content">
+            <p className="ra-eyebrow ra-eyebrow--light">{content.heroKicker}</p>
+            <h1 id="hero-title">{content.heroTitle}</h1>
+            <div className="ra-hero__bottom">
+              <p>{content.heroText}</p>
+              <div className="ra-actions">
+                <a className="ra-button ra-button--solid" href="#contact">{content.primaryCta}<span>↘</span></a>
+                <a className="ra-button ra-button--line" href="#work">{content.secondaryCta}<span>↘</span></a>
+              </div>
+            </div>
+            <aside className="ra-evidence-card" aria-label={content.heroMetricLabel}>
+              <span className="ra-evidence-card__dot" />
+              <p>{content.heroQuery}</p>
+              <div><strong>{content.heroMetric}</strong><span>{content.heroMetricLabel}</span></div>
+            </aside>
+          </div>
+          <a className="ra-scroll-cue" href="#solutions"><span>SCROLL TO DISCOVER</span><i /></a>
+          {isVideoReady && <button className="ra-video-toggle" type="button" onClick={() => { void toggleVideo() }} aria-label={language === 'ko' ? `배경 영상 ${isVideoPaused ? '재생' : '일시정지'}` : `${isVideoPaused ? 'Play' : 'Pause'} background video`}><span className={isVideoPaused ? 'is-play' : 'is-pause'} />{isVideoPaused ? 'PLAY' : 'PAUSE'}</button>}
+        </section>
+
+        <section id="solutions" className="ra-section ra-evidence" data-section="EVIDENCE">
+          <span className="ra-vertical-label" aria-hidden="true">EVIDENCE</span>
+          <div className="ra-shell ra-evidence__grid">
+            <div className="ra-section__heading">
+              <p className="ra-eyebrow">{content.evidenceEyebrow}</p>
+              <h2>{content.evidenceTitle}</h2>
+              <p className="ra-lead">{content.evidenceText}</p>
+            </div>
+            <div className="ra-evidence__visual">
+              <img src="/assets/images/main/processing.png" alt={language === 'ko' ? 'XAI Korea의 근거 추적형 AI 분석 화면' : 'XAI Korea evidence-traceable AI analysis interface'} loading="lazy" decoding="async" />
+              <span className="ra-evidence__label">EVIDENCE<br />LINKED</span>
+            </div>
+            <ol className="ra-evidence__list">
+              {content.evidencePoints.map(([title, text], index) => <li key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}
+            </ol>
+          </div>
+        </section>
+
+        <section id="work" className="ra-section ra-work" aria-labelledby="work-title" data-section="CASE STUDIES">
+          <span className="ra-vertical-label ra-vertical-label--light" aria-hidden="true">CASE STUDIES</span>
+          <div className="ra-shell">
+            <div className="ra-section__heading ra-section__heading--wide">
+              <p className="ra-eyebrow">{content.casesEyebrow}</p>
+              <h2 id="work-title">{content.casesTitle}</h2>
+            </div>
+            <div className="ra-case-switcher" role="tablist" aria-label={content.casesEyebrow} onPointerEnter={() => { setIsCasePaused(true) }} onPointerLeave={() => { setIsCasePaused(false) }} onFocus={() => { setIsCasePaused(true) }} onBlur={() => { setIsCasePaused(false) }}>
+               {content.cases.map((study, index) => <button key={study.label} type="button" role="tab" aria-selected={index === activeCase} className={index === activeCase ? 'is-active' : ''} onPointerEnter={() => { setActiveCase(index) }} onFocus={() => { setActiveCase(index) }} onClick={() => { setActiveCase(index) }}>{study.label}<span>0{index + 1}</span></button>)}
+            </div>
+             <div className={`ra-case ra-case--${String(activeCase)}`} role="tabpanel">
+              <div className="ra-case__art" aria-hidden="true">
+                <span className="ra-orb ra-orb--one" /><span className="ra-orb ra-orb--two" /><span className="ra-grid-lines" />
+                <div className="ra-case__window"><i /><i /><i /><b>{activeStudy.tag}</b><strong>AI</strong></div>
+              </div>
+              <div className="ra-case__copy">
+                <p>{activeStudy.tag}</p>
+                <h3>{activeStudy.title}</h3>
+                <p>{activeStudy.text}</p>
+                <div className="ra-case__stat"><strong>{activeStudy.stat}</strong><span>{activeStudy.statLabel}</span></div>
+                <a href="#contact">{content.primaryCta} <span>↘</span></a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="ra-section ra-services" data-section="SERVICES">
+          <span className="ra-vertical-label" aria-hidden="true">SERVICES</span>
+          <div className="ra-shell">
+            <div className="ra-section__heading ra-section__heading--wide">
+              <p className="ra-eyebrow">{content.servicesEyebrow}</p>
+              <h2>{content.servicesTitle}</h2>
+            </div>
+            <div className="ra-service-grid">
+              {content.services.map(([number, title, text], index) => (
+                <article className="ra-service" key={number}>
+                  <div className="ra-service__visual">
+                    <img className="ra-service__image ra-service__image--base" src={serviceVisuals[index] ?? '/assets/images/main/processing.png'} alt="" loading="lazy" decoding="async" />
+                    <img className="ra-service__image ra-service__image--preview" src={serviceHoverVisuals[index] ?? '/assets/images/og-image.png'} alt="" loading="lazy" decoding="async" />
+                    <span>{number}</span>
+                  </div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <a href="#contact" aria-label={`${title} ${content.primaryCta}`}>↘</a>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="ra-partners" aria-label={content.partnerTitle}>
+          <div className="ra-shell">
+            <p>{content.partnerTitle}</p>
+            <div><span>aSSIST</span><span>GBSA</span><span>송정세무회계</span><span>피엔케이국제법률사무소</span><span>호반건설</span><span>NHN CLOUD</span></div>
+          </div>
+        </section>
+
+        <section id="process" className="ra-section ra-process" data-section="PROCESS">
+          <span className="ra-vertical-label" aria-hidden="true">PROCESS</span>
+          <div className="ra-shell ra-process__layout">
+            <div className="ra-section__heading">
+              <p className="ra-eyebrow">{content.processEyebrow}</p>
+              <h2>{content.processTitle}</h2>
+            </div>
+            <ol className="ra-process__steps">
+              {content.process.map(([number, title, text]) => <li key={number}><div className="ra-process__badge"><span>STEP {number}</span><h3>{title}</h3></div><p>{text}</p></li>)}
+            </ol>
+          </div>
+        </section>
+
+        <section className="ra-section ra-principles" data-section="PRINCIPLES">
+          <span className="ra-vertical-label" aria-hidden="true">PRINCIPLES</span>
+          <div className="ra-shell">
+            <div className="ra-principles__intro">
+              <div>
+                <p className="ra-eyebrow">{content.principlesEyebrow}</p>
+                <h2>{content.principlesTitle}</h2>
+              </div>
+              <p>{content.principlesText}</p>
+            </div>
+            <ol className="ra-principles__grid">
+              {content.principles.map(([number, title, text]) => <li key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></li>)}
+            </ol>
+          </div>
+        </section>
+
+        <section id="experts" className="ra-section ra-experts" data-section="NETWORK">
+          <span className="ra-vertical-label ra-vertical-label--light" aria-hidden="true">NETWORK</span>
+          <div className="ra-shell">
+            <p className="ra-eyebrow ra-eyebrow--light">{content.expertsEyebrow}</p>
+            <div className="ra-experts__intro"><h2>{content.expertsTitle}</h2><p>{content.expertsText}</p></div>
+            <div className="ra-expert-grid">
+              {content.expertCards.map(([title, text], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{text}</p><div className="ra-expert-mark">X</div></article>)}
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="ra-section ra-contact" aria-labelledby="contact-title" data-section="REQUEST">
+          <span className="ra-vertical-label" aria-hidden="true">REQUEST</span>
+          <div className="ra-shell ra-contact__layout">
+            <div className="ra-contact__intro">
+              <p className="ra-eyebrow">{content.contactEyebrow}</p>
+              <h2 id="contact-title">{content.contactTitle}</h2>
+              <p>{content.contactText}</p>
+              <a href="mailto:contact@xaikorea.ai.kr">contact@xaikorea.ai.kr <span>↗</span></a>
+              <dl className="ra-contact__facts">
+                <div><dt>{content.contactInfo.officeLabel}</dt><dd>{content.contactInfo.officeAddress}</dd></div>
+                <div><dt>{content.contactInfo.phoneLabel}</dt><dd>{content.contactInfo.phone}</dd></div>
+                <div><dt>{content.contactInfo.emailLabel}</dt><dd>contact@xaikorea.ai.kr</dd></div>
+              </dl>
+            </div>
+            <form className="ra-contact__form" onSubmit={(event) => { void handleSubmit(event) }}>
+              <div className="ra-form-grid">
+                <label>{content.form.name}<input name="name" value={formData.name} onChange={handleChange} placeholder={content.form.namePlaceholder} autoComplete="name" required /></label>
+                <label>{content.form.company}<input name="company" value={formData.company} onChange={handleChange} placeholder={content.form.companyPlaceholder} autoComplete="organization" /></label>
+                <label>{content.form.email}<input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={content.form.emailPlaceholder} autoComplete="email" required /></label>
+                <label>{content.form.phone}<input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder={content.form.phonePlaceholder} autoComplete="tel" /></label>
+                <label>{content.form.type}<select name="inquiryType" value={formData.inquiryType} onChange={handleChange}><option value="">{content.form.selectDefault}</option>{content.form.types.map((item) => <option key={item}>{item}</option>)}</select></label>
+                <label>{content.form.budget}<select name="budget" value={formData.budget} onChange={handleChange}><option value="">{content.form.selectDefault}</option>{content.form.budgets.map((item) => <option key={item}>{item}</option>)}</select></label>
+              </div>
+              <label className="ra-form-message">{content.form.message}<textarea name="message" rows={5} value={formData.message} onChange={handleChange} placeholder={content.form.messagePlaceholder} required /></label>
+              <button className="ra-submit" type="submit" disabled={submission === 'sending'}>{submission === 'sending' ? content.form.sending : content.form.send}<span>↗</span></button>
+              {submission !== 'idle' && <p className={`ra-form-status ra-form-status--${submission}`} role="status">{submission === 'error' ? content.form.error : contactEndpoint !== undefined ? content.form.apiSent : content.form.sent}</p>}
+            </form>
+          </div>
+        </section>
+
+        <section id="location" className="ra-location" aria-labelledby="location-title">
+          <div className="ra-shell ra-location__heading">
+            <div><p className="ra-eyebrow">LOCATION</p><h2 id="location-title">{language === 'ko' ? '배민스퀘어에서 만나요.' : 'Meet us at Baemin Square.'}</h2></div>
+            <div><span>{content.contactInfo.officeLabel}</span><p>{content.contactInfo.officeAddress}</p><a href={MAP_LINK_URL} target="_blank" rel="noreferrer">{language === 'ko' ? '지도 앱에서 보기' : 'Open in Maps'} ↗</a></div>
+          </div>
+          <div className="ra-map">
+            <iframe title={language === 'ko' ? 'XAI Korea 본사 위치 지도' : 'Map showing XAI Korea head office'} src={MAP_EMBED_URL} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
+            <div className="ra-map__pin" aria-hidden="true"><img src="/assets/images/logo/xaikorea-corporate.png" alt="" /><span>XAI</span><b>KOREA</b></div>
+          </div>
+        </section>
+      </main>
+
+      <button className={`ra-back-to-top ${isScrolled ? 'is-visible' : ''}`} type="button" onClick={() => { scrollToTop() }} aria-label={language === 'ko' ? '페이지 맨 위로 이동' : 'Back to top'}>↑<span>TOP</span></button>
+
+      <footer className="ra-footer">
+        <div className="ra-shell">
+          <a className="ra-brand" href="#top"><span className="ra-brand__mark" aria-hidden="true"><img src="/assets/images/logo/xaikorea-corporate.png" alt="" /></span><span>XAI</span><b>KOREA</b></a>
+          <p>{content.footer}</p>
+          <div><a href="/privacy">{content.privacy}</a><a href="/terms">{content.terms}</a></div>
+          <small>{content.rights}</small>
+        </div>
+      </footer>
+    </div>
+  )
+}

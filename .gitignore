@@ -49,6 +49,7 @@ public_html
 .antigravity
 .specify
 .playwright-mcp
+.wrangler/
 
 # Netlify Functions
 netlify/node_modules

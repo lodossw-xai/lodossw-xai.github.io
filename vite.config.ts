@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react';
+import { sites } from '@openai/sites-vite-plugin';
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -41,11 +42,9 @@ const transformTemplates = (mode: string) => ({
 });
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
-  return {
-    // GitHub Pages 배포 시 경로 설정
+export default defineConfig(async ({ mode }) => {
+  const sharedConfig = {
     base: '/',
-    plugins: [react(), transformTemplates(mode)],
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
@@ -57,6 +56,46 @@ export default defineConfig(({ mode }) => {
         '@styles': resolve(__dirname, './src/styles'),
       },
     },
+  };
+
+  if (mode === 'sites') {
+    process.env['WRANGLER_WRITE_LOGS'] ??= 'false';
+    process.env['WRANGLER_LOG_PATH'] ??= '.wrangler/logs';
+    process.env['MINIFLARE_REGISTRY_PATH'] ??= '.wrangler/registry';
+
+    const { cloudflare } = await import('@cloudflare/vite-plugin');
+
+    return {
+      ...sharedConfig,
+      plugins: [
+        react(),
+        sites(),
+        cloudflare({
+          viteEnvironment: { name: 'server' },
+          config: {
+            main: './worker/index.ts',
+            compatibility_date: '2026-08-27',
+            assets: { not_found_handling: 'single-page-application' },
+          },
+        }),
+      ],
+      build: {
+        target: 'esnext',
+        sourcemap: true,
+        rollupOptions: {
+          output: {
+            manualChunks(id: string) {
+              return id.includes('node_modules/react') ? 'react-vendor' : undefined;
+            },
+          },
+        },
+      },
+    };
+  }
+
+  return {
+    ...sharedConfig,
+    plugins: [react(), transformTemplates(mode)],
     server: {
       port: 3000,
       open: true,
@@ -67,8 +106,8 @@ export default defineConfig(({ mode }) => {
       sourcemap: true,
       rollupOptions: {
         output: {
-          manualChunks: {
-            'react-vendor': ['react', 'react-dom'],
+          manualChunks(id: string) {
+            return id.includes('node_modules/react') ? 'react-vendor' : undefined;
           },
         },
       },
