@@ -18,6 +18,7 @@ type Project = {
   tone: string
   tall?: boolean
   logo?: boolean
+  contain?: boolean
 }
 
 const navigation = [
@@ -37,9 +38,9 @@ const previewImages: Record<string, string> = {
 }
 
 const projects: Project[] = [
-  { title: 'Evidence Finder', category: 'RESEARCH', caption: '연구 근거 탐색 및 출처 연결', image: '/assets/images/main/processing.png', result: '리서치 시간 85% 단축', tone: 'blue', tall: true },
-  { title: 'Tax Navigator', category: 'TAX', caption: '세무 규정·판례 질의 시스템', image: '/assets/images/main/processing_01.png', result: '답변 근거 추적률 100%', tone: 'red' },
-  { title: 'Policy Review', category: 'GOVERNANCE', caption: '규정 문서 비교 및 변경점 검토', image: '/assets/images/og-image.png', result: '검토 처리량 3.2배', tone: 'black', tall: true },
+  { title: 'Evidence Finder', category: 'RESEARCH', caption: '연구 근거 탐색 및 출처 연결', image: '/assets/images/company/cloa-evidence-vault.jpg', result: '리서치 시간 85% 단축', tone: 'blue', tall: true, contain: true },
+  { title: 'Tax Navigator', category: 'TAX', caption: '세무 규정·판례 질의 시스템', image: '/assets/images/company/codebase-intelligence-platform.jpg', result: '답변 근거 추적률 100%', tone: 'red', contain: true },
+  { title: 'Policy Review', category: 'GOVERNANCE', caption: '규정 문서 비교 및 변경점 검토', image: '/assets/images/company/meeting-ai-security.jpg', result: '검토 처리량 3.2배', tone: 'black', tall: true, contain: true },
   { title: 'Agent Harness', category: 'RESEARCH', caption: '에이전트 하네스 엔지니어링 교육·실험', image: '/assets/images/company/agent-harness-engineering.jpg', result: 'AI 엔지니어링 체계화', tone: 'ivory' },
   { title: 'Hoban AI Voice', category: 'GOVERNANCE', caption: '회의 녹음·전사·화자 분리 기반 지식 워크스페이스', image: '/assets/images/company/hoban-ai-workspace.jpg', result: '안전한 온프레미스 연결', tone: 'navy' },
   { title: 'Edge AI Lab', category: 'RESEARCH', caption: 'Raspberry Pi 기반 엣지 AI 검증 환경', image: '/assets/images/company/raspberry-pi-edge.jpg', result: '현장형 프로토타입 구축', tone: 'grey' },
@@ -237,7 +238,7 @@ function WorkPage(): ReactElement {
     </section>
     <section className="rp-work-grid-section rp-reveal">
       <div className="rp-filter" role="toolbar" aria-label="프로젝트 필터">{(['ALL', 'RESEARCH', 'TAX', 'GOVERNANCE'] as ProjectCategory[]).map((item) => <button key={item} type="button" className={filter === item ? 'is-active' : ''} aria-pressed={filter === item} onClick={() => { setFilter(item) }}>{item}</button>)}</div>
-      <div className="rp-project-grid">{visibleProjects.map((project) => <button className={`rp-project rp-project--${project.tone} ${project.tall ?? false ? 'is-tall' : ''} ${project.logo ?? false ? 'is-logo' : ''}`} type="button" key={project.title} onClick={() => { setSelected(project) }}>
+      <div className="rp-project-grid" aria-live="polite">{visibleProjects.map((project) => <button className={`rp-project rp-project--${project.tone} ${project.tall ?? false ? 'is-tall' : ''} ${project.logo ?? false ? 'is-logo' : ''} ${project.contain ?? false ? 'is-contain' : ''}`} type="button" key={project.title} aria-label={`${project.title}: ${project.caption}`} onClick={() => { setSelected(project) }}>
         <img src={project.image} alt="" loading="lazy" decoding="async" />
         <span className="rp-project__shade" />
         <span className="rp-project__number">{String(projects.indexOf(project) + 1).padStart(2, '0')}</span>
@@ -248,7 +249,7 @@ function WorkPage(): ReactElement {
     <div className={`rp-project-modal ${selected !== null ? 'is-open' : ''}`} role="dialog" aria-modal="true" aria-hidden={selected === null} aria-label="프로젝트 상세 미리보기">
       {selected !== null && <div className="rp-project-modal__panel">
         <button className="rp-project-modal__close" type="button" onClick={() => { setSelected(null) }} aria-label="프로젝트 상세 닫기">×</button>
-        <div className="rp-project-modal__visual"><img src={selected.image} alt="" /></div>
+        <div className={`rp-project-modal__visual ${selected.contain ?? false ? 'is-contain' : ''}`}><img src={selected.image} alt="" /></div>
         <div className="rp-project-modal__copy"><span>{selected.category} · XAIKOREA</span><h2>{selected.title}</h2><p>{selected.caption}</p><dl><div><dt>OUTCOME</dt><dd>{selected.result}</dd></div><div><dt>SCOPE</dt><dd>Strategy · UX · AI Engineering</dd></div></dl><Link to="/contact">프로젝트 상담하기 ↗</Link></div>
       </div>}
     </div>
