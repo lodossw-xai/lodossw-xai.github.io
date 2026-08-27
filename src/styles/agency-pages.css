@@ -45,8 +45,8 @@
 .rp-menu__meta span { color: rgba(255,255,255,.6); font-size: 11px; letter-spacing: .2em; }
 .rp-menu__meta a, .rp-menu__meta div p { margin: 0; font-size: 16px; }
 .rp-menu__nav { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: clamp(40px, 8vw, 130px); }
-.rp-menu__nav a { display: flex; align-items: flex-start; gap: 22px; padding: 5px 0; font-size: clamp(44px, 6vw, 92px); font-weight: 800; line-height: 1; letter-spacing: -.055em; opacity: .72; transition: opacity .25s, transform .25s; }
-.rp-menu__nav a span { padding-top: .7em; font-size: 10px; font-weight: 500; letter-spacing: .1em; }
+.rp-menu__nav a { display: flex; align-items: flex-start; gap: 22px; padding: 5px 0; font-size: clamp(44px, 6vw, 92px); font-weight: 600; line-height: 1; letter-spacing: -.055em; opacity: .72; transition: opacity .25s, transform .25s; }
+.rp-menu__nav a span { padding-top: .7em; font-size: 10px; font-weight: 600; letter-spacing: .1em; }
 .rp-menu__nav a:hover, .rp-menu__nav a:focus-visible, .rp-menu__nav a.is-current { opacity: 1; transform: translateX(14px); }
 .rp-menu__nav a.is-current { text-decoration: underline; text-underline-offset: .12em; text-decoration-thickness: 3px; }
 
@@ -55,7 +55,7 @@
 .rp-hero__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.42) 55%, rgba(0,0,0,.22) 100%); }
 .rp-hero__copy { position: absolute; z-index: 2; left: clamp(90px, 13vw, 210px); right: 8vw; top: 50%; transform: translateY(-42%); }
 .rp-hero__copy > p, .rp-work-intro > p, .rp-contact-hero > div > p, .rp-career-cta > p { margin: 0 0 25px; font-size: 12px; font-weight: 700; letter-spacing: .22em; }
-.rp-hero__copy h1 { margin: 0; max-width: 1240px; font-size: clamp(48px, 6.2vw, 106px); font-weight: 700; line-height: 1.03; letter-spacing: -.045em; }
+.rp-hero__copy h1 { margin: 0; max-width: 1240px; font-size: clamp(48px, 6.2vw, 106px); font-weight: 800; line-height: 1.03; letter-spacing: -.045em; }
 .rp-hero__copy > span { display: block; max-width: 720px; margin-top: 34px; font-size: clamp(17px, 1.35vw, 22px); line-height: 1.9; }
 .rp-scroll-cue { position: absolute; z-index: 3; left: 50%; bottom: 34px; display: grid; justify-items: center; gap: 10px; transform: translateX(-50%); font-size: 10px; letter-spacing: .18em; }
 .rp-scroll-cue i { display: block; width: 1px; height: 54px; background: rgba(255,255,255,.75); overflow: hidden; }
@@ -64,7 +64,7 @@
 .rp-section { padding: clamp(110px, 12vw, 190px) clamp(80px, 12.5vw, 200px); }
 .rp-section-title { display: flex; align-items: flex-start; gap: 30px; margin-bottom: clamp(70px, 8vw, 125px); }
 .rp-section-title > span { padding-top: 12px; color: var(--rp-red); font-size: 11px; letter-spacing: .14em; }
-.rp-section-title h2 { margin: 0; font-size: clamp(44px, 5vw, 78px); font-weight: 600; line-height: 1; letter-spacing: -.05em; }
+.rp-section-title h2 { margin: 0; font-size: clamp(44px, 5vw, 78px); font-weight: 700; line-height: 1; letter-spacing: -.05em; }
 .rp-section-lead { max-width: 760px; margin: -70px 0 80px 55%; color: #555; font-size: 19px; line-height: 1.8; }
 .rp-reveal { opacity: 0; transform: translateY(48px); transition: opacity .85s ease, transform .85s cubic-bezier(.2,.8,.2,1); }
 .rp-reveal.is-visible { opacity: 1; transform: translateY(0); }
@@ -94,7 +94,7 @@
 .rp-awards__preview img { width: 100%; height: 100%; object-fit: cover; animation: rpPreview .45s both; }
 
 .rp-work-intro { min-height: 720px; padding: 270px clamp(80px, 12.5vw, 200px) 110px; background: #fff; }
-.rp-work-intro h1 { margin: 0; font-size: clamp(76px, 10vw, 170px); line-height: .82; letter-spacing: -.07em; font-weight: 600; }
+.rp-work-intro h1 { margin: 0; font-size: clamp(76px, 10vw, 170px); line-height: .82; letter-spacing: -.07em; font-weight: 800; }
 .rp-work-intro > span { display: block; max-width: 610px; margin: 60px 0 0 48%; color: #444; font-size: 18px; line-height: 1.8; }
 .rp-work-grid-section { padding: 0 clamp(80px, 12.5vw, 200px) 180px; }
 .rp-filter { display: flex; gap: 8px; padding: 0 0 38px; border-bottom: 1px solid var(--rp-line); }
