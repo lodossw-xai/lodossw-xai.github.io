@@ -11,6 +11,7 @@ import '../styles/redesign.css';
 
 type Language = 'ko' | 'en';
 type SubmissionState = 'idle' | 'sending' | 'sent' | 'error';
+type OfficeLocationId = 'headOffice' | 'seongbukBranch';
 type SectionId =
   | 'top'
   | 'solutions'
@@ -52,9 +53,18 @@ const heroVisuals = [
     poster: '/assets/images/company/engineering-at-work.jpg',
   },
 ] as const;
-const MAP_ADDRESS = '경기도 성남시 금토로80번길 40 B동 배민스퀘어 301호';
-const MAP_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(MAP_ADDRESS)}&z=16&output=embed&hl=ko`;
-const MAP_LINK_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_ADDRESS)}`;
+const HEAD_OFFICE_MAP_ADDRESS =
+  '경기도 성남시 금토로80번길 40 B동 배민스퀘어 301호';
+const SEONGBUK_BRANCH_MAP_ADDRESS =
+  '서울특별시 성북구 삼양로 29 성북 청년 스마트 창업센터';
+
+function createMapEmbedUrl(address: string): string {
+  return `https://www.google.com/maps?q=${encodeURIComponent(address)}&z=16&output=embed&hl=ko`;
+}
+
+function createMapLinkUrl(address: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
 const serviceVisuals = [
   '/assets/images/company/hoban-ai-workspace.jpg',
   '/assets/images/company/server-mainboard.jpg',
@@ -367,6 +377,9 @@ const copy = {
     contactInfo: {
       officeLabel: '본사 위치',
       officeAddress: '경기도 성남시 금토로80번길 40, B동 배민스퀘어 301호',
+      branchLabel: '성북지점',
+      branchAddress:
+        '서울특별시 성북구 삼양로 29, 3층 23호 (길음동, 성북 청년 스마트 창업센터)',
       phoneLabel: '고객센터',
       phone: '+82)10-3253-5409 · 평일 09:00–18:00',
       emailLabel: '이메일',
@@ -667,6 +680,9 @@ const copy = {
       officeLabel: 'Head office',
       officeAddress:
         '301, Building B, Baemin Square, 40 Geumto-ro 80beon-gil, Seongnam-si, Gyeonggi-do, Republic of Korea',
+      branchLabel: 'Seongbuk branch',
+      branchAddress:
+        '3F, Unit 23, 29 Samyang-ro, Seongbuk-gu, Seoul (Seongbuk Youth Smart Startup Center), Republic of Korea',
       phoneLabel: 'Customer service',
       phone: '+82)10-3253-5409 · Weekdays 09:00–18:00',
       emailLabel: 'Email',
@@ -733,6 +749,8 @@ export default function LandingPage(): ReactElement {
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [isHeroRotationPaused, setIsHeroRotationPaused] = useState(false);
   const [isHeroPopupOpen, setIsHeroPopupOpen] = useState(true);
+  const [activeLocationId, setActiveLocationId] =
+    useState<OfficeLocationId>('headOffice');
   const [videoPlaybackNonce, setVideoPlaybackNonce] = useState(0);
   const [menuPreview, setMenuPreview] = useState(
     menuPreviewVisuals['/about'] ?? serviceVisuals[0]
@@ -756,6 +774,30 @@ export default function LandingPage(): ReactElement {
     content.heroSlides[activeHero] ?? content.heroSlides[0];
   const activeHeroVisual = heroVisuals[activeHero] ?? heroVisuals[0];
   const activeStudy = content.cases[activeCase] ?? content.cases[0];
+  const locationOptions = [
+    {
+      id: 'headOffice' as const,
+      label: content.contactInfo.officeLabel,
+      name: language === 'ko' ? '배민스퀘어' : 'Baemin Square',
+      address: content.contactInfo.officeAddress,
+      mapAddress: HEAD_OFFICE_MAP_ADDRESS,
+    },
+    {
+      id: 'seongbukBranch' as const,
+      label: content.contactInfo.branchLabel,
+      name:
+        language === 'ko'
+          ? '성북 청년 스마트 창업센터'
+          : 'Seongbuk Youth Smart Startup Center',
+      address: content.contactInfo.branchAddress,
+      mapAddress: SEONGBUK_BRANCH_MAP_ADDRESS,
+    },
+  ] as const;
+  const activeLocation =
+    locationOptions.find(({ id }) => id === activeLocationId) ??
+    locationOptions[0];
+  const activeMapEmbedUrl = createMapEmbedUrl(activeLocation.mapAddress);
+  const activeMapLinkUrl = createMapLinkUrl(activeLocation.mapAddress);
   const contactEndpoint =
     typeof CONTACT_API_URL === 'string' && CONTACT_API_URL.trim().length > 0
       ? CONTACT_API_URL
@@ -1774,6 +1816,10 @@ export default function LandingPage(): ReactElement {
                   <dd>{content.contactInfo.officeAddress}</dd>
                 </div>
                 <div>
+                  <dt>{content.contactInfo.branchLabel}</dt>
+                  <dd>{content.contactInfo.branchAddress}</dd>
+                </div>
+                <div>
                   <dt>{content.contactInfo.phoneLabel}</dt>
                   <dd>{content.contactInfo.phone}</dd>
                 </div>
@@ -1908,30 +1954,75 @@ export default function LandingPage(): ReactElement {
               <p className="ra-eyebrow">LOCATION</p>
               <h2 id="location-title">
                 {language === 'ko'
-                  ? '배민스퀘어에서 만나요.'
-                  : 'Meet us at Baemin Square.'}
+                  ? '성남과 성북에서 만나요.'
+                  : 'Meet us in Seongnam or Seongbuk.'}
               </h2>
             </div>
-            <div>
-              <span>{content.contactInfo.officeLabel}</span>
-              <p>{content.contactInfo.officeAddress}</p>
-              <a href={MAP_LINK_URL} target="_blank" rel="noreferrer">
+            <div className="ra-location__details">
+              <div
+                className="ra-location-switcher"
+                role="tablist"
+                aria-label={
+                  language === 'ko' ? '오피스 위치 선택' : 'Select office location'
+                }
+              >
+                {locationOptions.map((location) => (
+                  <button
+                    key={location.id}
+                    id={`location-tab-${location.id}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeLocation.id === location.id}
+                    aria-controls="location-map-panel"
+                    className={
+                      activeLocation.id === location.id ? 'is-active' : ''
+                    }
+                    onClick={() => {
+                      setActiveLocationId(location.id);
+                    }}
+                  >
+                    {location.label}
+                  </button>
+                ))}
+              </div>
+              <div
+                key={`${language}-${activeLocation.id}`}
+                className="ra-location__address"
+              >
+                <span>{activeLocation.label}</span>
+                <strong>{activeLocation.name}</strong>
+                <p>{activeLocation.address}</p>
+              </div>
+              <a href={activeMapLinkUrl} target="_blank" rel="noreferrer">
                 {language === 'ko' ? '지도 앱에서 보기' : 'Open in Maps'} ↗
               </a>
             </div>
           </div>
-          <div className="ra-map">
+          <div
+            id="location-map-panel"
+            className="ra-map"
+            role="tabpanel"
+            aria-labelledby={`location-tab-${activeLocation.id}`}
+          >
             <iframe
+              key={activeLocation.id}
               title={
                 language === 'ko'
-                  ? 'XAIKOREA 본사 위치 지도'
-                  : 'Map showing XAIKOREA head office'
+                  ? `XAIKOREA ${activeLocation.label} 위치 지도`
+                  : `Map showing XAIKOREA ${activeLocation.label}`
               }
-              src={MAP_EMBED_URL}
+              src={activeMapEmbedUrl}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen
             />
+            <div className="ra-map__caption" aria-hidden="true">
+              <span>{activeLocation.label}</span>
+              <strong>{activeLocation.name}</strong>
+              <small>
+                {language === 'ko' ? '지도에서 위치 확인' : 'View location on map'}
+              </small>
+            </div>
           </div>
         </section>
       </main>
