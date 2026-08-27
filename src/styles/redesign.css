@@ -949,6 +949,25 @@
 .ra-form-message {
   margin-top: 28px;
 }
+.ra-form-consent {
+  grid-template-columns: 20px 1fr !important;
+  align-items: start;
+  gap: 9px !important;
+  margin-top: 22px;
+  font-weight: 500 !important;
+  line-height: 1.55;
+}
+.ra-contact__form .ra-form-consent input {
+  width: 17px;
+  height: 17px;
+  margin: 1px 0 0;
+  padding: 0;
+  border: 1px solid rgba(16, 16, 15, 0.45);
+  accent-color: var(--ra-red);
+}
+.ra-form-consent a {
+  border-bottom: 1px solid currentColor;
+}
 .ra-submit {
   width: 100%;
   display: flex;

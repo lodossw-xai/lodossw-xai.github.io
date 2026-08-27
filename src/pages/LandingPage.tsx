@@ -4,11 +4,10 @@ import {
   useEffect,
   useRef,
   useState,
-  type ChangeEvent,
-  type FormEvent,
   type ReactElement,
 } from 'react';
 import { Link } from 'react-router-dom';
+import ProjectInquiryForm from '../components/contact/ProjectInquiryForm';
 import '../styles/redesign.css';
 
 const IntelligenceCoreCanvas = lazy(
@@ -16,7 +15,6 @@ const IntelligenceCoreCanvas = lazy(
 );
 
 type Language = 'ko' | 'en';
-type SubmissionState = 'idle' | 'sending' | 'sent' | 'error';
 type OfficeLocationId = 'headOffice' | 'seongbukBranch';
 type SectionId =
   | 'top'
@@ -29,19 +27,6 @@ type SectionId =
   | 'contact'
   | 'location';
 
-type InquiryFormData = {
-  name: string;
-  company: string;
-  email: string;
-  phone: string;
-  inquiryType: string;
-  budget: string;
-  message: string;
-};
-
-const CONTACT_API_URL = import.meta.env.VITE_CONTACT_API_URL as
-  | string
-  | undefined;
 const HERO_ROTATION_MS = 8000;
 const HERO_COPY_EXIT_MS = 520;
 const heroVisuals = [
@@ -801,15 +786,6 @@ const copy = {
   },
 } as const;
 
-function isSuccessfulResponse(value: unknown): value is { success: true } {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'success' in value &&
-    (value as { success?: unknown }).success === true
-  );
-}
-
 export default function LandingPage(): ReactElement {
   const [language, setLanguage] = useState<Language>('ko');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -830,16 +806,6 @@ export default function LandingPage(): ReactElement {
   const [menuPreview, setMenuPreview] = useState(
     menuPreviewVisuals['/about'] ?? serviceVisuals[0]
   );
-  const [submission, setSubmission] = useState<SubmissionState>('idle');
-  const [formData, setFormData] = useState<InquiryFormData>({
-    name: '',
-    company: '',
-    email: '',
-    phone: '',
-    inquiryType: '',
-    budget: '',
-    message: '',
-  });
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -873,11 +839,6 @@ export default function LandingPage(): ReactElement {
     locationOptions[0];
   const activeMapEmbedUrl = createMapEmbedUrl(activeLocation.mapAddress);
   const activeMapLinkUrl = createMapLinkUrl(activeLocation.mapAddress);
-  const contactEndpoint =
-    typeof CONTACT_API_URL === 'string' && CONTACT_API_URL.trim().length > 0
-      ? CONTACT_API_URL
-      : undefined;
-
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     const onKeyDown = (event: KeyboardEvent): void => {
@@ -1117,75 +1078,6 @@ export default function LandingPage(): ReactElement {
 
   const scrollToTop = (): void => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleChange = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ): void => {
-    const field = event.target.name as keyof InquiryFormData;
-    setFormData((current) => ({ ...current, [field]: event.target.value }));
-  };
-
-  const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    event.preventDefault();
-    setSubmission('sending');
-
-    if (contactEndpoint !== undefined) {
-      try {
-        const response = await fetch(contactEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...formData,
-            language,
-            source: 'website-contact-form',
-          }),
-        });
-        const data: unknown = await response.json().catch(() => null);
-        if (!response.ok || !isSuccessfulResponse(data)) {
-          throw new Error('Contact request failed');
-        }
-        setSubmission('sent');
-        setFormData({
-          name: '',
-          company: '',
-          email: '',
-          phone: '',
-          inquiryType: '',
-          budget: '',
-          message: '',
-        });
-      } catch {
-        setSubmission('error');
-      }
-      return;
-    }
-
-    const inquirySubject =
-      formData.inquiryType !== ''
-        ? formData.inquiryType
-        : formData.company !== ''
-          ? formData.company
-          : 'Project inquiry';
-    const subject = encodeURIComponent(`[XAIKOREA] ${inquirySubject}`);
-    const body = encodeURIComponent(
-      [
-        `Name: ${formData.name}`,
-        `Company: ${formData.company}`,
-        `Email: ${formData.email}`,
-        `Phone: ${formData.phone}`,
-        `Area: ${formData.inquiryType}`,
-        `Scope: ${formData.budget}`,
-        '',
-        formData.message,
-      ].join('\n')
-    );
-    window.location.href = `mailto:contact@xaikorea.ai.kr?subject=${subject}&body=${body}`;
-    setSubmission('sent');
   };
 
   return (
@@ -2103,118 +1995,12 @@ export default function LandingPage(): ReactElement {
                 </div>
               </dl>
             </div>
-            <form
-              className="ra-contact__form"
-              onSubmit={(event) => {
-                void handleSubmit(event);
-              }}
-            >
-              <div className="ra-form-grid">
-                <label>
-                  {content.form.name}
-                  <input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder={content.form.namePlaceholder}
-                    autoComplete="name"
-                    required
-                  />
-                </label>
-                <label>
-                  {content.form.company}
-                  <input
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    placeholder={content.form.companyPlaceholder}
-                    autoComplete="organization"
-                  />
-                </label>
-                <label>
-                  {content.form.email}
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder={content.form.emailPlaceholder}
-                    autoComplete="email"
-                    required
-                  />
-                </label>
-                <label>
-                  {content.form.phone}
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder={content.form.phonePlaceholder}
-                    autoComplete="tel"
-                  />
-                </label>
-                <label>
-                  {content.form.type}
-                  <select
-                    name="inquiryType"
-                    value={formData.inquiryType}
-                    onChange={handleChange}
-                  >
-                    <option value="">{content.form.selectDefault}</option>
-                    {content.form.types.map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  {content.form.budget}
-                  <select
-                    name="budget"
-                    value={formData.budget}
-                    onChange={handleChange}
-                  >
-                    <option value="">{content.form.selectDefault}</option>
-                    {content.form.budgets.map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <label className="ra-form-message">
-                {content.form.message}
-                <textarea
-                  name="message"
-                  rows={5}
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder={content.form.messagePlaceholder}
-                  required
-                />
-              </label>
-              <button
-                className="ra-submit"
-                type="submit"
-                disabled={submission === 'sending'}
-              >
-                {submission === 'sending'
-                  ? content.form.sending
-                  : content.form.send}
-                <span>↗</span>
-              </button>
-              {submission !== 'idle' && (
-                <p
-                  className={`ra-form-status ra-form-status--${submission}`}
-                  role="status"
-                >
-                  {submission === 'error'
-                    ? content.form.error
-                    : contactEndpoint !== undefined
-                      ? content.form.apiSent
-                      : content.form.sent}
-                </p>
-              )}
-            </form>
+            <ProjectInquiryForm
+              copy={content.form}
+              language={language}
+              variant="landing"
+              source="website-contact-form"
+            />
           </div>
         </section>
 
