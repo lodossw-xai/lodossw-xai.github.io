@@ -158,7 +158,7 @@ function AgencyHeader({ current }: { current: AgencyPageType }): ReactElement {
   return <>
     <div className="rp-progress" aria-hidden="true"><span /></div>
     <header className={`rp-header ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-open' : ''}`}>
-      <Link className="rp-brand" to="/" aria-label="XAIKOREA home"><span className="rp-brand__mark" aria-hidden="true"><img src="/assets/images/logo/xaikorea-corporate.png" alt="" /></span><span className="rp-brand__word">XAIKOREA</span></Link>
+      <Link className="rp-brand" to="/" aria-label="XAIKOREA home"><span className="rp-brand__mark" aria-hidden="true"><img src="/assets/images/logo/logo-dark.png" alt="" /></span><span className="rp-brand__word">XAIKOREA</span></Link>
       <button ref={buttonRef} className="rp-menu-button" type="button" aria-expanded={open} aria-controls="agency-menu" aria-label={open ? '메뉴 닫기' : '메뉴 열기'} onClick={() => { setOpen((value) => !value) }}><i /><i /></button>
     </header>
     <div ref={panelRef} id="agency-menu" className={`rp-menu ${open ? 'is-open' : ''}`} aria-hidden={!open}>

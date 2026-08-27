@@ -22,8 +22,11 @@
 .rp-header.is-open { color: #fff; background: transparent; border-color: transparent; backdrop-filter: none; }
 .rp-brand { position: absolute; top: 35px; left: clamp(24px, 4.7vw, 76px); display: inline-flex; align-items: center; gap: .28em; font-size: clamp(22px, 2vw, 32px); letter-spacing: -.06em; line-height: 1; transition: top .35s; }
 .rp-brand__word { font-weight: 700; }
-.rp-brand__mark { display: grid; width: 34px; height: 34px; margin-right: 4px; overflow: hidden; place-items: center; flex: 0 0 auto; background: #fff; }
-.rp-brand__mark img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.72); }
+.rp-brand__mark { display: grid; width: 34px; height: 34px; margin-right: 4px; place-items: center; flex: 0 0 auto; background: transparent; }
+.rp-brand__mark img { display: block; width: 100%; height: 100%; object-fit: contain; transform: none; filter: none; transition: filter .35s; }
+.rp-site--work .rp-header:not(.is-scrolled):not(.is-open) .rp-brand__mark img,
+.rp-site--contact .rp-header:not(.is-scrolled):not(.is-open) .rp-brand__mark img,
+.rp-header.is-scrolled:not(.is-open) .rp-brand__mark img { filter: invert(1); }
 .rp-header.is-scrolled .rp-brand { top: 24px; }
 .rp-menu-button { position: absolute; top: 34px; right: clamp(24px, 4.7vw, 76px); width: 58px; height: 48px; border: 0; background: transparent; cursor: pointer; transition: top .35s; }
 .rp-header.is-scrolled .rp-menu-button { top: 17px; }

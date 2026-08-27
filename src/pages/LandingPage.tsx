@@ -1175,7 +1175,7 @@ export default function LandingPage(): ReactElement {
         <div className="ra-shell ra-header__inner">
           <Link className="ra-brand" to="/" aria-label="XAIKOREA home">
             <span className="ra-brand__mark" aria-hidden="true">
-              <img src="/assets/images/logo/xaikorea-corporate.png" alt="" />
+              <img src="/assets/images/logo/logo-dark.png" alt="" />
             </span>
             <span className="ra-brand__word">XAIKOREA</span>
           </Link>
@@ -2202,7 +2202,7 @@ export default function LandingPage(): ReactElement {
         <div className="ra-shell">
           <a className="ra-brand" href="#top">
             <span className="ra-brand__mark" aria-hidden="true">
-              <img src="/assets/images/logo/xaikorea-corporate.png" alt="" />
+              <img src="/assets/images/logo/logo-dark.png" alt="" />
             </span>
             <span className="ra-brand__word">XAIKOREA</span>
           </a>

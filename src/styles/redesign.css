@@ -65,17 +65,18 @@
   width: 32px;
   height: 32px;
   margin-right: 5px;
-  overflow: hidden;
   place-items: center;
   flex: 0 0 auto;
-  background: #fff;
+  background: transparent;
 }
 .ra-brand__mark img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(1.72);
+  object-fit: contain;
+  transform: none;
+  filter: none;
+  transition: filter 0.25s ease;
 }
 .ra-desktop-nav {
   display: flex;
@@ -2082,6 +2083,9 @@ html {
   box-shadow: 0 1px 0 rgba(17, 17, 15, 0.12);
   mix-blend-mode: normal;
   backdrop-filter: blur(14px);
+}
+.ra-header.is-scrolled:not(.is-over-dark):not(.is-menu-open) .ra-brand__mark img {
+  filter: invert(1);
 }
 .ra-header.is-scrolled .ra-header__inner {
   min-height: 76px;
