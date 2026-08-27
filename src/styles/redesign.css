@@ -1185,7 +1185,7 @@
 }
 
 .ra-mobile-menu {
-  background: #d72428;
+  background: var(--ra-red);
 }
 .ra-mobile-menu .ra-shell {
   padding-block: 142px 52px;
