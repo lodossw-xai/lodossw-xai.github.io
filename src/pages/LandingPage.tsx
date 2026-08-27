@@ -257,6 +257,8 @@ const copy = {
         stat: '85%',
         statLabel: '리서치 시간 절감',
         tag: 'Academic intelligence',
+        panelTitle: '질문에서 근거까지, 한 번에 연결',
+        panelMeta: 'SOURCE SEARCH · CONTEXT LINKING',
       },
       {
         label: 'Review',
@@ -265,6 +267,8 @@ const copy = {
         stat: '3.2×',
         statLabel: '검토 처리량 향상',
         tag: 'Document intelligence',
+        panelTitle: '문서의 차이와 핵심 쟁점을 빠르게 확인',
+        panelMeta: 'COMPARE · TRACE · REVIEW',
       },
       {
         label: 'Governance',
@@ -273,6 +277,8 @@ const copy = {
         stat: '100%',
         statLabel: '추적 가능한 응답',
         tag: 'Trusted AI operations',
+        panelTitle: '모든 답변의 출처와 검토 이력을 기록',
+        panelMeta: 'SOURCE · ACCESS · AUDIT',
       },
     ],
     servicesEyebrow: 'WHAT WE BUILD',
@@ -559,6 +565,8 @@ const copy = {
         stat: '85%',
         statLabel: 'less research time',
         tag: 'Academic intelligence',
+        panelTitle: 'Connect every question to its evidence',
+        panelMeta: 'SOURCE SEARCH · CONTEXT LINKING',
       },
       {
         label: 'Review',
@@ -567,6 +575,8 @@ const copy = {
         stat: '3.2×',
         statLabel: 'more review throughput',
         tag: 'Document intelligence',
+        panelTitle: 'See document changes and key issues faster',
+        panelMeta: 'COMPARE · TRACE · REVIEW',
       },
       {
         label: 'Governance',
@@ -575,6 +585,8 @@ const copy = {
         stat: '100%',
         statLabel: 'traceable responses',
         tag: 'Trusted AI operations',
+        panelTitle: 'Record sources and review history for every answer',
+        panelMeta: 'SOURCE · ACCESS · AUDIT',
       },
     ],
     servicesEyebrow: 'WHAT WE BUILD',
@@ -1595,10 +1607,18 @@ export default function LandingPage(): ReactElement {
                 <span className="ra-orb ra-orb--two" />
                 <span className="ra-grid-lines" />
                 <div className="ra-case__window">
-                  <i />
-                  <i />
-                  <i />
-                  <b>{activeStudy.tag}</b>
+                  <div className="ra-case__window-header">
+                    <span className="ra-case__window-dots">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                    <em>AI ANALYSIS</em>
+                  </div>
+                  <div className="ra-case__window-copy">
+                    <b>{activeStudy.panelTitle}</b>
+                    <span>{activeStudy.panelMeta}</span>
+                  </div>
                   <strong>AI</strong>
                 </div>
               </div>
