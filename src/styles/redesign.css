@@ -1287,12 +1287,12 @@
   border-top: 0;
 }
 .ra-mobile-menu nav a {
-  gap: 22px;
-  padding: clamp(10px, 1.35vw, 20px) 0;
+  gap: 18px;
+  padding: clamp(8px, 0.9vw, 13px) 0;
   border-bottom: 0;
-  font-size: clamp(48px, 6.4vw, 94px);
-  letter-spacing: -0.08em;
-  line-height: 0.95;
+  font-size: clamp(40px, 4.25vw, 68px);
+  letter-spacing: -0.06em;
+  line-height: 1.02;
   transition:
     transform 0.2s,
     opacity 0.2s;
@@ -1302,7 +1302,7 @@
   opacity: 0.72;
 }
 .ra-mobile-menu nav span {
-  padding-top: 8px;
+  padding-top: 6px;
   font-size: 10px;
 }
 .ra-mobile-mail {
