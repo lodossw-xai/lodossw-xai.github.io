@@ -5,15 +5,22 @@ type Particle = {
   y: number;
   angle: number;
   radius: number;
+  orbitBand: number;
   depth: number;
   size: number;
   speed: number;
   seed: number;
+  brightness: number;
   cool: boolean;
 };
 
 function clamp(value: number, minimum = 0, maximum = 1): number {
   return Math.min(maximum, Math.max(minimum, value));
+}
+
+function smooth(value: number): number {
+  const progress = clamp(value);
+  return progress * progress * (3 - 2 * progress);
 }
 
 export default function ContactStellarHero(): ReactElement {
@@ -46,11 +53,11 @@ export default function ContactStellarHero(): ReactElement {
 
     const makeParticles = (): void => {
       const count = reducedMotion
-        ? Math.min(700, Math.max(450, Math.round((width * height) / 2200)))
+        ? Math.min(900, Math.max(600, Math.round((width * height) / 1800)))
         : width < 760
-          ? Math.min(950, Math.max(650, Math.round((width * height) / 1050)))
-          : Math.min(2200, Math.max(1400, Math.round((width * height) / 950)));
-      const baseRadius = Math.min(width, height) * (width < 760 ? 0.3 : 0.35);
+          ? Math.min(1350, Math.max(850, Math.round((width * height) / 820)))
+          : Math.min(3200, Math.max(2100, Math.round((width * height) / 700)));
+      const baseRadius = Math.min(width, height) * (width < 760 ? 0.31 : 0.36);
 
       particles = Array.from({ length: count }, () => {
         const shell = Math.pow(Math.random(), 2.2);
@@ -58,11 +65,15 @@ export default function ContactStellarHero(): ReactElement {
           x: Math.random() * width,
           y: Math.random() * height,
           angle: Math.random() * Math.PI * 2,
-          radius: baseRadius * (0.72 + shell * 0.4),
+          radius: baseRadius * (0.7 + shell * 0.48),
+          orbitBand:
+            (Math.floor(Math.random() * 3) - 1) * 0.016 +
+            (Math.random() - 0.5) * 0.004,
           depth: Math.pow(Math.random(), 1.6),
-          size: 0.3 + Math.random() * 1.45,
-          speed: 0.18 + Math.random() * 0.5,
+          size: 0.45 + Math.random() * 1.75,
+          speed: 0.16 + Math.random() * 0.46,
           seed: Math.random() * Math.PI * 2,
+          brightness: 0.72 + Math.random() * 0.58,
           cool: Math.random() > 0.78,
         };
       });
@@ -87,10 +98,10 @@ export default function ContactStellarHero(): ReactElement {
     const updateScroll = (): void => {
       const bounds = section.getBoundingClientRect();
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
-      scrollProgress = reducedMotion ? 0.82 : clamp(-bounds.top / travel);
+      scrollProgress = reducedMotion ? 1 : clamp(-bounds.top / travel);
       const copyProgress = reducedMotion
         ? 1
-        : clamp((scrollProgress - 0.28) / 0.54);
+        : smooth((scrollProgress - 0.66) / 0.25);
       section.style.setProperty(
         '--rp-stellar-copy-opacity',
         String(0.02 + copyProgress * 0.98)
@@ -107,14 +118,12 @@ export default function ContactStellarHero(): ReactElement {
 
     const draw = (time = 0): void => {
       drawingContext.clearRect(0, 0, width, height);
-      const normalizedFormation = clamp((scrollProgress - 0.04) / 0.88);
-      const formation =
-        normalizedFormation *
-        normalizedFormation *
-        (3 - 2 * normalizedFormation);
+      const gather = smooth((scrollProgress - 0.12) / 0.65);
+      const settle = smooth((scrollProgress - 0.7) / 0.22);
+      const complete = smooth((scrollProgress - 0.84) / 0.12);
       const centerX = width * 0.5 + pointerX * 10;
       const centerY = height * 0.5 + pointerY * 7;
-      const baseRadius = Math.min(width, height) * (width < 760 ? 0.3 : 0.35);
+      const baseRadius = Math.min(width, height) * (width < 760 ? 0.31 : 0.36);
       const glowRadius = baseRadius * 1.45;
       const glow = drawingContext.createRadialGradient(
         centerX,
@@ -126,68 +135,148 @@ export default function ContactStellarHero(): ReactElement {
       );
       glow.addColorStop(
         0,
-        `rgba(255,255,255,${String(0.025 + formation * 0.055)})`
+        `rgba(255,255,255,${String(0.035 + gather * 0.075)})`
       );
-      glow.addColorStop(0.5, 'rgba(178,83,77,.03)');
+      glow.addColorStop(0.52, 'rgba(177,196,205,.035)');
       glow.addColorStop(1, 'rgba(0,0,0,0)');
       drawingContext.fillStyle = glow;
       drawingContext.fillRect(0, 0, width, height);
 
+      if (gather > 0.04 && complete < 0.98) {
+        drawingContext.save();
+        drawingContext.translate(centerX, centerY);
+        drawingContext.rotate(time * 0.000035);
+        drawingContext.globalCompositeOperation = 'lighter';
+        for (let arm = 0; arm < 4; arm += 1) {
+          drawingContext.beginPath();
+          for (let point = 0; point <= 90; point += 1) {
+            const ratio = point / 90;
+            const radius = baseRadius * (0.18 + ratio * 1.35);
+            const angle =
+              arm * (Math.PI / 2) + ratio * Math.PI * 2.7 - gather * 1.4;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            if (point === 0) {
+              drawingContext.moveTo(x, y);
+            } else {
+              drawingContext.lineTo(x, y);
+            }
+          }
+          drawingContext.strokeStyle = `rgba(205,224,235,${String(gather * (1 - complete) * 0.055)})`;
+          drawingContext.lineWidth = 0.7;
+          drawingContext.stroke();
+        }
+        drawingContext.restore();
+      }
+
+      drawingContext.save();
+      drawingContext.globalCompositeOperation = 'lighter';
+
       particles.forEach((particle, index) => {
-        const startX = particle.x - centerX;
-        const startY = particle.y - centerY;
+        const drift = 1 - gather;
+        const scatterX =
+          particle.x +
+          Math.sin(time * 0.00016 * particle.speed + particle.seed) *
+            (4 + particle.depth * 11) *
+            drift;
+        const scatterY =
+          particle.y +
+          Math.cos(time * 0.00013 * particle.speed + particle.seed * 1.7) *
+            (3 + particle.depth * 8) *
+            drift;
+        const startX = scatterX - centerX;
+        const startY = scatterY - centerY;
         const startRadius = Math.max(1, Math.hypot(startX, startY));
         const startAngle = Math.atan2(startY, startX);
-        const vortexTurns =
-          Math.PI * 2 * (1.4 + particle.depth * 2.7 + particle.seed * 0.05);
-        const rotation = time * 0.00012 * (0.35 + particle.speed);
-        const angle = startAngle + rotation + formation * vortexTurns;
-        const wobble =
-          Math.sin(time * 0.0007 + particle.seed) *
-          particle.radius *
-          (0.01 + (1 - formation) * 0.018);
+        const targetAngle = particle.angle;
+        const shortestAngle = Math.atan2(
+          Math.sin(targetAngle - startAngle),
+          Math.cos(targetAngle - startAngle)
+        );
+        const vortexTurns = Math.PI * 2 * (1.8 + particle.depth * 3.8);
+        const rotation = time * 0.000075 * (0.6 + particle.speed);
+        const angle =
+          startAngle + shortestAngle * gather + vortexTurns * gather + rotation;
+        const looseOrbitRadius = particle.radius;
+        const finalOrbitRadius =
+          baseRadius * (1 + particle.orbitBand) +
+          Math.sin(particle.seed * 2.3) * 0.85;
+        const targetRadius =
+          looseOrbitRadius * (1 - settle) + finalOrbitRadius * settle;
+        const spiralPulse =
+          Math.sin(particle.seed + gather * Math.PI * 7) *
+          baseRadius *
+          0.038 *
+          gather *
+          (1 - settle);
         const orbitRadius =
-          startRadius * (1 - formation) + particle.radius * formation + wobble;
-        const verticalScale = 1 - formation * 0.18;
-        const x = centerX + Math.cos(angle) * orbitRadius;
-        const y = centerY + Math.sin(angle) * orbitRadius * verticalScale;
-        const alpha = 0.1 + particle.depth * 0.68 + formation * 0.08;
+          startRadius * (1 - gather) + targetRadius * gather + spiralPulse;
+        const orbitX = centerX + Math.cos(angle) * orbitRadius;
+        const orbitY = centerY + Math.sin(angle) * orbitRadius;
+        const x = scatterX * (1 - gather) + orbitX * gather;
+        const y = scatterY * (1 - gather) + orbitY * gather;
+        const twinkle =
+          0.82 + Math.sin(time * 0.0011 * particle.speed + particle.seed) * 0.18;
+        const alpha = clamp(
+          (0.34 + particle.depth * 0.58 + complete * 0.08) *
+            particle.brightness *
+            twinkle,
+          0.18,
+          1
+        );
 
-        if (!reducedMotion && index % 4 === 0 && formation > 0.08) {
-          const trailAngle = angle - 0.02 * (0.6 + particle.speed) * formation;
+        if (!reducedMotion && index % 3 === 0 && gather > 0.06) {
+          const trailAngle = angle - 0.026 * (0.65 + particle.speed) * gather;
           drawingContext.beginPath();
           drawingContext.moveTo(
             centerX + Math.cos(trailAngle) * orbitRadius,
-            centerY + Math.sin(trailAngle) * orbitRadius * verticalScale
+            centerY + Math.sin(trailAngle) * orbitRadius
           );
           drawingContext.lineTo(x, y);
-          drawingContext.strokeStyle = `rgba(255,255,255,${String(alpha * 0.42)})`;
-          drawingContext.lineWidth = Math.max(0.35, particle.size * 0.45);
+          drawingContext.strokeStyle = `rgba(220,234,241,${String(alpha * (0.28 + gather * 0.22))})`;
+          drawingContext.lineWidth = Math.max(0.4, particle.size * 0.5);
           drawingContext.stroke();
+        }
+
+        if (index % 9 === 0) {
+          drawingContext.beginPath();
+          drawingContext.fillStyle = particle.cool
+            ? `rgba(183,217,235,${String(alpha * 0.2)})`
+            : `rgba(255,252,237,${String(alpha * 0.22)})`;
+          drawingContext.arc(
+            x,
+            y,
+            particle.size * (2.2 + particle.depth),
+            0,
+            Math.PI * 2
+          );
+          drawingContext.fill();
         }
 
         drawingContext.beginPath();
         drawingContext.fillStyle = particle.cool
-          ? `rgba(205,224,235,${String(alpha)})`
-          : `rgba(246,244,233,${String(alpha)})`;
+          ? `rgba(222,240,250,${String(alpha)})`
+          : `rgba(255,253,244,${String(alpha)})`;
         drawingContext.arc(
           x,
           y,
-          particle.size * (0.8 + particle.depth * 0.45),
+          particle.size * (0.9 + particle.depth * 0.5),
           0,
           Math.PI * 2
         );
         drawingContext.fill();
       });
+      drawingContext.restore();
 
-      const orbitOpacity = clamp((formation - 0.18) / 0.65);
+      const orbitOpacity = smooth((scrollProgress - 0.48) / 0.42);
       if (orbitOpacity > 0) {
         drawingContext.save();
         drawingContext.translate(centerX, centerY);
-        drawingContext.rotate(time * 0.000055);
-        [0.78, 0.97, 1.17].forEach((scale, index) => {
+        drawingContext.rotate(time * 0.00004);
+        drawingContext.globalCompositeOperation = 'lighter';
+        [0.82, 1, 1.19].forEach((scale, index) => {
           drawingContext.save();
-          drawingContext.rotate(index % 2 === 0 ? formation * 0.7 : -formation);
+          drawingContext.rotate(index % 2 === 0 ? gather * 0.65 : -gather * 0.82);
           drawingContext.beginPath();
           drawingContext.setLineDash([
             18 + index * 11,
@@ -196,18 +285,10 @@ export default function ContactStellarHero(): ReactElement {
             28 + index * 9,
           ]);
           drawingContext.lineDashOffset =
-            time * 0.018 * (index % 2 === 0 ? -1 : 1);
-          drawingContext.ellipse(
-            0,
-            0,
-            baseRadius * scale,
-            baseRadius * scale * 0.82,
-            0,
-            0,
-            Math.PI * 2
-          );
-          drawingContext.strokeStyle = `rgba(255,255,255,${String(orbitOpacity * (0.08 + index * 0.025))})`;
-          drawingContext.lineWidth = index === 1 ? 1.2 : 0.7;
+            time * 0.012 * (index % 2 === 0 ? -1 : 1);
+          drawingContext.arc(0, 0, baseRadius * scale, 0, Math.PI * 2);
+          drawingContext.strokeStyle = `rgba(224,239,246,${String(orbitOpacity * (0.11 + index * 0.035))})`;
+          drawingContext.lineWidth = index === 1 ? 1.45 : 0.8;
           drawingContext.stroke();
           drawingContext.restore();
         });

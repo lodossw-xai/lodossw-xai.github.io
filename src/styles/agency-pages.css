@@ -1001,8 +1001,8 @@
   --rp-stellar-copy-blur: 16px;
   --rp-stellar-copy-scale: 0.94;
   position: relative;
-  height: 155svh;
-  min-height: 720px;
+  height: 450svh;
+  min-height: 3000px;
   color: #fff;
   background: #0d0e0d;
 }
@@ -1010,9 +1010,10 @@
   position: sticky;
   top: 0;
   height: 100svh;
-  min-height: 720px;
+  min-height: 0;
   overflow: hidden;
   isolation: isolate;
+  contain: paint;
 }
 .rp-stellar-hero canvas {
   position: absolute;
@@ -1957,11 +1958,11 @@
     margin-top: 65px;
   }
   .rp-stellar-hero {
-    height: 142svh;
-    min-height: 690px;
+    height: 400svh;
+    min-height: 2500px;
   }
   .rp-stellar-hero__stage {
-    min-height: 690px;
+    min-height: 0;
   }
   .rp-stellar-hero canvas {
     background: radial-gradient(
