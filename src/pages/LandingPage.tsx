@@ -86,6 +86,38 @@ const expertVisuals = [
   '/assets/images/company/xai-team-collaboration.jpg',
   '/assets/images/company/xai-technology-protection.jpg',
 ] as const;
+const officeMarqueeVisuals = [
+  [
+    '/assets/images/company/baemin-square-campus.jpg',
+    '배민스퀘어 오피스 전경',
+    'Baemin Square office campus',
+  ],
+  [
+    '/assets/images/company/xai-office-workspace.jpg',
+    'XAIKOREA 업무 공간',
+    'XAIKOREA workspace',
+  ],
+  [
+    '/assets/images/company/office-lounge.jpg',
+    '협업 회의 공간',
+    'Collaboration lounge',
+  ],
+  [
+    '/assets/images/company/research-desk.jpg',
+    '연구 개발 업무 현장',
+    'Research and development desk',
+  ],
+  [
+    '/assets/images/company/xai-team-collaboration.jpg',
+    'XAIKOREA 팀 협업',
+    'XAIKOREA team collaboration',
+  ],
+  [
+    '/assets/images/company/xai-onpremise-lab.jpg',
+    '온프레미스 AI 연구 환경',
+    'On-premise AI lab',
+  ],
+] as const;
 const globalNavigation = [
   ['HOME', '/'],
   ['ABOUT', '/about'],
@@ -1854,6 +1886,48 @@ export default function LandingPage(): ReactElement {
                     </a>
                   )}
                 </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="ra-office-marquee"
+          aria-label={
+            language === 'ko'
+              ? 'XAIKOREA의 공간과 업무 현장'
+              : 'Inside XAIKOREA'
+          }
+        >
+          <div className="ra-office-marquee__viewport">
+            <div className="ra-office-marquee__track">
+              {[0, 1].map((groupIndex) => (
+                <div
+                  className="ra-office-marquee__group"
+                  key={groupIndex}
+                  aria-hidden={groupIndex === 1 ? true : undefined}
+                >
+                  {officeMarqueeVisuals.map(([src, koAlt, enAlt], index) => (
+                    <figure key={`${groupIndex}-${src}`}>
+                      <img
+                        src={src}
+                        alt={
+                          groupIndex === 0
+                            ? language === 'ko'
+                              ? koAlt
+                              : enAlt
+                            : ''
+                        }
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <figcaption>
+                        <span>0{index + 1}</span>
+                        {language === 'ko' ? koAlt : enAlt}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
               ))}
             </div>
           </div>
