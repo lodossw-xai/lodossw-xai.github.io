@@ -15,7 +15,10 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "contact:dev": "wrangler dev --config contact-worker/wrangler.jsonc --port 8787",
+    "contact:deploy": "wrangler deploy --config contact-worker/wrangler.jsonc",
+    "contact:test": "node --test contact-worker/src/index.test.ts"
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^1.4.1",
@@ -30,7 +33,6 @@
     "react-dom": "^19.0.0",
     "react-google-recaptcha": "^3.1.0",
     "react-router-dom": "^7.11.0",
-    "resend": "^6.9.1",
     "three": "^0.185.1",
     "three-stdlib": "^2.36.1",
     "zustand": "^5.0.2"

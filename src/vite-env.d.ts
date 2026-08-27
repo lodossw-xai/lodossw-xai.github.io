@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_SITE_DOMAIN: string;
   readonly VITE_SITE_CNAME: string;
   readonly VITE_RECAPTCHA_SITE_KEY: string;
+  readonly VITE_TURNSTILE_SITE_KEY: string;
 }
 
 interface ImportMeta {

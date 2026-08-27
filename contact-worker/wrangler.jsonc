@@ -1,0 +1,16 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "xaikorea-contact-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-27",
+  "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGINS": "https://www.xaikorea.ai.kr,https://xaikorea.ai.kr,https://xaikorea-team-preview.kjh861213.chatgpt.site",
+    "TURNSTILE_EXPECTED_HOSTNAMES": "www.xaikorea.ai.kr,xaikorea.ai.kr,xaikorea-team-preview.kjh861213.chatgpt.site",
+    "TURNSTILE_ACTION": "contact_form",
+    "GMAIL_SENDER_ADDRESS": "contact@xaikorea.ai.kr",
+    "CONTACT_RECIPIENT": "contact@xaikorea.ai.kr",
+    "MIN_FORM_FILL_MS": "3000",
+    "MAX_FORM_AGE_MS": "7200000"
+  }
+}

@@ -968,6 +968,32 @@
 .ra-form-consent a {
   border-bottom: 1px solid currentColor;
 }
+.ra-form-honeypot {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.ra-form-security {
+  min-height: 65px;
+  margin-top: 24px;
+}
+.ra-form-security > div {
+  width: 100%;
+}
+.ra-form-config-notice {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--ra-line);
+  color: #736f69;
+  font-size: 12px;
+  line-height: 1.5;
+}
 .ra-submit {
   width: 100%;
   display: flex;
@@ -1006,6 +1032,22 @@
 }
 .ra-form-status--error {
   color: #b92c28;
+}
+.ra-form-inquiry-id {
+  display: block;
+  margin-top: 5px;
+  color: var(--ra-ink);
+}
+.ra-form-fallback {
+  margin: 16px 0 0;
+  color: #736f69;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.ra-form-fallback a {
+  color: var(--ra-ink);
+  border-bottom: 1px solid currentColor;
+  font-weight: 700;
 }
 .ra-footer {
   padding: 55px 0 30px;

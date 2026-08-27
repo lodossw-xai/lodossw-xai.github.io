@@ -9,6 +9,7 @@ lerna-debug.log*
 
 # Dependencies
 node_modules
+.npm-cache/
 dist
 dist-ssr
 *.local
@@ -30,6 +31,8 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+.dev.vars
+contact-worker/.dev.vars
 
 # Testing
 coverage

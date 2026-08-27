@@ -1,10 +1,15 @@
 import {
   useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type FormEvent,
   type ReactElement,
 } from 'react';
+import {
+  Turnstile,
+  type TurnstileInstance,
+} from '@marsidev/react-turnstile';
 import { Link } from 'react-router-dom';
 
 export type InquiryFormCopy = {
@@ -38,6 +43,7 @@ type InquiryFormData = {
   inquiryType: string;
   budget: string;
   message: string;
+  companyWebsite: string;
 };
 
 type SubmissionState = 'idle' | 'sending' | 'sent' | 'error';
@@ -54,6 +60,10 @@ type ProjectInquiryFormProps = {
 const CONTACT_API_URL = import.meta.env.VITE_CONTACT_API_URL as
   | string
   | undefined;
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as
+  | string
+  | undefined;
+const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA';
 
 const initialFormData: InquiryFormData = {
   name: '',
@@ -63,9 +73,12 @@ const initialFormData: InquiryFormData = {
   inquiryType: '',
   budget: '',
   message: '',
+  companyWebsite: '',
 };
 
-function isSuccessfulResponse(value: unknown): value is { success: true } {
+function isSuccessfulResponse(
+  value: unknown
+): value is { success: true; inquiryId?: string } {
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -84,10 +97,23 @@ export default function ProjectInquiryForm({
 }: ProjectInquiryFormProps): ReactElement {
   const [submission, setSubmission] = useState<SubmissionState>('idle');
   const [formData, setFormData] = useState<InquiryFormData>(initialFormData);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [inquiryId, setInquiryId] = useState('');
+  const startedAtRef = useRef<number | undefined>(undefined);
+  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
   const contactEndpoint =
     typeof CONTACT_API_URL === 'string' && CONTACT_API_URL.trim().length > 0
       ? CONTACT_API_URL
       : undefined;
+  const turnstileSiteKey =
+    typeof TURNSTILE_SITE_KEY === 'string' &&
+    TURNSTILE_SITE_KEY.trim().length > 0
+      ? TURNSTILE_SITE_KEY.trim()
+      : import.meta.env.DEV
+        ? TURNSTILE_TEST_SITE_KEY
+        : undefined;
+  const isConfigured =
+    contactEndpoint !== undefined && turnstileSiteKey !== undefined;
   const prefix = variant === 'landing' ? 'ra' : 'rp';
 
   useEffect(() => {
@@ -109,65 +135,76 @@ export default function ProjectInquiryForm({
     setFormData((current) => ({ ...current, [field]: event.target.value }));
     if (submission !== 'idle') {
       setSubmission('idle');
+      setInquiryId('');
     }
+  };
+
+  const markFormStarted = (): void => {
+    startedAtRef.current ??= Date.now();
   };
 
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    setSubmission('sending');
-
-    if (contactEndpoint !== undefined) {
-      try {
-        const response = await fetch(contactEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...formData, language, source }),
-        });
-        const data: unknown = await response.json().catch(() => null);
-        if (!response.ok || !isSuccessfulResponse(data)) {
-          throw new Error('Contact request failed');
-        }
-        setSubmission('sent');
-        setFormData(initialFormData);
-      } catch {
-        setSubmission('error');
-      }
+    if (!isConfigured || turnstileToken === '') {
+      setSubmission('error');
       return;
     }
+    setSubmission('sending');
 
-    const inquirySubject =
-      formData.inquiryType !== ''
-        ? formData.inquiryType
-        : formData.company !== ''
-          ? formData.company
-          : 'Project inquiry';
-    const subject = encodeURIComponent(`[XAIKOREA] ${inquirySubject}`);
-    const body = encodeURIComponent(
-      [
-        `Name: ${formData.name}`,
-        `Company: ${formData.company}`,
-        `Email: ${formData.email}`,
-        `Phone: ${formData.phone}`,
-        `Area: ${formData.inquiryType}`,
-        `Scope: ${formData.budget}`,
-        '',
-        formData.message,
-      ].join('\n')
-    );
-    window.location.href = `mailto:contact@xaikorea.ai.kr?subject=${subject}&body=${body}`;
-    setSubmission('sent');
+    try {
+      const response = await fetch(contactEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          language,
+          source,
+          turnstileToken,
+          startedAt: startedAtRef.current ?? Date.now(),
+          consent: true,
+        }),
+      });
+      const data: unknown = await response.json().catch(() => null);
+      if (!response.ok || !isSuccessfulResponse(data)) {
+        throw new Error('Contact request failed');
+      }
+      setSubmission('sent');
+      setInquiryId(data.inquiryId ?? '');
+      setFormData(initialFormData);
+      setTurnstileToken('');
+      startedAtRef.current = undefined;
+      turnstileRef.current?.reset();
+    } catch {
+      setSubmission('error');
+      setTurnstileToken('');
+      turnstileRef.current?.reset();
+    }
   };
 
   return (
     <form
       id={id}
       className={`${prefix}-contact__form ${prefix}-inquiry-form`}
+      onFocusCapture={markFormStarted}
       onSubmit={(event) => {
         void handleSubmit(event);
       }}
     >
+      <div className={`${prefix}-form-honeypot`} aria-hidden="true">
+        <label htmlFor={`${id}-company-website`}>
+          Website
+          <input
+            id={`${id}-company-website`}
+            name="companyWebsite"
+            value={formData.companyWebsite}
+            onChange={handleChange}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </label>
+      </div>
       <div className={`${prefix}-form-grid`}>
         <label>
           {copy.name}
@@ -177,6 +214,7 @@ export default function ProjectInquiryForm({
             onChange={handleChange}
             placeholder={copy.namePlaceholder}
             autoComplete="name"
+            maxLength={80}
             required
           />
         </label>
@@ -188,6 +226,7 @@ export default function ProjectInquiryForm({
             onChange={handleChange}
             placeholder={copy.companyPlaceholder}
             autoComplete="organization"
+            maxLength={120}
           />
         </label>
         <label>
@@ -199,6 +238,7 @@ export default function ProjectInquiryForm({
             onChange={handleChange}
             placeholder={copy.emailPlaceholder}
             autoComplete="email"
+            maxLength={254}
             required
           />
         </label>
@@ -211,6 +251,7 @@ export default function ProjectInquiryForm({
             onChange={handleChange}
             placeholder={copy.phonePlaceholder}
             autoComplete="tel"
+            maxLength={40}
           />
         </label>
         <label>
@@ -244,6 +285,8 @@ export default function ProjectInquiryForm({
           value={formData.message}
           onChange={handleChange}
           placeholder={copy.messagePlaceholder}
+          minLength={10}
+          maxLength={5000}
           required
         />
       </label>
@@ -258,10 +301,47 @@ export default function ProjectInquiryForm({
           </Link>
         </span>
       </label>
+      <div className={`${prefix}-form-security`}>
+        {turnstileSiteKey !== undefined ? (
+          <Turnstile
+            ref={turnstileRef}
+            siteKey={turnstileSiteKey}
+            onSuccess={(token) => {
+              setTurnstileToken(token);
+              if (submission === 'error') {
+                setSubmission('idle');
+              }
+            }}
+            onExpire={() => {
+              setTurnstileToken('');
+            }}
+            onError={() => {
+              setTurnstileToken('');
+              setSubmission('error');
+            }}
+            options={{
+              action: 'contact_form',
+              appearance: 'interaction-only',
+              language,
+              refreshExpired: 'auto',
+              size: 'flexible',
+              theme: 'light',
+            }}
+          />
+        ) : (
+          <p className={`${prefix}-form-config-notice`} role="status">
+            {language === 'ko'
+              ? '온라인 문의 보안 설정을 준비 중입니다.'
+              : 'Secure online inquiries are being configured.'}
+          </p>
+        )}
+      </div>
       <button
         className={`${prefix}-submit`}
         type="submit"
-        disabled={submission === 'sending'}
+        disabled={
+          submission === 'sending' || !isConfigured || turnstileToken === ''
+        }
       >
         {submission === 'sending' ? copy.sending : copy.send}
         <span aria-hidden="true">↗</span>
@@ -271,13 +351,26 @@ export default function ProjectInquiryForm({
           className={`${prefix}-form-status ${prefix}-form-status--${submission}`}
           role="status"
         >
-          {submission === 'error'
-            ? copy.error
-            : contactEndpoint !== undefined
-              ? copy.apiSent
-              : copy.sent}
+          {submission === 'error' ? (
+            copy.error
+          ) : (
+            <>
+              {copy.apiSent}
+              {inquiryId !== '' && (
+                <strong className={`${prefix}-form-inquiry-id`}>
+                  {language === 'ko' ? '문의번호' : 'Reference'}: {inquiryId}
+                </strong>
+              )}
+            </>
+          )}
         </p>
       )}
+      <p className={`${prefix}-form-fallback`}>
+        {language === 'ko'
+          ? '온라인 전송이 어려우면 이메일로 직접 문의해 주세요.'
+          : 'If online submission is unavailable, contact us directly by email.'}{' '}
+        <a href="mailto:contact@xaikorea.ai.kr">contact@xaikorea.ai.kr</a>
+      </p>
     </form>
   );
 }

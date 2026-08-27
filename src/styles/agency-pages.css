@@ -1376,6 +1376,32 @@
 .rp-form-consent a {
   border-bottom: 1px solid currentColor;
 }
+.rp-form-honeypot {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.rp-form-security {
+  min-height: 65px;
+  margin-top: 24px;
+}
+.rp-form-security > div {
+  width: 100%;
+}
+.rp-form-config-notice {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid rgba(23, 23, 23, 0.2);
+  color: #736f69;
+  font-size: 12px;
+  line-height: 1.5;
+}
 .rp-submit {
   display: flex;
   align-items: center;
@@ -1414,6 +1440,22 @@
 }
 .rp-form-status--error {
   color: #9c3d38;
+}
+.rp-form-inquiry-id {
+  display: block;
+  margin-top: 5px;
+  color: var(--rp-ink);
+}
+.rp-form-fallback {
+  margin: 16px 0 0;
+  color: #736f69;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.rp-form-fallback a {
+  color: var(--rp-ink);
+  border-bottom: 1px solid currentColor;
+  font-weight: 700;
 }
 
 .rp-contact-location {

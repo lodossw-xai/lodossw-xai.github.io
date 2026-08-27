@@ -1,0 +1,13 @@
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+GOOGLE_OAUTH_CLIENT_ID=replace-with-google-oauth-client-id
+GOOGLE_OAUTH_CLIENT_SECRET=replace-with-google-oauth-client-secret
+GOOGLE_OAUTH_REFRESH_TOKEN=replace-with-google-oauth-refresh-token
+
+# Local testing overrides. Copy this file to .dev.vars before running the Worker.
+ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost:4178,http://127.0.0.1:4178
+TURNSTILE_EXPECTED_HOSTNAMES=localhost,127.0.0.1
+TURNSTILE_ACTION=contact_form
+GMAIL_SENDER_ADDRESS=contact@xaikorea.ai.kr
+CONTACT_RECIPIENT=contact@xaikorea.ai.kr
+MIN_FORM_FILL_MS=3000
+MAX_FORM_AGE_MS=7200000
