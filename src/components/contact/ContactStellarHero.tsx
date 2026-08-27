@@ -46,11 +46,11 @@ export default function ContactStellarHero(): ReactElement {
 
     const makeParticles = (): void => {
       const count = reducedMotion
-        ? Math.min(520, Math.max(300, Math.round((width * height) / 2600)))
+        ? Math.min(700, Math.max(450, Math.round((width * height) / 2200)))
         : width < 760
-          ? Math.min(600, Math.max(360, Math.round((width * height) / 1400)))
-          : Math.min(1180, Math.max(720, Math.round((width * height) / 1250)));
-      const baseRadius = Math.min(width, height) * (width < 760 ? 0.31 : 0.36);
+          ? Math.min(950, Math.max(650, Math.round((width * height) / 1050)))
+          : Math.min(2200, Math.max(1400, Math.round((width * height) / 950)));
+      const baseRadius = Math.min(width, height) * (width < 760 ? 0.3 : 0.35);
 
       particles = Array.from({ length: count }, () => {
         const shell = Math.pow(Math.random(), 2.2);
@@ -58,9 +58,7 @@ export default function ContactStellarHero(): ReactElement {
           x: Math.random() * width,
           y: Math.random() * height,
           angle: Math.random() * Math.PI * 2,
-          radius:
-            baseRadius +
-            (Math.random() - 0.5) * baseRadius * (0.1 + shell * 0.45),
+          radius: baseRadius * (0.72 + shell * 0.4),
           depth: Math.pow(Math.random(), 1.6),
           size: 0.3 + Math.random() * 1.45,
           speed: 0.18 + Math.random() * 0.5,
@@ -89,15 +87,35 @@ export default function ContactStellarHero(): ReactElement {
     const updateScroll = (): void => {
       const bounds = section.getBoundingClientRect();
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
-      scrollProgress = clamp(-bounds.top / travel);
+      scrollProgress = reducedMotion ? 0.82 : clamp(-bounds.top / travel);
+      const copyProgress = reducedMotion
+        ? 1
+        : clamp((scrollProgress - 0.28) / 0.54);
+      section.style.setProperty(
+        '--rp-stellar-copy-opacity',
+        String(0.02 + copyProgress * 0.98)
+      );
+      section.style.setProperty(
+        '--rp-stellar-copy-blur',
+        `${String((1 - copyProgress) * 16)}px`
+      );
+      section.style.setProperty(
+        '--rp-stellar-copy-scale',
+        String(0.94 + copyProgress * 0.06)
+      );
     };
 
     const draw = (time = 0): void => {
       drawingContext.clearRect(0, 0, width, height);
-      const formation = reducedMotion ? 0.78 : 0.45 + scrollProgress * 0.55;
-      const centerX = width * (width < 760 ? 0.53 : 0.68) + pointerX * 8;
-      const centerY = height * 0.49 + pointerY * 6;
-      const glowRadius = Math.min(width, height) * 0.34;
+      const normalizedFormation = clamp((scrollProgress - 0.04) / 0.88);
+      const formation =
+        normalizedFormation *
+        normalizedFormation *
+        (3 - 2 * normalizedFormation);
+      const centerX = width * 0.5 + pointerX * 10;
+      const centerY = height * 0.5 + pointerY * 7;
+      const baseRadius = Math.min(width, height) * (width < 760 ? 0.3 : 0.35);
+      const glowRadius = baseRadius * 1.45;
       const glow = drawingContext.createRadialGradient(
         centerX,
         centerY,
@@ -106,24 +124,47 @@ export default function ContactStellarHero(): ReactElement {
         centerY,
         glowRadius
       );
-      glow.addColorStop(0, 'rgba(201,216,122,.08)');
-      glow.addColorStop(0.56, 'rgba(178,83,77,.035)');
+      glow.addColorStop(
+        0,
+        `rgba(255,255,255,${String(0.025 + formation * 0.055)})`
+      );
+      glow.addColorStop(0.5, 'rgba(178,83,77,.03)');
       glow.addColorStop(1, 'rgba(0,0,0,0)');
       drawingContext.fillStyle = glow;
       drawingContext.fillRect(0, 0, width, height);
 
-      particles.forEach((particle) => {
-        const rotation = time * 0.000045 * particle.speed;
-        const angle = particle.angle + rotation;
+      particles.forEach((particle, index) => {
+        const startX = particle.x - centerX;
+        const startY = particle.y - centerY;
+        const startRadius = Math.max(1, Math.hypot(startX, startY));
+        const startAngle = Math.atan2(startY, startX);
+        const vortexTurns =
+          Math.PI * 2 * (1.4 + particle.depth * 2.7 + particle.seed * 0.05);
+        const rotation = time * 0.00012 * (0.35 + particle.speed);
+        const angle = startAngle + rotation + formation * vortexTurns;
         const wobble =
-          Math.sin(time * 0.00045 + particle.seed) * particle.radius * 0.018;
-        const ringX = centerX + Math.cos(angle) * (particle.radius + wobble);
-        const ringY =
-          centerY + Math.sin(angle) * (particle.radius + wobble) * 0.92;
-        const ease = formation * formation * (3 - 2 * formation);
-        const x = particle.x * (1 - ease) + ringX * ease;
-        const y = particle.y * (1 - ease) + ringY * ease;
-        const alpha = 0.12 + particle.depth * 0.62;
+          Math.sin(time * 0.0007 + particle.seed) *
+          particle.radius *
+          (0.01 + (1 - formation) * 0.018);
+        const orbitRadius =
+          startRadius * (1 - formation) + particle.radius * formation + wobble;
+        const verticalScale = 1 - formation * 0.18;
+        const x = centerX + Math.cos(angle) * orbitRadius;
+        const y = centerY + Math.sin(angle) * orbitRadius * verticalScale;
+        const alpha = 0.1 + particle.depth * 0.68 + formation * 0.08;
+
+        if (!reducedMotion && index % 4 === 0 && formation > 0.08) {
+          const trailAngle = angle - 0.02 * (0.6 + particle.speed) * formation;
+          drawingContext.beginPath();
+          drawingContext.moveTo(
+            centerX + Math.cos(trailAngle) * orbitRadius,
+            centerY + Math.sin(trailAngle) * orbitRadius * verticalScale
+          );
+          drawingContext.lineTo(x, y);
+          drawingContext.strokeStyle = `rgba(255,255,255,${String(alpha * 0.42)})`;
+          drawingContext.lineWidth = Math.max(0.35, particle.size * 0.45);
+          drawingContext.stroke();
+        }
 
         drawingContext.beginPath();
         drawingContext.fillStyle = particle.cool
@@ -138,6 +179,54 @@ export default function ContactStellarHero(): ReactElement {
         );
         drawingContext.fill();
       });
+
+      const orbitOpacity = clamp((formation - 0.18) / 0.65);
+      if (orbitOpacity > 0) {
+        drawingContext.save();
+        drawingContext.translate(centerX, centerY);
+        drawingContext.rotate(time * 0.000055);
+        [0.78, 0.97, 1.17].forEach((scale, index) => {
+          drawingContext.save();
+          drawingContext.rotate(index % 2 === 0 ? formation * 0.7 : -formation);
+          drawingContext.beginPath();
+          drawingContext.setLineDash([
+            18 + index * 11,
+            38 + index * 16,
+            4,
+            28 + index * 9,
+          ]);
+          drawingContext.lineDashOffset =
+            time * 0.018 * (index % 2 === 0 ? -1 : 1);
+          drawingContext.ellipse(
+            0,
+            0,
+            baseRadius * scale,
+            baseRadius * scale * 0.82,
+            0,
+            0,
+            Math.PI * 2
+          );
+          drawingContext.strokeStyle = `rgba(255,255,255,${String(orbitOpacity * (0.08 + index * 0.025))})`;
+          drawingContext.lineWidth = index === 1 ? 1.2 : 0.7;
+          drawingContext.stroke();
+          drawingContext.restore();
+        });
+        drawingContext.restore();
+
+        const core = drawingContext.createRadialGradient(
+          centerX,
+          centerY,
+          0,
+          centerX,
+          centerY,
+          baseRadius * 0.5
+        );
+        core.addColorStop(0, `rgba(0,0,0,${String(orbitOpacity * 0.76)})`);
+        core.addColorStop(0.62, `rgba(8,9,8,${String(orbitOpacity * 0.42)})`);
+        core.addColorStop(1, 'rgba(0,0,0,0)');
+        drawingContext.fillStyle = core;
+        drawingContext.fillRect(0, 0, width, height);
+      }
 
       if (!reducedMotion && visible) {
         frame = window.requestAnimationFrame(draw);
@@ -162,6 +251,7 @@ export default function ContactStellarHero(): ReactElement {
     const onMotionChange = (event: MediaQueryListEvent): void => {
       reducedMotion = event.matches;
       resize();
+      updateScroll();
       restart();
     };
 
@@ -207,17 +297,11 @@ export default function ContactStellarHero(): ReactElement {
         <canvas ref={canvasRef} aria-hidden="true" />
         <div className="rp-stellar-hero__veil" aria-hidden="true" />
         <div className="rp-stellar-hero__content">
-          <p>CONTACT XAIKOREA · PANGYO</p>
           <h1 id="contact-title">
-            설명 가능한 AI로,
+            근거가 모이면,
             <br />
-            <em>더 신뢰할 수 있는 업무</em>를 설계합니다.
+            신뢰가 선명해집니다.
           </h1>
-          <span>
-            프로젝트의 문제와 기대하는 결과를 들려주세요.
-            <br />
-            적합한 적용 방식부터 함께 검토하겠습니다.
-          </span>
         </div>
       </div>
     </section>

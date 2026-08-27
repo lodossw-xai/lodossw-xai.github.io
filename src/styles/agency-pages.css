@@ -997,16 +997,20 @@
 }
 
 .rp-stellar-hero {
+  --rp-stellar-copy-opacity: 0.02;
+  --rp-stellar-copy-blur: 16px;
+  --rp-stellar-copy-scale: 0.94;
   position: relative;
-  height: 92svh;
+  height: 155svh;
   min-height: 720px;
   color: #fff;
   background: #0d0e0d;
 }
 .rp-stellar-hero__stage {
-  position: relative;
-  height: 100%;
-  min-height: inherit;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 720px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -1042,8 +1046,12 @@
   left: 50%;
   top: 50%;
   width: min(1100px, calc(100% - 48px));
+  opacity: var(--rp-stellar-copy-opacity);
+  filter: blur(var(--rp-stellar-copy-blur));
   text-align: center;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(var(--rp-stellar-copy-scale));
+  transform-origin: center;
+  will-change: opacity, filter, transform;
 }
 .rp-stellar-hero__content > p,
 .rp-inquiry-types__heading > p,
@@ -1057,15 +1065,16 @@
 }
 .rp-stellar-hero__content h1 {
   margin: 0;
-  font-size: clamp(52px, 6.3vw, 105px);
+  color: #fff;
+  font-size: clamp(52px, 6vw, 96px);
   font-weight: 800;
-  line-height: 1.01;
-  letter-spacing: -0.055em;
+  line-height: 1.04;
+  letter-spacing: -0.05em;
   text-wrap: balance;
   word-break: keep-all;
 }
 .rp-stellar-hero__content h1 em {
-  color: var(--rp-citron);
+  color: #fff;
   font-style: normal;
 }
 .rp-stellar-hero__content > span {
@@ -1903,11 +1912,11 @@
     margin-top: 65px;
   }
   .rp-stellar-hero {
-    height: 92svh;
+    height: 142svh;
     min-height: 690px;
   }
   .rp-stellar-hero__stage {
-    min-height: inherit;
+    min-height: 690px;
   }
   .rp-stellar-hero canvas {
     background: radial-gradient(
@@ -1930,7 +1939,7 @@
     right: auto;
     top: 50%;
     width: calc(100% - 48px);
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(var(--rp-stellar-copy-scale));
   }
   .rp-stellar-hero__content > p {
     margin-bottom: 18px;
@@ -2086,12 +2095,17 @@
     transform: none;
   }
   .rp-stellar-hero {
-    height: 92svh;
+    height: 100svh;
     min-height: 720px;
   }
   .rp-stellar-hero__stage {
     position: relative;
-    min-height: inherit;
+    min-height: 720px;
+  }
+  .rp-stellar-hero__content {
+    opacity: 1;
+    filter: none;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
