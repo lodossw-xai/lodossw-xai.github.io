@@ -1,4 +1,6 @@
 import {
+  lazy,
+  Suspense,
   useEffect,
   useRef,
   useState,
@@ -8,6 +10,10 @@ import {
 } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/redesign.css';
+
+const IntelligenceCoreCanvas = lazy(
+  () => import('../features/intelligence-core/IntelligenceCoreCanvas')
+);
 
 type Language = 'ko' | 'en';
 type SubmissionState = 'idle' | 'sending' | 'sent' | 'error';
@@ -1603,6 +1609,11 @@ export default function LandingPage(): ReactElement {
                   src={caseVisuals[activeCase] ?? caseVisuals[0]}
                   alt=""
                 />
+                <Suspense fallback={null}>
+                  {activeSection === 'work' ? (
+                    <IntelligenceCoreCanvas stateIndex={activeCase} />
+                  ) : null}
+                </Suspense>
                 <span className="ra-orb ra-orb--one" />
                 <span className="ra-orb ra-orb--two" />
                 <span className="ra-grid-lines" />
@@ -2123,7 +2134,9 @@ export default function LandingPage(): ReactElement {
                 className="ra-location-switcher"
                 role="tablist"
                 aria-label={
-                  language === 'ko' ? '오피스 위치 선택' : 'Select office location'
+                  language === 'ko'
+                    ? '오피스 위치 선택'
+                    : 'Select office location'
                 }
               >
                 {locationOptions.map((location) => (
@@ -2180,7 +2193,9 @@ export default function LandingPage(): ReactElement {
               <span>{activeLocation.label}</span>
               <strong>{activeLocation.name}</strong>
               <small>
-                {language === 'ko' ? '지도에서 위치 확인' : 'View location on map'}
+                {language === 'ko'
+                  ? '지도에서 위치 확인'
+                  : 'View location on map'}
               </small>
             </div>
           </div>
