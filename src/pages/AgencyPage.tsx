@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState, type ReactElement } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ContactStellarHero from '../components/contact/ContactStellarHero';
+import ProjectInquiryForm, {
+  type InquiryFormCopy,
+} from '../components/contact/ProjectInquiryForm';
 import '../styles/agency-pages.css';
 
 type AgencyPageType = 'about' | 'work' | 'careers' | 'contact';
@@ -275,6 +278,48 @@ const workspaceSlides = [
 const address = '경기도 성남시 금토로80번길 40, B동 배민스퀘어 301호';
 const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(address)}&z=16&output=embed&hl=ko`;
 const mapLinkUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+const companyProfileInquiryType = '회사소개서·자료 요청';
+const contactInquiryCopy: InquiryFormCopy = {
+  name: '이름',
+  company: '회사/기관명',
+  email: '이메일',
+  phone: '연락처',
+  type: '관심 분야',
+  budget: '예상 범위',
+  message: '현재 해결하고 싶은 문제',
+  namePlaceholder: '홍길동',
+  companyPlaceholder: '회사 또는 기관명',
+  emailPlaceholder: 'name@company.com',
+  phonePlaceholder: '010-0000-0000',
+  messagePlaceholder:
+    '현재 업무 흐름, 참고 자료, 기대하는 결과를 편하게 알려 주세요.',
+  selectDefault: '선택해 주세요',
+  types: [
+    '지식 탐색 시스템',
+    '문서 검토 지원',
+    'AI 거버넌스',
+    companyProfileInquiryType,
+    '기타',
+  ],
+  budgets: ['미정 / 논의 필요', 'PoC·파일럿', '정식 구축', '운영 고도화'],
+  send: '문의 내용 보내기',
+  sending: '전송 중...',
+  sent: '문의가 접수되었습니다.',
+  apiSent: '문의가 전달되었습니다. 빠르게 검토 후 연락드리겠습니다.',
+  error:
+    '전송에 실패했습니다. 잠시 후 다시 시도하거나 contact@xaikorea.ai.kr로 연락해 주세요.',
+};
+
+function scrollToContactInquiry(): void {
+  window.requestAnimationFrame(() => {
+    document.getElementById('contact-inquiry')?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+      block: 'start',
+    });
+  });
+}
 
 function AgencyHeader({ current }: { current: AgencyPageType }): ReactElement {
   const [open, setOpen] = useState(false);
@@ -422,6 +467,8 @@ function AgencyHeader({ current }: { current: AgencyPageType }): ReactElement {
 }
 
 function AgencyFooter(): ReactElement {
+  const location = useLocation();
+
   return (
     <footer className="rp-footer">
       <div className="rp-footer__image" aria-hidden="true">
@@ -455,12 +502,29 @@ function AgencyFooter(): ReactElement {
           <a href="tel:+821032535409">+82 10 3253 5409</a>
         </div>
         <div className="rp-footer__actions">
-          <Link to="/contact">
+          <Link
+            to="/contact#contact-inquiry"
+            onClick={() => {
+              if (location.pathname === '/contact') {
+                window.setTimeout(scrollToContactInquiry, 0);
+              }
+            }}
+          >
             프로젝트 문의 <b>↗</b>
           </Link>
-          <a href="mailto:contact@xaikorea.ai.kr?subject=XAI%20Korea%20회사소개%20요청">
+          <Link
+            to="/contact?type=company-profile#contact-inquiry"
+            onClick={() => {
+              if (
+                location.pathname === '/contact' &&
+                location.search === '?type=company-profile'
+              ) {
+                window.setTimeout(scrollToContactInquiry, 0);
+              }
+            }}
+          >
             회사소개 요청 <b>□</b>
-          </a>
+          </Link>
         </div>
       </div>
       <div className="rp-footer__bottom">
@@ -673,7 +737,9 @@ function WorkPage(): ReactElement {
                   <dd>Strategy · UX · AI Engineering</dd>
                 </div>
               </dl>
-              <Link to="/contact">프로젝트 상담하기 ↗</Link>
+              <Link to="/contact#contact-inquiry">
+                프로젝트 상담하기 ↗
+              </Link>
             </div>
           </div>
         )}
@@ -828,6 +894,12 @@ function CareersPage(): ReactElement {
 }
 
 function ContactPage(): ReactElement {
+  const location = useLocation();
+  const selectedInquiryType =
+    new URLSearchParams(location.search).get('type') === 'company-profile'
+      ? companyProfileInquiryType
+      : '';
+
   return (
     <>
       <ContactStellarHero />
@@ -866,12 +938,54 @@ function ContactPage(): ReactElement {
           <div>
             <dt>Project.</dt>
             <dd>
-              <a href="mailto:contact@xaikorea.ai.kr?subject=XAI%20Korea%20프로젝트%20문의">
-                프로젝트 문의 보내기 ↗
-              </a>
+              <a href="#contact-inquiry">프로젝트 문의 작성하기 ↗</a>
             </dd>
           </div>
         </dl>
+      </section>
+      <section
+        id="contact-inquiry"
+        className="rp-contact-inquiry rp-reveal rp-reveal--slow"
+        aria-labelledby="contact-inquiry-title"
+      >
+        <div className="rp-contact-inquiry__copy">
+          <p>START A CONVERSATION</p>
+          <h2 id="contact-inquiry-title">
+            다음 업무의 기준을
+            <br />
+            함께 설계해 볼까요?
+          </h2>
+          <span>
+            프로젝트의 현재 단계와 해결하고 싶은 문제를 알려 주세요. 검토 후
+            가장 적합한 방식으로 연락드리겠습니다.
+          </span>
+          <dl>
+            <div>
+              <dt>OFFICE</dt>
+              <dd>{address}</dd>
+            </div>
+            <div>
+              <dt>PHONE</dt>
+              <dd>+82 10 3253 5409 · 평일 09:00–18:00</dd>
+            </div>
+            <div>
+              <dt>EMAIL</dt>
+              <dd>contact@xaikorea.ai.kr</dd>
+            </div>
+          </dl>
+        </div>
+        <ProjectInquiryForm
+          id="contact-project-inquiry-form"
+          copy={contactInquiryCopy}
+          language="ko"
+          variant="contact"
+          selectedInquiryType={selectedInquiryType}
+          source={
+            selectedInquiryType === companyProfileInquiryType
+              ? 'company-profile-request'
+              : 'contact-page'
+          }
+        />
       </section>
       <section
         id="contact-map"
@@ -887,27 +1001,17 @@ function ContactPage(): ReactElement {
           GOOGLE MAPS에서 크게 보기 ↗
         </a>
       </section>
-      <section
-        id="contact-next"
-        className="rp-contact-next rp-reveal rp-reveal--slow"
-      >
-        <p>NEXT STEP</p>
-        <h2>
-          프로젝트의 현재 단계와
-          <br />
-          해결하고 싶은 문제를 알려주세요.
-        </h2>
-        <Link to="/#contact">
-          문의 양식 작성하기 <span>↗</span>
-        </Link>
-      </section>
     </>
   );
 }
 
 export default function AgencyPage({ page }: AgencyPageProps): ReactElement {
+  const location = useLocation();
+
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (window.location.hash === '') {
+      window.scrollTo(0, 0);
+    }
     const metadata = pageMetadata[page];
     document.title = metadata.title;
     document
@@ -947,6 +1051,35 @@ export default function AgencyPage({ page }: AgencyPageProps): ReactElement {
       observer.disconnect();
     };
   }, [page]);
+
+  useEffect(() => {
+    if (location.hash === '') {
+      return;
+    }
+
+    const targetId = decodeURIComponent(location.hash.slice(1));
+    let firstFrame = 0;
+    let secondFrame = 0;
+    const timer = window.setTimeout(() => {
+      firstFrame = window.requestAnimationFrame(() => {
+        secondFrame = window.requestAnimationFrame(() => {
+          document.getElementById(targetId)?.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)')
+              .matches
+              ? 'auto'
+              : 'smooth',
+            block: 'start',
+          });
+        });
+      });
+    }, 80);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+    };
+  }, [location.hash, location.pathname, location.search]);
 
   return (
     <div className={`rp-site rp-site--${page}`}>

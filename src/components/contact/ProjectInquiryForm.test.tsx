@@ -59,4 +59,22 @@ describe('ProjectInquiryForm privacy consent', () => {
       })
     ).toBeChecked();
   });
+
+  it('preselects a requested inquiry type', () => {
+    const profileCopy: InquiryFormCopy = {
+      ...copy,
+      types: [...copy.types, '회사소개서·자료 요청'],
+    };
+
+    render(
+      <ProjectInquiryForm
+        copy={profileCopy}
+        selectedInquiryType="회사소개서·자료 요청"
+      />
+    );
+
+    expect(screen.getByRole('combobox', { name: '관심 분야' })).toHaveValue(
+      '회사소개서·자료 요청'
+    );
+  });
 });

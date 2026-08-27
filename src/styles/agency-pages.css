@@ -1276,6 +1276,7 @@
   display: grid;
   grid-template-columns: minmax(280px, 0.82fr) minmax(460px, 1.18fr);
   gap: 8vw;
+  scroll-margin-top: 105px;
   padding: clamp(110px, 12vw, 190px) clamp(80px, 12.5vw, 200px);
   background: #fff;
 }

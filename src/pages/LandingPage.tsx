@@ -441,7 +441,13 @@ const copy = {
       messagePlaceholder:
         '현재 업무 흐름, 참고 자료, 기대하는 결과를 편하게 알려 주세요.',
       selectDefault: '선택해 주세요',
-      types: ['지식 탐색 시스템', '문서 검토 지원', 'AI 거버넌스', '기타'],
+      types: [
+        '지식 탐색 시스템',
+        '문서 검토 지원',
+        'AI 거버넌스',
+        '회사소개서·자료 요청',
+        '기타',
+      ],
       budgets: ['미정 / 논의 필요', 'PoC·파일럿', '정식 구축', '운영 고도화'],
       send: '문의 내용 보내기',
       sending: '전송 중...',
@@ -1933,8 +1939,8 @@ export default function LandingPage(): ReactElement {
                   key={groupIndex}
                   aria-hidden={groupIndex === 1 ? true : undefined}
                 >
-                  {officeMarqueeVisuals.map(([src, koAlt, enAlt], index) => (
-                    <figure key={`${groupIndex}-${src}`}>
+                  {officeMarqueeVisuals.map(([src, koAlt, enAlt]) => (
+                    <figure key={`${String(groupIndex)}-${src}`}>
                       <img
                         src={src}
                         alt={
