@@ -1641,11 +1641,11 @@
   color: #f7f5ef;
   background:
     radial-gradient(
-      circle at 71% 48%,
-      rgba(201, 216, 122, 0.08),
-      transparent 32%
+      circle at 70% 50%,
+      rgba(255, 255, 255, 0.055),
+      transparent 30%
     ),
-    #050707;
+    #000;
   isolation: isolate;
 }
 
@@ -1664,32 +1664,53 @@
 
 .rp-logo-finale__canvas {
   z-index: 0;
+  transition: filter 600ms ease;
+}
+
+.rp-logo-finale[data-motion='accelerated'] .rp-logo-finale__canvas {
+  filter: brightness(1.08);
+}
+
+.rp-logo-finale__scanlines {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.52;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.016) 0,
+    rgba(255, 255, 255, 0.016) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: screen;
 }
 
 .rp-logo-finale__veil {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   inset: 0;
   pointer-events: none;
   background:
     linear-gradient(
       90deg,
-      rgba(5, 7, 7, 0.94) 0%,
-      rgba(5, 7, 7, 0.63) 36%,
+      rgba(0, 0, 0, 0.96) 0%,
+      rgba(0, 0, 0, 0.66) 36%,
       transparent 63%
     ),
     linear-gradient(
       0deg,
-      rgba(5, 7, 7, 0.55),
+      rgba(0, 0, 0, 0.58),
       transparent 30%,
       transparent 76%,
-      rgba(5, 7, 7, 0.3)
+      rgba(0, 0, 0, 0.34)
     );
 }
 
 .rp-logo-finale__copy {
   position: absolute;
-  z-index: 2;
+  z-index: 4;
   top: 50%;
   left: max(6vw, calc((100vw - 1600px) / 2));
   width: min(620px, 43vw);
@@ -1731,7 +1752,7 @@
 
 .rp-logo-finale__index {
   position: absolute;
-  z-index: 2;
+  z-index: 4;
   right: clamp(26px, 4vw, 76px);
   bottom: 32px;
   display: flex;
@@ -1748,6 +1769,71 @@
   width: 42px;
   height: 1px;
   background: rgba(201, 216, 122, 0.62);
+}
+
+.rp-logo-finale__theme {
+  position: absolute;
+  z-index: 5;
+  top: 24px;
+  right: clamp(26px, 4vw, 76px);
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  color: rgba(247, 245, 239, 0.58);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.rp-logo-finale__swatches {
+  display: flex;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(10px);
+}
+
+.rp-logo-finale__swatches button {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: var(--theme-color);
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.rp-logo-finale__swatches button:hover,
+.rp-logo-finale__swatches button:focus-visible {
+  transform: scale(1.24);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+}
+
+.rp-logo-finale__swatches button[aria-pressed='true'] {
+  box-shadow:
+    0 0 0 2px #000,
+    0 0 0 3px rgba(255, 255, 255, 0.76);
+}
+
+.rp-logo-finale__stats {
+  position: absolute;
+  z-index: 4;
+  bottom: 28px;
+  left: max(6vw, calc((100vw - 1600px) / 2));
+  display: flex;
+  gap: 18px;
+  color: rgba(247, 245, 239, 0.3);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  pointer-events: none;
 }
 
 .rp-logo-finale__fallback {
@@ -1782,8 +1868,7 @@
   left: 70%;
   width: min(14vw, 150px);
   transform: translateX(-50%);
-  filter: brightness(4)
-    drop-shadow(0 0 18px rgba(201, 216, 122, 0.24));
+  filter: brightness(4) drop-shadow(0 0 18px rgba(201, 216, 122, 0.24));
 }
 .rp-footer__grid {
   display: grid;
@@ -2368,6 +2453,13 @@
   .rp-logo-finale__index {
     display: none;
   }
+  .rp-logo-finale__theme,
+  .rp-logo-finale__stats {
+    display: none;
+  }
+  .rp-logo-finale__scanlines {
+    opacity: 0.28;
+  }
   .rp-logo-finale__fallback span,
   .rp-logo-finale__fallback img {
     top: 46%;
@@ -2393,6 +2485,13 @@
   }
   .rp-footer__bottom {
     padding: 22px 24px;
+  }
+}
+
+@media (pointer: coarse) {
+  .rp-logo-finale__theme,
+  .rp-logo-finale__stats {
+    display: none;
   }
 }
 
