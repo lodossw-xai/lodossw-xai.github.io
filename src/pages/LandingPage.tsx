@@ -36,6 +36,7 @@ const CONTACT_API_URL = import.meta.env.VITE_CONTACT_API_URL as
   | string
   | undefined;
 const HERO_ROTATION_MS = 8000;
+const HERO_COPY_EXIT_MS = 520;
 const heroVisuals = [
   {
     video:
@@ -741,6 +742,8 @@ export default function LandingPage(): ReactElement {
   const [language, setLanguage] = useState<Language>('ko');
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHero, setActiveHero] = useState(0);
+  const [pendingHero, setPendingHero] = useState<number | null>(null);
+  const [isHeroCopyExiting, setIsHeroCopyExiting] = useState(false);
   const [activeCase, setActiveCase] = useState(0);
   const [activeSection, setActiveSection] = useState<SectionId>('top');
   const [isScrolled, setIsScrolled] = useState(false);
@@ -948,13 +951,36 @@ export default function LandingPage(): ReactElement {
       return;
     }
     const timer = window.setTimeout(() => {
-      setIsVideoReady(false);
-      setActiveHero((current) => (current + 1) % heroVisuals.length);
+      setPendingHero((activeHero + 1) % heroVisuals.length);
+      setIsHeroCopyExiting(true);
     }, HERO_ROTATION_MS);
     return () => {
       window.clearTimeout(timer);
     };
   }, [activeHero, isHeroRotationPaused, menuOpen]);
+
+  useEffect(() => {
+    if (!isHeroCopyExiting || pendingHero === null) {
+      return;
+    }
+
+    const applyNextHero = (): void => {
+      setIsVideoReady(false);
+      setActiveHero(pendingHero);
+      setPendingHero(null);
+      setIsHeroCopyExiting(false);
+    };
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      applyNextHero();
+      return;
+    }
+
+    const timer = window.setTimeout(applyNextHero, HERO_COPY_EXIT_MS);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [isHeroCopyExiting, pendingHero]);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1010,8 +1036,11 @@ export default function LandingPage(): ReactElement {
   const showHeroSlide = (nextIndex: number): void => {
     const normalizedIndex =
       (nextIndex + heroVisuals.length) % heroVisuals.length;
-    setIsVideoReady(false);
-    setActiveHero(normalizedIndex);
+    if (normalizedIndex === activeHero && !isHeroCopyExiting) {
+      return;
+    }
+    setPendingHero(normalizedIndex);
+    setIsHeroCopyExiting(true);
   };
 
   const scrollToTop = (): void => {
@@ -1280,7 +1309,8 @@ export default function LandingPage(): ReactElement {
           <div className="ra-shell ra-hero__content">
             <div
               key={`${language}-${String(activeHero)}`}
-              className="ra-hero__copy"
+              className={`ra-hero__copy ${isHeroCopyExiting ? 'is-exiting' : ''}`}
+              aria-live="polite"
             >
               <p className="ra-eyebrow ra-eyebrow--light">
                 {activeHeroCopy.kicker}
@@ -1304,7 +1334,7 @@ export default function LandingPage(): ReactElement {
           {isHeroPopupOpen ? (
             <aside
               key={`recommendation-${language}-${String(activeHero)}`}
-              className="ra-hero-popup"
+              className={`ra-hero-popup ${isHeroCopyExiting ? 'is-exiting' : ''}`}
               aria-label={activeHeroCopy.popupTitle}
             >
               <button
