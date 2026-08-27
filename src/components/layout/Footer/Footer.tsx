@@ -56,22 +56,6 @@ function Footer(): ReactElement {
                   🤗
                 </span>
               </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition"
-              >
-                <span className="text-gray-400 text-sm">
-                  {data.footer.social.linkedin}
-                </span>
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition"
-              >
-                <span className="text-gray-400 text-sm">
-                  {data.footer.social.twitter}
-                </span>
-              </a>
             </div>
           </div>
 

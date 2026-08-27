@@ -67,7 +67,8 @@
     height 0.35s,
     backdrop-filter 0.35s;
 }
-.rp-site--work .rp-header:not(.is-scrolled):not(.is-open) {
+.rp-site--work .rp-header:not(.is-scrolled):not(.is-open),
+.rp-site--legal .rp-header:not(.is-scrolled):not(.is-open) {
   color: #111;
 }
 .rp-header.is-scrolled {
@@ -117,6 +118,7 @@
   transition: filter 0.35s;
 }
 .rp-site--work .rp-header:not(.is-scrolled):not(.is-open) .rp-brand__mark img,
+.rp-site--legal .rp-header:not(.is-scrolled):not(.is-open) .rp-brand__mark img,
 .rp-header.is-scrolled:not(.is-open) .rp-brand__mark img {
   filter: invert(1);
 }
