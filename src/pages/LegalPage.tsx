@@ -1,11 +1,10 @@
 /**
  * Legal Page - Privacy Policy and Terms of Service
- * Uses shared Navigation, ContactSection, and Footer components
+ * Uses shared Navigation and Footer components
  */
 import type { ReactElement } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ContactSection from '../components/layout/ContactSection';
 import Footer from '../components/layout/Footer';
 import Navigation from '../components/layout/Navigation';
 import { getLocalizedData, legalData } from '../data';
@@ -18,7 +17,9 @@ interface LegalPageProps {
 function LegalPage({ type }: LegalPageProps): ReactElement {
   const { language } = useLanguageStore();
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === 'undefined') {
+      return false;
+    }
     return document.documentElement.classList.contains('dark');
   });
 
@@ -68,9 +69,6 @@ function LegalPage({ type }: LegalPageProps): ReactElement {
           </div>
         </div>
       </main>
-
-      {/* Contact Section */}
-      <ContactSection />
 
       {/* Footer */}
       <Footer />
