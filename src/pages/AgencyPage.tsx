@@ -831,6 +831,48 @@ function ContactPage(): ReactElement {
   return (
     <>
       <ContactStellarHero />
+      <section
+        className="rp-contact-hero"
+        aria-labelledby="original-contact-title"
+      >
+        <div>
+          <p>CONTACT XAIKOREA</p>
+          <h1 id="original-contact-title">
+            A PARTNER FOR
+            <br />
+            BETTER DECISIONS.
+          </h1>
+          <span>
+            설명 가능한 AI가 필요한 프로젝트라면 편하게 이야기를 들려주세요.
+          </span>
+        </div>
+        <dl>
+          <div>
+            <dt>Address.</dt>
+            <dd>{address}</dd>
+          </div>
+          <div>
+            <dt>Tel.</dt>
+            <dd>
+              <a href="tel:+821032535409">+82 10 3253 5409</a>
+            </dd>
+          </div>
+          <div>
+            <dt>Mail.</dt>
+            <dd>
+              <a href="mailto:contact@xaikorea.ai.kr">contact@xaikorea.ai.kr</a>
+            </dd>
+          </div>
+          <div>
+            <dt>Project.</dt>
+            <dd>
+              <a href="mailto:contact@xaikorea.ai.kr?subject=XAI%20Korea%20프로젝트%20문의">
+                프로젝트 문의 보내기 ↗
+              </a>
+            </dd>
+          </div>
+        </dl>
+      </section>
       <section id="contact-map" className="rp-contact-map rp-reveal">
         <iframe
           title="XAIKOREA 판교 오피스 위치"
