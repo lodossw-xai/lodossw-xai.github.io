@@ -35,16 +35,16 @@ function Navigation({
           >
             <img
               src="/assets/images/logo/logo-light.png"
-              alt="XAI Korea Logo"
+              alt="XAIKOREA Logo"
               className="h-12 w-auto dark:hidden"
             />
             <img
               src="/assets/images/logo/logo-dark.png"
-              alt="XAI Korea Logo"
+              alt="XAIKOREA Logo"
               className="h-12 w-auto hidden dark:block"
             />
             <span className="font-display font-bold text-2xl tracking-tight text-gray-900 dark:text-white">
-              XAI <span className="text-primary">Korea</span>
+              XAIKOREA
             </span>
           </Link>
 

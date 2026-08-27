@@ -18,14 +18,11 @@ function Footer(): ReactElement {
             <div className="flex items-center gap-2 mb-4">
               <img
                 src="/assets/images/logo/logo-dark.png"
-                alt="XAI Korea Logo"
+                alt="XAIKOREA Logo"
                 className="h-10 w-auto"
               />
               <span className="font-display font-bold text-xl tracking-tight">
-                {data.footer.logo.name}{' '}
-                <span className="text-primary">
-                  {data.footer.logo.highlight}
-                </span>
+                {data.footer.logo.name}
               </span>
             </div>
             <p className="text-gray-400 text-sm mb-6 max-w-xs leading-relaxed whitespace-pre-line">

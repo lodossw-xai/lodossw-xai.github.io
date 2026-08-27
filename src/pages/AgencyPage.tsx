@@ -29,26 +29,26 @@ const navigation = [
 ] as const
 
 const previewImages: Record<string, string> = {
-  '/': '/assets/images/main/processing_01.png',
-  '/about': '/assets/images/main/processing.png',
-  '/work': '/assets/images/og-image.png',
-  '/careers': '/assets/images/members/kim_jh.webp',
-  '/contact': '/assets/images/partners/gbsa.png',
+  '/': '/assets/images/company/baemin-square-night.jpg',
+  '/about': '/assets/images/company/office-lounge.jpg',
+  '/work': '/assets/images/company/hoban-ai-workspace.jpg',
+  '/careers': '/assets/images/company/open-workspace.jpg',
+  '/contact': '/assets/images/company/baemin-square-campus.jpg',
 }
 
 const projects: Project[] = [
   { title: 'Evidence Finder', category: 'RESEARCH', caption: '연구 근거 탐색 및 출처 연결', image: '/assets/images/main/processing.png', result: '리서치 시간 85% 단축', tone: 'blue', tall: true },
-  { title: 'Tax Navigator', category: 'TAX', caption: '세무 규정·판례 질의 시스템', image: '/assets/images/og-image.png', result: '답변 근거 추적률 100%', tone: 'red' },
-  { title: 'Policy Review', category: 'GOVERNANCE', caption: '규정 문서 비교 및 변경점 검토', image: '/assets/images/main/processing_01.png', result: '검토 처리량 3.2배', tone: 'black', tall: true },
-  { title: 'ASSIST', category: 'RESEARCH', caption: '지식 검색 경험 설계', image: '/assets/images/partners/assist.webp', result: '통합 검색 경험 구축', tone: 'ivory', logo: true },
-  { title: 'Audit Trail', category: 'GOVERNANCE', caption: 'AI 응답 이력과 승인 흐름', image: '/assets/images/advisors/ko_wooju.png', result: '전 과정 감사 가능', tone: 'navy' },
-  { title: 'GBSA Lab', category: 'RESEARCH', caption: '기관형 지식 허브', image: '/assets/images/partners/gbsa.png', result: '산학 협력 기반 마련', tone: 'grey', logo: true },
-  { title: 'Clause Compare', category: 'TAX', caption: '조항·고시 자동 비교', image: '/assets/images/main/processing.png', result: '개정 검토 자동화', tone: 'mint' },
-  { title: 'Expert Network', category: 'GOVERNANCE', caption: '전문가 검토 연결 시스템', image: '/assets/images/advisors/park_wonil.jpg', result: '사람 중심 승인 설계', tone: 'sand', tall: true },
-  { title: 'Research Brief', category: 'RESEARCH', caption: '논문·보고서 브리핑', image: '/assets/images/advisors/song_junwon.png', result: '출처 포함 요약', tone: 'violet' },
-  { title: 'Compliance Desk', category: 'TAX', caption: '업무별 컴플라이언스 지원', image: '/assets/images/main/processing_01.png', result: '리스크 조기 확인', tone: 'orange' },
-  { title: 'KOSA Partnership', category: 'GOVERNANCE', caption: '신뢰 가능한 AI 생태계', image: '/assets/images/partners/kosa.jpg', result: '산업 네트워크 확장', tone: 'white', logo: true },
-  { title: 'Decision Room', category: 'RESEARCH', caption: '근거 중심 의사결정 보드', image: '/assets/images/advisors/jung_sunghoon.jpg', result: '판단 맥락 구조화', tone: 'green', tall: true },
+  { title: 'Tax Navigator', category: 'TAX', caption: '세무 규정·판례 질의 시스템', image: '/assets/images/main/processing_01.png', result: '답변 근거 추적률 100%', tone: 'red' },
+  { title: 'Policy Review', category: 'GOVERNANCE', caption: '규정 문서 비교 및 변경점 검토', image: '/assets/images/og-image.png', result: '검토 처리량 3.2배', tone: 'black', tall: true },
+  { title: 'Agent Harness', category: 'RESEARCH', caption: '에이전트 하네스 엔지니어링 교육·실험', image: '/assets/images/company/agent-harness-engineering.jpg', result: 'AI 엔지니어링 체계화', tone: 'ivory' },
+  { title: 'Hoban AI Voice', category: 'GOVERNANCE', caption: '회의 녹음·전사·화자 분리 기반 지식 워크스페이스', image: '/assets/images/company/hoban-ai-workspace.jpg', result: '안전한 온프레미스 연결', tone: 'navy' },
+  { title: 'Edge AI Lab', category: 'RESEARCH', caption: 'Raspberry Pi 기반 엣지 AI 검증 환경', image: '/assets/images/company/raspberry-pi-edge.jpg', result: '현장형 프로토타입 구축', tone: 'grey' },
+  { title: 'Secure Edge Gateway', category: 'GOVERNANCE', caption: '로컬 데이터 보호를 위한 저장·연산 인프라', image: '/assets/images/company/edge-storage-array.jpg', result: '데이터 통제 범위 강화', tone: 'mint' },
+  { title: 'AI Governance Studio', category: 'GOVERNANCE', caption: 'AI 전환 전략과 신뢰 운영 기준 연구', image: '/assets/images/company/ai-transformation-conference.jpg', result: '산업 현장 인사이트 연결', tone: 'sand', tall: true },
+  { title: 'Technology Protection', category: 'GOVERNANCE', caption: '기술보호 선도기업 운영 체계', image: '/assets/images/company/technology-protection-company.jpg', result: '기술·지식재산 보호 강화', tone: 'violet' },
+  { title: 'On-Premise AI', category: 'RESEARCH', caption: '조직 내부에서 운영되는 AI 인프라 실증', image: '/assets/images/company/server-mainboard.jpg', result: '폐쇄망·로컬 환경 대응', tone: 'orange' },
+  { title: 'Knowledge Engineering', category: 'RESEARCH', caption: '도메인 지식과 컴퓨팅 환경의 통합 검증', image: '/assets/images/company/engineering-at-work.jpg', result: '현장 중심 검증 루프', tone: 'white' },
+  { title: 'Decision Room', category: 'TAX', caption: '근거 중심 의사결정과 협업을 위한 공간', image: '/assets/images/company/office-lounge.jpg', result: '판단 맥락 구조화', tone: 'green', tall: true },
 ]
 
 const businessItems = [
@@ -59,10 +59,10 @@ const businessItems = [
 ] as const
 
 const awards = [
-  ['2025', 'XAI Korea 서비스 고도화', 'Evidence-first AI', '/assets/images/main/processing.png'],
-  ['2024', '경기스타트업랩 협력', 'Innovation network', '/assets/images/partners/gbsa.png'],
-  ['2024', '설명 가능한 지식 탐색', 'Product launch', '/assets/images/og-image.png'],
-  ['2023', 'AI·도메인 전문가 네트워크', 'Advisory group', '/assets/images/advisors/ko_wooju.png'],
+  ['2026.08', '온프레미스 AI 회의 인텔리전스 플랫폼 GUI·아이콘 디자인 화면집 v1.0', '저작권 등록 · 08.11', '/assets/images/company/office-design-wall.jpg'],
+  ['2026.08', '온프레미스 AI 회의 인텔리전스 플랫폼 v1.0', '프로그램 저작권 · 08.03', '/assets/images/company/hoban-ai-workspace.jpg'],
+  ['2026.02', '연구개발전담부서 인정', '인정서 발급 · 02.20', '/assets/images/company/engineering-at-work.jpg'],
+  ['2026.02', '벤처기업 확인 · 혁신성장유형', '유효기간 · 2029.02.03까지', '/assets/images/company/baemin-square-campus.jpg'],
 ] as const
 
 const recruitParts = [
@@ -91,9 +91,9 @@ const welfare = [
 ] as const
 
 const workspaceSlides = [
-  ['/assets/images/main/processing_01.png', '생각을 빠르게 시각화하는 프로젝트 룸'],
-  ['/assets/images/main/processing.png', '근거와 데이터를 함께 검토하는 리서치 데스크'],
-  ['/assets/images/og-image.png', '도메인과 기술이 만나는 협업 세션'],
+  ['/assets/images/company/open-workspace.jpg', '판교 배민스퀘어의 집중 업무 공간'],
+  ['/assets/images/company/office-lounge.jpg', '아이디어와 대화를 이어가는 오픈 라운지'],
+  ['/assets/images/company/engineering-at-work.jpg', 'AI 인프라를 직접 검증하는 엔지니어링 현장'],
 ] as const
 
 const address = '경기도 성남시 금토로80번길 40, B동 배민스퀘어 301호'
@@ -157,7 +157,7 @@ function AgencyHeader({ current }: { current: AgencyPageType }): ReactElement {
   return <>
     <div className="rp-progress" aria-hidden="true"><span /></div>
     <header className={`rp-header ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-open' : ''}`}>
-      <Link className="rp-brand" to="/" aria-label="XAI Korea home"><span className="rp-brand__mark" aria-hidden="true"><img src="/assets/images/logo/xaikorea-corporate.png" alt="" /></span><span>XAI</span><b>KOREA</b></Link>
+      <Link className="rp-brand" to="/" aria-label="XAIKOREA home"><span className="rp-brand__mark" aria-hidden="true"><img src="/assets/images/logo/xaikorea-corporate.png" alt="" /></span><span className="rp-brand__word">XAIKOREA</span></Link>
       <button ref={buttonRef} className="rp-menu-button" type="button" aria-expanded={open} aria-controls="agency-menu" aria-label={open ? '메뉴 닫기' : '메뉴 열기'} onClick={() => { setOpen((value) => !value) }}><i /><i /></button>
     </header>
     <div ref={panelRef} id="agency-menu" className={`rp-menu ${open ? 'is-open' : ''}`} aria-hidden={!open}>
@@ -176,15 +176,15 @@ function AgencyHeader({ current }: { current: AgencyPageType }): ReactElement {
 
 function AgencyFooter(): ReactElement {
   return <footer className="rp-footer">
-    <div className="rp-footer__image" aria-hidden="true"><img src="/assets/images/main/processing.png" alt="" loading="lazy" /></div>
+    <div className="rp-footer__image" aria-hidden="true"><img src="/assets/images/company/baemin-square-night.jpg" alt="" loading="lazy" /></div>
     <div className="rp-footer__grid">
-      <div className="rp-footer__company"><img src="/assets/images/logo/xaikorea-corporate.png" alt="XAI Korea 로고" /><div><span>Company</span><strong>XAI Korea</strong></div></div>
+      <div className="rp-footer__company"><img src="/assets/images/logo/xaikorea-corporate.png" alt="XAIKOREA 로고" /><div><span>Company</span><strong>XAIKOREA</strong></div></div>
       <div className="rp-footer__address"><span>Address</span><strong>{address}</strong></div>
       <div><span>Project Request</span><a href="mailto:contact@xaikorea.ai.kr">contact@xaikorea.ai.kr</a></div>
       <div><span>Tel</span><a href="tel:+821032535409">+82 10 3253 5409</a></div>
       <div className="rp-footer__actions"><Link to="/contact">프로젝트 문의 <b>↗</b></Link><a href="mailto:contact@xaikorea.ai.kr?subject=XAI%20Korea%20회사소개%20요청">회사소개 요청 <b>□</b></a></div>
     </div>
-    <div className="rp-footer__bottom"><p>© 2026 XAI Korea</p><div><Link to="/privacy">PRIVACY</Link><Link to="/terms">TERMS</Link></div></div>
+    <div className="rp-footer__bottom"><p>© 2026 XAIKOREA</p><div><Link to="/privacy">PRIVACY</Link><Link to="/terms">TERMS</Link></div></div>
   </footer>
 }
 
@@ -192,9 +192,9 @@ function AboutPage(): ReactElement {
   const [awardPreview, setAwardPreview] = useState<string>(awards[0][3])
   return <>
     <section className="rp-hero rp-hero--about">
-      <img src="/assets/images/main/processing_01.png" alt="" />
+      <img src="/assets/images/company/office-lounge.jpg" alt="" />
       <div className="rp-hero__veil" />
-      <div className="rp-hero__copy"><p>ABOUT XAI KOREA</p><h1>CREATIVE THINKING.<br />PROVABLE TECHNOLOGY.</h1><span>도메인 지식과 AI 기술을 연결해, 설명할 수 있는 의사결정 경험을 만듭니다.</span></div>
+      <div className="rp-hero__copy"><p>ABOUT XAIKOREA</p><h1>CREATIVE THINKING.<br />PROVABLE TECHNOLOGY.</h1><span>도메인 지식과 AI 기술을 연결해, 설명할 수 있는 의사결정 경험을 만듭니다.</span></div>
       <a href="#business" className="rp-scroll-cue">SCROLL <i /></a>
     </section>
     <section id="business" className="rp-section rp-business rp-reveal">
@@ -203,6 +203,7 @@ function AboutPage(): ReactElement {
     </section>
     <section className="rp-section rp-awards rp-reveal">
       <div className="rp-section-title"><span>02</span><h2>MILESTONES</h2></div>
+      <p className="rp-section-lead">공식 확인서와 한국저작권위원회 등록증을 기준으로 검증된 이력만 안내합니다.</p>
       <div className="rp-awards__layout">
         <div className="rp-awards__list">{awards.map(([year, title, result, image]) => <button key={title} type="button" onPointerEnter={() => { setAwardPreview(image) }} onFocus={() => { setAwardPreview(image) }}><span>{year}</span><strong>{title}</strong><em>{result}</em><b>↗</b></button>)}</div>
         <div className="rp-awards__preview"><img key={awardPreview} src={awardPreview} alt="선택한 이력 미리보기" /></div>
@@ -248,7 +249,7 @@ function WorkPage(): ReactElement {
       {selected !== null && <div className="rp-project-modal__panel">
         <button className="rp-project-modal__close" type="button" onClick={() => { setSelected(null) }} aria-label="프로젝트 상세 닫기">×</button>
         <div className="rp-project-modal__visual"><img src={selected.image} alt="" /></div>
-        <div className="rp-project-modal__copy"><span>{selected.category} · XAI KOREA</span><h2>{selected.title}</h2><p>{selected.caption}</p><dl><div><dt>OUTCOME</dt><dd>{selected.result}</dd></div><div><dt>SCOPE</dt><dd>Strategy · UX · AI Engineering</dd></div></dl><Link to="/contact">프로젝트 상담하기 ↗</Link></div>
+        <div className="rp-project-modal__copy"><span>{selected.category} · XAIKOREA</span><h2>{selected.title}</h2><p>{selected.caption}</p><dl><div><dt>OUTCOME</dt><dd>{selected.result}</dd></div><div><dt>SCOPE</dt><dd>Strategy · UX · AI Engineering</dd></div></dl><Link to="/contact">프로젝트 상담하기 ↗</Link></div>
       </div>}
     </div>
   </>
@@ -275,9 +276,9 @@ function CareersPage(): ReactElement {
 
   return <>
     <section className="rp-hero rp-hero--careers">
-      <img src="/assets/images/main/processing_01.png" alt="" />
+      <img src="/assets/images/company/open-workspace.jpg" alt="" />
       <div className="rp-hero__veil" />
-      <div className="rp-hero__copy"><p>CAREERS AT XAI KOREA</p><h1>BUILD YOUR CAREER<br />WITH US.</h1><span>오늘보다 더 나은 질문을 던지고, 신뢰할 수 있는 AI의 기준을 함께 만듭니다.</span></div>
+      <div className="rp-hero__copy"><p>CAREERS AT XAIKOREA</p><h1>BUILD YOUR CAREER<br />WITH US.</h1><span>오늘보다 더 나은 질문을 던지고, 신뢰할 수 있는 AI의 기준을 함께 만듭니다.</span></div>
       <a href="#recruit" className="rp-scroll-cue">JOIN THE TEAM <i /></a>
     </section>
     <section id="recruit" className="rp-section rp-recruit rp-reveal">
@@ -304,7 +305,7 @@ function CareersPage(): ReactElement {
 function ContactPage(): ReactElement {
   return <>
     <section className="rp-contact-hero">
-      <div><p>CONTACT XAI KOREA</p><h1>A PARTNER FOR<br />BETTER DECISIONS.</h1><span>설명 가능한 AI가 필요한 프로젝트라면 편하게 이야기를 들려주세요.</span></div>
+      <div><p>CONTACT XAIKOREA</p><h1>A PARTNER FOR<br />BETTER DECISIONS.</h1><span>설명 가능한 AI가 필요한 프로젝트라면 편하게 이야기를 들려주세요.</span></div>
       <dl>
         <div><dt>Address.</dt><dd>{address}</dd></div>
         <div><dt>Tel.</dt><dd><a href="tel:+821032535409">+82 10 3253 5409</a></dd></div>
@@ -313,8 +314,7 @@ function ContactPage(): ReactElement {
       </dl>
     </section>
     <section className="rp-contact-map rp-reveal">
-      <iframe title="XAI Korea 판교 오피스 위치" src={mapEmbedUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-      <div className="rp-map-pin" aria-hidden="true"><span>XAI<br />KOREA</span></div>
+      <iframe title="XAIKOREA 판교 오피스 위치" src={mapEmbedUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
       <a href={mapLinkUrl} target="_blank" rel="noreferrer">GOOGLE MAPS에서 크게 보기 ↗</a>
     </section>
     <section className="rp-contact-next"><p>NEXT STEP</p><h2>프로젝트의 현재 단계와<br />해결하고 싶은 문제를 알려주세요.</h2><Link to="/#contact">문의 양식 작성하기 <span>↗</span></Link></section>
@@ -324,7 +324,7 @@ function ContactPage(): ReactElement {
 export default function AgencyPage({ page }: AgencyPageProps): ReactElement {
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.title = `XAI Korea | ${page.toUpperCase()}`
+    document.title = `XAIKOREA | ${page.toUpperCase()}`
     const targets = document.querySelectorAll<HTMLElement>('.rp-reveal')
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {

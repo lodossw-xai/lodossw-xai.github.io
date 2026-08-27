@@ -87,7 +87,7 @@ function ContactSection(): ReactElement {
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    title="XAI Korea Office Location"
+                    title="XAIKOREA Office Location"
                   ></iframe>
                   {/* Map overlay button */}
                   <a
