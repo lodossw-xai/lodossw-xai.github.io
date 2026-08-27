@@ -2519,8 +2519,132 @@ html {
 .ra-hero__copy {
   animation: ra-hero-copy-in 0.72s cubic-bezier(0.22, 0.78, 0.27, 1) both;
 }
-.ra-evidence-card {
-  animation: ra-hero-card-in 0.68s 0.1s cubic-bezier(0.22, 0.78, 0.27, 1) both;
+.ra-hero-popup {
+  position: absolute;
+  z-index: 4;
+  right: max(24px, calc((100% - 1180px) / 2));
+  bottom: 112px;
+  width: min(340px, calc(100% - 48px));
+  padding: 27px;
+  color: var(--ra-ink);
+  border: 1px solid rgba(20, 20, 20, 0.12);
+  background: #f7f4ee;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.24);
+  animation: ra-hero-card-in 0.52s cubic-bezier(0.22, 0.78, 0.27, 1) both;
+}
+.ra-hero-popup__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--ra-ink);
+  border: 1px solid rgba(20, 20, 20, 0.2);
+  background: transparent;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.2s;
+}
+.ra-hero-popup__close:hover,
+.ra-hero-popup__close:focus-visible {
+  color: #fff;
+  border-color: var(--ra-ink);
+  background: var(--ra-ink);
+  transform: rotate(4deg);
+}
+.ra-hero-popup__eyebrow {
+  margin: 0 46px 18px 0;
+  color: var(--ra-red);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+.ra-hero-popup h2 {
+  max-width: 260px;
+  margin: 0;
+  font-size: clamp(21px, 2vw, 27px);
+  line-height: 1.16;
+  letter-spacing: -0.055em;
+  word-break: keep-all;
+}
+.ra-hero-popup__text {
+  margin: 14px 0 22px;
+  color: #55514c;
+  font-size: 12px;
+  line-height: 1.72;
+  word-break: keep-all;
+}
+.ra-hero-popup__tag {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-end;
+  padding: 13px 0;
+  border-top: 1px solid rgba(20, 20, 20, 0.13);
+  border-bottom: 1px solid rgba(20, 20, 20, 0.13);
+}
+.ra-hero-popup__tag strong {
+  font-size: 14px;
+  letter-spacing: -0.03em;
+}
+.ra-hero-popup__tag span {
+  color: #706b65;
+  font-size: 10px;
+  text-align: right;
+}
+.ra-hero-popup > a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  font-size: 11px;
+  font-weight: 900;
+}
+.ra-hero-popup > a span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  color: var(--ra-ink);
+  background: var(--ra-lime);
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+.ra-hero-popup > a:hover span,
+.ra-hero-popup > a:focus-visible span {
+  transform: translate(3px, -3px);
+}
+.ra-hero-popup-open {
+  position: absolute;
+  z-index: 4;
+  right: max(24px, calc((100% - 1180px) / 2));
+  bottom: 112px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 14px;
+  color: var(--ra-ink);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background: #f7f4ee;
+  box-shadow: 0 14px 42px rgba(0, 0, 0, 0.2);
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+  animation: ra-hero-card-in 0.35s ease both;
+}
+.ra-hero-popup-open span {
+  color: var(--ra-red);
+  font-size: 17px;
+  line-height: 1;
 }
 @keyframes ra-hero-media-in {
   from {
@@ -2742,17 +2866,48 @@ html {
   .ra-hero-nav {
     left: 24px;
   }
+  .ra-hero-popup,
+  .ra-hero-popup-open {
+    right: 24px;
+  }
   .ra-request__grid {
     margin-top: 54px;
   }
 }
 
 @media (max-width: 680px) {
-  .ra-hero__content {
-    padding-bottom: 142px;
+  .ra-hero {
+    min-height: 860px;
   }
-  .ra-evidence-card {
-    display: none;
+  .ra-hero__content {
+    padding-bottom: 340px;
+  }
+  .ra-hero-popup {
+    right: 16px;
+    bottom: 68px;
+    width: calc(100% - 32px);
+    padding: 21px;
+  }
+  .ra-hero-popup__close {
+    top: 11px;
+    right: 11px;
+    width: 32px;
+    height: 32px;
+  }
+  .ra-hero-popup__eyebrow {
+    margin-bottom: 13px;
+  }
+  .ra-hero-popup h2 {
+    max-width: calc(100% - 40px);
+    font-size: 21px;
+  }
+  .ra-hero-popup__text {
+    margin: 11px 0 16px;
+    font-size: 11px;
+  }
+  .ra-hero-popup-open {
+    right: 16px;
+    bottom: 68px;
   }
   .ra-hero-nav {
     left: 16px;
@@ -2793,6 +2948,10 @@ html {
   .ra-hero-nav__pages button.is-active i::after {
     animation: none;
     transform: scaleX(1);
+  }
+  .ra-hero-popup,
+  .ra-hero-popup-open {
+    animation: none;
   }
   .ra-case-switcher button::after {
     display: none;

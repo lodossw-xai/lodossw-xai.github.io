@@ -124,9 +124,14 @@ const copy = {
           </>
         ),
         text: 'XAIKOREA는 규정·판례·내부 문서를 읽고, 출처가 추적되는 답변과 업무 흐름을 설계합니다.',
-        metric: '12.4k',
-        metricLabel: '검증 가능한 근거',
-        query: '“최근 개정 규정을 반영해 고객사 리스크를 알려줘.”',
+        popupKicker: '추천 활용 분야',
+        popupTitle: '규정·판례·계약서 검토',
+        popupText:
+          '답변마다 확인 가능한 원문과 조항, 문서 위치를 함께 제공합니다.',
+        popupTag: 'SOURCE LINKED',
+        popupTagLabel: '원문·조항 연결',
+        popupCta: '근거 설계 방식 보기',
+        popupHref: '#solutions',
       },
       {
         kicker: 'ON-PREMISE INTELLIGENCE',
@@ -138,9 +143,14 @@ const copy = {
           </>
         ),
         text: '조직의 회의·문서·업무 지식을 외부 유출 없이 연결하고, 권한 안에서 안전하게 활용할 수 있게 합니다.',
-        metric: '100%',
-        metricLabel: '조직 내 데이터 통제',
-        query: '“회의 기록을 검토 가능한 조직 지식으로 바꿔줘.”',
+        popupKicker: '추천 활용 분야',
+        popupTitle: '내부 문서 기반 지식 검색',
+        popupText:
+          '권한 안에서 회의록·업무 자료를 연결해 검토 가능한 조직 지식으로 전환합니다.',
+        popupTag: 'ON-PREMISE',
+        popupTagLabel: '권한 기반 지식 연결',
+        popupCta: '구축 방식 보기',
+        popupHref: '#process',
       },
       {
         kicker: 'AI FOR PROFESSIONAL WORK',
@@ -152,9 +162,14 @@ const copy = {
           </>
         ),
         text: '법·세무·정책처럼 정확성이 중요한 업무를 원문 근거, 변경 이력, 사람의 검토 흐름과 함께 설계합니다.',
-        metric: '3.2×',
-        metricLabel: '검토 처리량 향상',
-        query: '“변경된 조항과 영향 범위를 원문과 함께 보여줘.”',
+        popupKicker: '추천 활용 분야',
+        popupTitle: '전문 업무 검토 지원',
+        popupText:
+          '법·세무·정책 변화의 영향 범위를 원문과 함께 비교하고 사람의 검토 지점을 남깁니다.',
+        popupTag: 'HUMAN REVIEW',
+        popupTagLabel: '검토·승인 지점 설계',
+        popupCta: '활용 사례 보기',
+        popupHref: '#work',
       },
     ],
     primaryCta: '프로젝트 문의하기',
@@ -408,9 +423,14 @@ const copy = {
           </>
         ),
         text: 'XAIKOREA designs traceable answers and work flows from regulations, cases, and your organization’s knowledge.',
-        metric: '12.4k',
-        metricLabel: 'verifiable references',
-        query: '“Show the client risk with the latest regulatory changes.”',
+        popupKicker: 'RECOMMENDED USE CASE',
+        popupTitle: 'Policy, case, and contract review',
+        popupText:
+          'Each answer connects to checkable source text, clauses, and document locations.',
+        popupTag: 'SOURCE LINKED',
+        popupTagLabel: 'Original sources attached',
+        popupCta: 'See evidence design',
+        popupHref: '#solutions',
       },
       {
         kicker: 'ON-PREMISE INTELLIGENCE',
@@ -422,9 +442,14 @@ const copy = {
           </>
         ),
         text: 'Connect meetings, documents, and operational knowledge without giving up organizational control or access boundaries.',
-        metric: '100%',
-        metricLabel: 'in-house data control',
-        query: '“Turn this meeting record into reviewable team knowledge.”',
+        popupKicker: 'RECOMMENDED USE CASE',
+        popupTitle: 'Private knowledge discovery',
+        popupText:
+          'Connect meeting notes and work documents within access boundaries to create reviewable organizational knowledge.',
+        popupTag: 'ON-PREMISE',
+        popupTagLabel: 'Permission-aware knowledge',
+        popupCta: 'See how we build',
+        popupHref: '#process',
       },
       {
         kicker: 'AI FOR PROFESSIONAL WORK',
@@ -436,9 +461,14 @@ const copy = {
           </>
         ),
         text: 'For legal, tax, and policy work, we connect original sources, change history, and clear human review points.',
-        metric: '3.2×',
-        metricLabel: 'review throughput',
-        query: '“Show the changed clauses and their impact with source text.”',
+        popupKicker: 'RECOMMENDED USE CASE',
+        popupTitle: 'Professional review support',
+        popupText:
+          'Compare changes across legal, tax, and policy materials while keeping clear human review points.',
+        popupTag: 'HUMAN REVIEW',
+        popupTagLabel: 'Review and approval built in',
+        popupCta: 'See use cases',
+        popupHref: '#work',
       },
     ],
     primaryCta: 'Start a project',
@@ -702,6 +732,7 @@ export default function LandingPage(): ReactElement {
   const [isVideoPaused, setIsVideoPaused] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [isHeroRotationPaused, setIsHeroRotationPaused] = useState(false);
+  const [isHeroPopupOpen, setIsHeroPopupOpen] = useState(true);
   const [videoPlaybackNonce, setVideoPlaybackNonce] = useState(0);
   const [menuPreview, setMenuPreview] = useState(
     menuPreviewVisuals['/about'] ?? serviceVisuals[0]
@@ -1227,19 +1258,56 @@ export default function LandingPage(): ReactElement {
                 </div>
               </div>
             </div>
-            <aside
-              key={`metric-${language}-${String(activeHero)}`}
-              className="ra-evidence-card"
-              aria-label={activeHeroCopy.metricLabel}
-            >
-              <span className="ra-evidence-card__dot" />
-              <p>{activeHeroCopy.query}</p>
-              <div>
-                <strong>{activeHeroCopy.metric}</strong>
-                <span>{activeHeroCopy.metricLabel}</span>
-              </div>
-            </aside>
           </div>
+          {isHeroPopupOpen ? (
+            <aside
+              key={`recommendation-${language}-${String(activeHero)}`}
+              className="ra-hero-popup"
+              aria-label={activeHeroCopy.popupTitle}
+            >
+              <button
+                type="button"
+                className="ra-hero-popup__close"
+                onClick={() => {
+                  setIsHeroPopupOpen(false);
+                }}
+                aria-label={
+                  language === 'ko' ? '추천 팝업 닫기' : 'Close recommendation'
+                }
+              >
+                ×
+              </button>
+              <p className="ra-hero-popup__eyebrow">
+                {activeHeroCopy.popupKicker}
+              </p>
+              <h2>{activeHeroCopy.popupTitle}</h2>
+              <p className="ra-hero-popup__text">{activeHeroCopy.popupText}</p>
+              <div className="ra-hero-popup__tag">
+                <strong>{activeHeroCopy.popupTag}</strong>
+                <span>{activeHeroCopy.popupTagLabel}</span>
+              </div>
+              <a href={activeHeroCopy.popupHref}>
+                {activeHeroCopy.popupCta}
+                <span aria-hidden="true">↘</span>
+              </a>
+            </aside>
+          ) : (
+            <button
+              type="button"
+              className="ra-hero-popup-open"
+              onClick={() => {
+                setIsHeroPopupOpen(true);
+              }}
+              aria-label={
+                language === 'ko'
+                  ? '추천 활용 분야 다시 보기'
+                  : 'Open recommendation'
+              }
+            >
+              {language === 'ko' ? '추천 보기' : 'View recommendation'}
+              <span aria-hidden="true">+</span>
+            </button>
+          )}
           <div
             className="ra-hero-nav"
             aria-label={
