@@ -1,0 +1,21 @@
+{
+  "name": "XAIKOREA",
+  "short_name": "XAIKOREA",
+  "description": "설명 가능한 AI 업무 파트너",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f1eb",
+  "theme_color": "#f4f1eb",
+  "icons": [
+    {
+      "src": "/favicon-xaikorea-20260827-v3-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-xaikorea-20260827-v3-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
