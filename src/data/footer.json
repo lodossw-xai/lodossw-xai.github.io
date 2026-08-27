@@ -14,13 +14,13 @@
       "company": {
         "title": "Company",
         "items": [
-          { "label": "팀 소개", "href": "#team" },
-          { "label": "오시는 길", "href": "#contact" }
+          { "label": "팀 소개", "href": "/#experts" },
+          { "label": "오시는 길", "href": "/#location" }
         ]
       },
       "solution": {
         "title": "Solution",
-        "items": [{ "label": "Texia", "href": "#services" }]
+        "items": [{ "label": "TAXiA", "href": "/#solutions" }]
       },
       "legal": {
         "title": "Legal",
@@ -48,19 +48,19 @@
       "company": {
         "title": "Company",
         "items": [
-          { "label": "About Us", "href": "#" },
-          { "label": "Team", "href": "#team" },
-          { "label": "Careers", "href": "#" },
-          { "label": "Directions", "href": "#contact" }
+          { "label": "About Us", "href": "/about" },
+          { "label": "Team", "href": "/#experts" },
+          { "label": "Careers", "href": "/careers" },
+          { "label": "Directions", "href": "/#location" }
         ]
       },
       "solution": {
         "title": "Solution",
         "items": [
-          { "label": "XAI Tax", "href": "#services" },
-          { "label": "XAI Audit", "href": "#services" },
-          { "label": "API Service", "href": "#" },
-          { "label": "Integrations", "href": "#" }
+          { "label": "TAXiA", "href": "/#solutions" },
+          { "label": "XAI Audit", "href": "/#solutions" },
+          { "label": "API Service", "href": "/#solutions" },
+          { "label": "Integrations", "href": "/#solutions" }
         ]
       },
       "legal": {

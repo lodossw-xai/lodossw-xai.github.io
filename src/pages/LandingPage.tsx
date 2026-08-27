@@ -6,7 +6,7 @@ import {
   useState,
   type ReactElement,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ProjectInquiryForm from '../components/contact/ProjectInquiryForm';
 import '../styles/redesign.css';
 
@@ -793,6 +793,7 @@ const copy = {
 } as const;
 
 export default function LandingPage(): ReactElement {
+  const location = useLocation();
   const [language, setLanguage] = useState<Language>('ko');
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHero, setActiveHero] = useState(0);
@@ -845,6 +846,43 @@ export default function LandingPage(): ReactElement {
     locationOptions[0];
   const activeMapEmbedUrl = createMapEmbedUrl(activeLocation.mapAddress);
   const activeMapLinkUrl = createMapLinkUrl(activeLocation.mapAddress);
+
+  useEffect(() => {
+    if (location.hash === '') {
+      return;
+    }
+
+    const targetId = decodeURIComponent(location.hash.slice(1));
+    let animationFrame = 0;
+    let retryTimer = 0;
+    let remainingAttempts = 10;
+
+    const scrollToTarget = (): void => {
+      const target = document.getElementById(targetId);
+      if (target === null) {
+        remainingAttempts -= 1;
+        if (remainingAttempts > 0) {
+          retryTimer = window.setTimeout(scrollToTarget, 80);
+        }
+        return;
+      }
+
+      target.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+        block: 'start',
+      });
+    };
+
+    animationFrame = window.requestAnimationFrame(scrollToTarget);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.clearTimeout(retryTimer);
+    };
+  }, [location.hash]);
+
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     const onKeyDown = (event: KeyboardEvent): void => {
@@ -1939,7 +1977,7 @@ export default function LandingPage(): ReactElement {
                   key={groupIndex}
                   aria-hidden={groupIndex === 1 ? true : undefined}
                 >
-                  {officeMarqueeVisuals.map(([src, koAlt, enAlt]) => (
+                  {officeMarqueeVisuals.map(([src, koAlt, enAlt], index) => (
                     <figure key={`${String(groupIndex)}-${src}`}>
                       <img
                         src={src}
