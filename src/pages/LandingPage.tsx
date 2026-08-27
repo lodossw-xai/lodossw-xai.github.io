@@ -40,17 +40,17 @@ const heroVisuals = [
   {
     video:
       'https://videos.pexels.com/video-files/3202364/3202364-hd_1920_1080_25fps.mp4',
-    poster: '/assets/images/company/baemin-square-night.jpg',
+    poster: '/assets/images/company/xai-team-collaboration.jpg',
   },
   {
     video:
       'https://videos.pexels.com/video-files/3209211/3209211-hd_1920_1080_25fps.mp4',
-    poster: '/assets/images/company/hoban-ai-workspace.jpg',
+    poster: '/assets/images/company/xai-office-engineering.jpg',
   },
   {
     video:
       'https://videos.pexels.com/video-files/3202047/3202047-hd_1920_1080_25fps.mp4',
-    poster: '/assets/images/company/engineering-at-work.jpg',
+    poster: '/assets/images/company/meeting-ai-security.jpg',
   },
 ] as const;
 const HEAD_OFFICE_MAP_ADDRESS =
@@ -66,24 +66,24 @@ function createMapLinkUrl(address: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 }
 const serviceVisuals = [
-  '/assets/images/company/hoban-ai-workspace.jpg',
-  '/assets/images/company/server-mainboard.jpg',
-  '/assets/images/company/technology-protection-company.jpg',
+  '/assets/images/company/cloa-evidence-vault.jpg',
+  '/assets/images/company/xai-onpremise-lab.jpg',
+  '/assets/images/company/meeting-ai-security.jpg',
 ] as const;
 const serviceHoverVisuals = [
-  '/assets/images/company/agent-harness-engineering.jpg',
-  '/assets/images/company/engineering-at-work.jpg',
-  '/assets/images/company/ai-transformation-conference.jpg',
+  '/assets/images/company/codebase-intelligence-platform.jpg',
+  '/assets/images/company/xai-office-engineering.jpg',
+  '/assets/images/company/meeting-ai-system.jpg',
 ] as const;
 const caseVisuals = [
-  '/assets/images/company/agent-harness-engineering.jpg',
-  '/assets/images/company/hoban-ai-workspace.jpg',
-  '/assets/images/company/technology-protection-company.jpg',
+  '/assets/images/company/cloa-evidence-vault.jpg',
+  '/assets/images/company/meeting-ai-security.jpg',
+  '/assets/images/company/xai-rnd-certifications.jpg',
 ] as const;
 const expertVisuals = [
-  '/assets/images/company/ai-transformation-conference.jpg',
-  '/assets/images/company/engineering-at-work.jpg',
-  '/assets/images/company/office-design-wall.jpg',
+  '/assets/images/company/xai-ceo-forum.jpg',
+  '/assets/images/company/xai-team-collaboration.jpg',
+  '/assets/images/company/xai-technology-protection.jpg',
 ] as const;
 const globalNavigation = [
   ['HOME', '/'],
@@ -93,11 +93,11 @@ const globalNavigation = [
   ['CONTACT', '/contact'],
 ] as const;
 const menuPreviewVisuals: Record<string, string> = {
-  '/': '/assets/images/company/baemin-square-night.jpg',
-  '/about': '/assets/images/company/office-lounge.jpg',
-  '/work': '/assets/images/company/hoban-ai-workspace.jpg',
-  '/careers': '/assets/images/company/open-workspace.jpg',
-  '/contact': '/assets/images/company/baemin-square-campus.jpg',
+  '/': '/assets/images/company/xai-team-collaboration.jpg',
+  '/about': '/assets/images/company/xai-office-workspace.jpg',
+  '/work': '/assets/images/company/codebase-intelligence-platform.jpg',
+  '/careers': '/assets/images/company/xai-engineer-at-work.jpg',
+  '/contact': '/assets/images/company/xai-office-workspace.jpg',
 };
 const sectionIndicator: ReadonlyArray<{ id: SectionId; label: string }> = [
   { id: 'top', label: 'Intro' },
@@ -1433,7 +1433,7 @@ export default function LandingPage(): ReactElement {
             </div>
             <div className="ra-evidence__visual">
               <img
-                src="/assets/images/main/processing.png"
+                src="/assets/images/company/cloa-evidence-vault.jpg"
                 alt={
                   language === 'ko'
                     ? 'XAIKOREA의 근거 추적형 AI 분석 화면'
@@ -1654,7 +1654,7 @@ export default function LandingPage(): ReactElement {
             >
               <figure>
                 <img
-                  src="/assets/images/company/engineering-at-work.jpg"
+                  src="/assets/images/company/xai-office-engineering.jpg"
                   alt={
                     language === 'ko'
                       ? '온프레미스 AI 장비를 점검하는 엔지니어'
@@ -1662,27 +1662,63 @@ export default function LandingPage(): ReactElement {
                   }
                   loading="lazy"
                 />
-                <figcaption>ENGINEERING · ON-PREMISE AI</figcaption>
+                <figcaption>ENGINEERING · ON-PREMISE AI LAB</figcaption>
               </figure>
               <figure>
                 <img
-                  src="/assets/images/company/ai-transformation-conference.jpg"
+                  src="/assets/images/company/meeting-ai-architecture.jpg"
                   alt={
                     language === 'ko'
-                      ? '중소기업 AI 대전환 세미나 현장'
-                      : 'AI transformation conference'
+                      ? 'XAIKOREA 온프레미스 AI 회의록 자동화 아키텍처'
+                      : 'XAIKOREA on-premise meeting AI architecture'
                   }
                   loading="lazy"
                 />
-                <figcaption>RESEARCH · AI TRANSFORMATION</figcaption>
+                <figcaption>PRODUCT · MEETING INTELLIGENCE</figcaption>
               </figure>
               <figure>
                 <img
-                  src="/assets/images/company/baemin-square-campus.jpg"
+                  src="/assets/images/company/xai-rnd-certifications.jpg"
                   alt={
                     language === 'ko'
-                      ? 'XAIKOREA가 위치한 배민스퀘어'
-                      : 'Baemin Square, home of XAIKOREA'
+                      ? 'XAIKOREA 연구개발전담부서와 산업기술진흥협회 회원 인증'
+                      : 'XAIKOREA research and industry technology certifications'
+                  }
+                  loading="lazy"
+                />
+                <figcaption>R&amp;D · RECOGNIZED ORGANIZATION</figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="/assets/images/company/xai-technology-protection.jpg"
+                  alt={
+                    language === 'ko'
+                      ? 'XAIKOREA 기술보호 선도기업 지정 현판'
+                      : 'XAIKOREA technology protection designation'
+                  }
+                  loading="lazy"
+                />
+                <figcaption>TRUST · TECHNOLOGY PROTECTION</figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="/assets/images/company/xai-team-collaboration.jpg"
+                  alt={
+                    language === 'ko'
+                      ? 'XAIKOREA 팀 협업 미팅'
+                      : 'XAIKOREA team collaboration meeting'
+                  }
+                  loading="lazy"
+                />
+                <figcaption>TEAM · DOMAIN COLLABORATION</figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="/assets/images/company/xai-office-workspace.jpg"
+                  alt={
+                    language === 'ko'
+                      ? 'XAIKOREA 배민스퀘어 업무 공간'
+                      : 'XAIKOREA workspace at Baemin Square'
                   }
                   loading="lazy"
                 />
