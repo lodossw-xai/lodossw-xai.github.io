@@ -9,37 +9,49 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // 템플릿 변환 플러그인
-const transformTemplates = (mode: string) => ({
-  name: 'transform-templates',
-  closeBundle: async () => {
-    const env = loadEnv(mode, process.cwd());
-    const siteUrl = env['VITE_SITE_URL'] || 'https://xaikorea.ai';
-    const siteDomain = env['VITE_SITE_DOMAIN'] || 'xaikorea.ai';
+const transformTemplates = (mode: string) => {
+  const env = loadEnv(mode, process.cwd());
+  const siteUrl = env['VITE_SITE_URL'] || 'https://www.xaikorea.ai.kr';
+  const siteDomain = env['VITE_SITE_DOMAIN'] || 'xaikorea.ai.kr';
+  const siteCname = env['VITE_SITE_CNAME'] || 'www.xaikorea.ai.kr';
 
-    const templates = [
-      { src: 'CNAME.template', dest: 'CNAME' },
-      { src: 'robots.txt.template', dest: 'robots.txt' },
-      { src: 'sitemap.xml.template', dest: 'sitemap.xml' },
-    ];
+  const replaceSiteVariables = (content: string) =>
+    content
+      .replace(/\r\n/g, '\n')
+      .replace(/%VITE_SITE_URL%/g, siteUrl)
+      .replace(/%VITE_SITE_DOMAIN%/g, siteDomain)
+      .replace(/%VITE_SITE_CNAME%/g, siteCname)
+      .replace(/__SITE_URL__/g, siteUrl)
+      .replace(/__SITE_DOMAIN__/g, siteDomain);
 
-    templates.forEach(({ src, dest }) => {
-      const templatePath = resolve(__dirname, 'src/templates', src);
-      try {
-        let content = readFileSync(templatePath, 'utf-8');
-        content = content.replace(/%VITE_SITE_URL%/g, siteUrl);
-        content = content.replace(/%VITE_SITE_DOMAIN%/g, siteDomain);
+  return {
+    name: 'transform-templates',
+    transformIndexHtml: (html: string) => replaceSiteVariables(html),
+    closeBundle: async () => {
+      const templates = [
+        { src: 'CNAME.template', dest: 'CNAME' },
+        { src: 'robots.txt.template', dest: 'robots.txt' },
+        { src: 'sitemap.xml.template', dest: 'sitemap.xml' },
+      ];
 
-        const outPath = resolve(__dirname, 'docs', dest);
-        writeFileSync(outPath, content);
-        console.log(
-          `[transform-templates] Generated ${dest} for ${siteDomain} (mode: ${mode})`
-        );
-      } catch (err) {
-        console.error(`[transform-templates] Error generating ${dest}:`, err);
-      }
-    });
-  },
-});
+      templates.forEach(({ src, dest }) => {
+        const templatePath = resolve(__dirname, 'src/templates', src);
+        try {
+          let content = readFileSync(templatePath, 'utf-8');
+          content = replaceSiteVariables(content);
+
+          const outPath = resolve(__dirname, 'docs', dest);
+          writeFileSync(outPath, content);
+          console.log(
+            `[transform-templates] Generated ${dest} for ${siteCname} (mode: ${mode})`
+          );
+        } catch (err) {
+          console.error(`[transform-templates] Error generating ${dest}:`, err);
+        }
+      });
+    },
+  };
+};
 
 // https://vite.dev/config/
 export default defineConfig(async ({ mode }) => {

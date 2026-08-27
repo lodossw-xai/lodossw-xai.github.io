@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://github.com/lodossw-xai/xaikorea-web",
+  "homepage": "https://www.xaikorea.ai.kr",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && node scripts/after-build.mjs",
