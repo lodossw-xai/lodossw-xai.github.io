@@ -1004,8 +1004,8 @@
   --rp-stellar-copy-blur: 16px;
   --rp-stellar-copy-scale: 0.94;
   position: relative;
-  height: 950svh;
-  min-height: 6300px;
+  height: 1900svh;
+  min-height: 12600px;
   color: #fff;
   background: #0d0e0d;
 }
@@ -1961,8 +1961,8 @@
     margin-top: 65px;
   }
   .rp-stellar-hero {
-    height: 760svh;
-    min-height: 5000px;
+    height: 1520svh;
+    min-height: 10000px;
   }
   .rp-stellar-hero__stage {
     min-height: 0;

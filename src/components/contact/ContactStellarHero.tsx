@@ -52,6 +52,12 @@ export default function ContactStellarHero(): ReactElement {
     let scrollProgress = 0;
     let pointerX = 0;
     let pointerY = 0;
+    let pointerInside = false;
+    let hoverSpinTriggeredForFormation = false;
+    let hoverSpinStartedAt = Number.NEGATIVE_INFINITY;
+
+    const HOVER_SPIN_DURATION = 1800;
+    const HOVER_SPIN_TURNS = 5;
 
     const makeParticles = (): void => {
       const count = reducedMotion
@@ -103,6 +109,15 @@ export default function ContactStellarHero(): ReactElement {
       const bounds = section.getBoundingClientRect();
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
       scrollProgress = reducedMotion ? 1 : clamp(-bounds.top / travel);
+      if (
+        !reducedMotion &&
+        pointerInside &&
+        scrollProgress >= 0.5 &&
+        !hoverSpinTriggeredForFormation
+      ) {
+        hoverSpinStartedAt = performance.now();
+        hoverSpinTriggeredForFormation = true;
+      }
       const copyIn = reducedMotion
         ? 1
         : smoother((scrollProgress - 0.5) / 0.13);
@@ -135,7 +150,14 @@ export default function ContactStellarHero(): ReactElement {
       const axialTurn = reducedMotion
         ? 0
         : smoother((scrollProgress - 0.85) / 0.145);
-      const axialAngle = axialTurn * Math.PI * 2 * 3;
+      const hoverSpinProgress = reducedMotion
+        ? 1
+        : clamp((time - hoverSpinStartedAt) / HOVER_SPIN_DURATION);
+      const hoverSpin =
+        hoverSpinStartedAt === Number.NEGATIVE_INFINITY
+          ? 0
+          : smoother(hoverSpinProgress) * Math.PI * 2 * HOVER_SPIN_TURNS;
+      const axialAngle = axialTurn * Math.PI * 2 * 3 + hoverSpin;
       const axialProjection = Math.cos(axialAngle);
       const centerX = width * 0.5 + pointerX * 10;
       const centerY = height * 0.5 + pointerY * 7;
@@ -385,6 +407,22 @@ export default function ContactStellarHero(): ReactElement {
         clamp((event.clientY - bounds.top) / Math.max(bounds.height, 1), 0, 1) -
         0.5;
     };
+    const onPointerEnter = (event: PointerEvent): void => {
+      if (event.pointerType !== 'mouse') {
+        return;
+      }
+      pointerInside = true;
+      if (!reducedMotion && scrollProgress >= 0.5) {
+        hoverSpinStartedAt = performance.now();
+        hoverSpinTriggeredForFormation = true;
+      }
+    };
+    const onPointerLeave = (event: PointerEvent): void => {
+      if (event.pointerType === 'mouse') {
+        pointerInside = false;
+        hoverSpinTriggeredForFormation = false;
+      }
+    };
     const onMotionChange = (event: MediaQueryListEvent): void => {
       reducedMotion = event.matches;
       resize();
@@ -407,6 +445,8 @@ export default function ContactStellarHero(): ReactElement {
 
     visibilityObserver.observe(section);
     resizeObserver.observe(section);
+    section.addEventListener('pointerenter', onPointerEnter, { passive: true });
+    section.addEventListener('pointerleave', onPointerLeave, { passive: true });
     section.addEventListener('pointermove', onPointerMove, { passive: true });
     window.addEventListener('scroll', updateScroll, { passive: true });
     motionQuery.addEventListener('change', onMotionChange);
@@ -418,6 +458,8 @@ export default function ContactStellarHero(): ReactElement {
       window.cancelAnimationFrame(frame);
       visibilityObserver.disconnect();
       resizeObserver.disconnect();
+      section.removeEventListener('pointerenter', onPointerEnter);
+      section.removeEventListener('pointerleave', onPointerLeave);
       section.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('scroll', updateScroll);
       motionQuery.removeEventListener('change', onMotionChange);
