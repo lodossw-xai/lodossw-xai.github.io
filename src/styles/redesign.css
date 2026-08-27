@@ -1,8 +1,8 @@
 :root {
   --ra-ink: #11110f;
   --ra-paper: #f4f1eb;
-  --ra-red: #ee3933;
-  --ra-lime: #d8ff4b;
+  --ra-red: #b2534d;
+  --ra-lime: #c9d87a;
   --ra-line: rgba(17, 17, 15, 0.17);
   --ra-muted: #66635e;
 }
@@ -815,7 +815,7 @@
   position: absolute;
   right: -14px;
   bottom: -38px;
-  color: rgba(216, 255, 75, 0.11);
+  color: rgba(201, 216, 122, 0.12);
   font-size: 190px;
   font-weight: 900;
   line-height: 1;

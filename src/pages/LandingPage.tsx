@@ -1572,6 +1572,7 @@ export default function LandingPage(): ReactElement {
               <span>송정세무회계</span>
               <span>피엔케이국제법률사무소</span>
               <span>호반건설</span>
+              <span>우아한형제들</span>
               <span>NHN CLOUD</span>
             </div>
           </div>
