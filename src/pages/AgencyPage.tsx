@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState, type ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import ContactStellarHero from '../components/contact/ContactStellarHero';
-import ProjectInquiryForm, {
-  type InquiryFormCopy,
-} from '../components/contact/ProjectInquiryForm';
 import '../styles/agency-pages.css';
 
 type AgencyPageType = 'about' | 'work' | 'careers' | 'contact';
@@ -276,66 +273,8 @@ const workspaceSlides = [
 ] as const;
 
 const address = '경기도 성남시 금토로80번길 40, B동 배민스퀘어 301호';
-const branchAddress =
-  '서울특별시 성북구 삼양로 29, 3층 23호 (길음동, 성북 청년 스마트 창업센터)';
-const contactPhone = '+82 10 3253 5409';
-const contactEmail = 'contact@xaikorea.ai.kr';
-const contactLocations = [
-  { id: 'head-office', label: '본사', name: '배민스퀘어', address },
-  {
-    id: 'seongbuk-branch',
-    label: '성북지점',
-    name: '성북 청년 스마트 창업센터',
-    address: branchAddress,
-  },
-] as const;
-const inquiryCards = [
-  {
-    label: 'Research',
-    value: '지식 탐색 시스템',
-    title: '질문에서 근거까지, 한 번에 연결',
-    meta: 'SOURCE SEARCH · CONTEXT LINKING',
-    text: '논문·보고서·내부 자료에서 질문과 맞닿은 근거를 찾아 맥락과 함께 제시합니다.',
-  },
-  {
-    label: 'Review',
-    value: '문서 검토 지원',
-    title: '문서의 차이와 핵심 쟁점을 빠르게 확인',
-    meta: 'COMPARE · TRACE · REVIEW',
-    text: '계약·규정·정책 문서를 비교하고 사람이 확인할 쟁점과 출처를 정리합니다.',
-  },
-  {
-    label: 'Governance',
-    value: 'AI 거버넌스',
-    title: '모든 답변의 출처와 검토 이력을 기록',
-    meta: 'SOURCE · ACCESS · AUDIT',
-    text: '권한·출처·평가·승인 이력을 묶어 신뢰할 수 있는 AI 운영 흐름을 설계합니다.',
-  },
-] as const;
-const contactFormCopy: InquiryFormCopy = {
-  name: '이름',
-  company: '회사/기관명',
-  email: '이메일',
-  phone: '연락처',
-  type: '관심 분야',
-  budget: '예상 범위',
-  message: '현재 해결하고 싶은 문제',
-  namePlaceholder: '홍길동',
-  companyPlaceholder: '회사 또는 기관명',
-  emailPlaceholder: 'name@company.com',
-  phonePlaceholder: '010-0000-0000',
-  messagePlaceholder:
-    '현재 업무 흐름, 참고 자료, 기대하는 결과를 편하게 알려 주세요.',
-  selectDefault: '선택해 주세요',
-  types: ['지식 탐색 시스템', '문서 검토 지원', 'AI 거버넌스', '기타'],
-  budgets: ['미정 / 논의 필요', 'PoC·파일럿', '정식 구축', '운영 고도화'],
-  send: '문의 내용 보내기',
-  sending: '전송 중...',
-  sent: '문의 메일을 열었습니다. 내용을 확인한 뒤 전송해 주세요.',
-  apiSent: '문의가 전달되었습니다. 빠르게 검토 후 연락드리겠습니다.',
-  error:
-    '전송에 실패했습니다. 잠시 후 다시 시도하거나 contact@xaikorea.ai.kr로 연락해 주세요.',
-};
+const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(address)}&z=16&output=embed&hl=ko`;
+const mapLinkUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 
 function AgencyHeader({ current }: { current: AgencyPageType }): ReactElement {
   const [open, setOpen] = useState(false);
@@ -889,159 +828,30 @@ function CareersPage(): ReactElement {
 }
 
 function ContactPage(): ReactElement {
-  const [selectedInquiryType, setSelectedInquiryType] = useState('');
-  const [activeLocationId, setActiveLocationId] = useState<
-    (typeof contactLocations)[number]['id']
-  >(contactLocations[0].id);
-  const activeLocation =
-    contactLocations.find(({ id }) => id === activeLocationId) ??
-    contactLocations[0];
-  const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(activeLocation.address)}&z=16&output=embed&hl=ko`;
-  const mapLinkUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeLocation.address)}`;
-
-  const chooseInquiryType = (value: string): void => {
-    setSelectedInquiryType(value);
-    window.requestAnimationFrame(() => {
-      document
-        .getElementById('project-inquiry-form')
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  };
-
   return (
     <>
-      <ContactStellarHero
-        address={address}
-        phone={contactPhone}
-        email={contactEmail}
-      />
-      <section
-        id="inquiry-types"
-        className="rp-inquiry-types rp-section rp-reveal"
-        aria-labelledby="inquiry-types-title"
-      >
-        <div className="rp-inquiry-types__heading">
-          <p>START WITH YOUR CONTEXT</p>
-          <h2 id="inquiry-types-title">
-            어떤 업무를
-            <br />
-            함께 설계할까요?
-          </h2>
-          <span>
-            가장 가까운 분야를 선택하면 문의 양식에 자동으로 반영됩니다.
-          </span>
-        </div>
-        <div className="rp-inquiry-types__track">
-          {inquiryCards.map((card, index) => (
-            <button
-              key={card.label}
-              type="button"
-              className={
-                selectedInquiryType === card.value ? 'is-selected' : ''
-              }
-              aria-pressed={selectedInquiryType === card.value}
-              onClick={() => {
-                chooseInquiryType(card.value);
-              }}
-            >
-              <span>
-                0{index + 1} · {card.label}
-              </span>
-              <strong>{card.title}</strong>
-              <p>{card.text}</p>
-              <em>{card.meta}</em>
-              <b aria-hidden="true">↘</b>
-            </button>
-          ))}
-        </div>
-      </section>
-      <section
-        className="rp-contact-inquiry rp-reveal"
-        aria-labelledby="contact-form-title"
-      >
-        <div className="rp-contact-inquiry__copy">
-          <p>PROJECT REQUEST</p>
-          <h2 id="contact-form-title">
-            다음 업무의 기준을
-            <br />
-            함께 설계해 볼까요?
-          </h2>
-          <span>
-            현재 업무 흐름과 참고 자료, 기대하는 결과를 알려주시면 적합한
-            방식으로 연락드리겠습니다.
-          </span>
-          <dl>
-            <div>
-              <dt>EMAIL</dt>
-              <dd>
-                <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
-              </dd>
-            </div>
-            <div>
-              <dt>PHONE</dt>
-              <dd>
-                <a href="tel:+821032535409">{contactPhone}</a>
-              </dd>
-            </div>
-          </dl>
-        </div>
-        <ProjectInquiryForm
-          copy={contactFormCopy}
-          selectedInquiryType={selectedInquiryType}
-          source="contact-page-form"
+      <ContactStellarHero />
+      <section id="contact-map" className="rp-contact-map rp-reveal">
+        <iframe
+          title="XAIKOREA 판교 오피스 위치"
+          src={mapEmbedUrl}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
         />
+        <a href={mapLinkUrl} target="_blank" rel="noreferrer">
+          GOOGLE MAPS에서 크게 보기 ↗
+        </a>
       </section>
-      <section
-        className="rp-contact-location rp-reveal"
-        aria-labelledby="contact-location-title"
-      >
-        <div className="rp-contact-location__heading">
-          <div>
-            <p>LOCATION</p>
-            <h2 id="contact-location-title">
-              성남과 성북에서
-              <br />
-              만나요.
-            </h2>
-          </div>
-          <div
-            className="rp-contact-location__tabs"
-            role="tablist"
-            aria-label="오피스 위치 선택"
-          >
-            {contactLocations.map((location) => (
-              <button
-                key={location.id}
-                type="button"
-                role="tab"
-                aria-selected={activeLocation.id === location.id}
-                className={activeLocation.id === location.id ? 'is-active' : ''}
-                onClick={() => {
-                  setActiveLocationId(location.id);
-                }}
-              >
-                {location.label}
-              </button>
-            ))}
-          </div>
-          <div className="rp-contact-location__details">
-            <span>{activeLocation.label}</span>
-            <strong>{activeLocation.name}</strong>
-            <p>{activeLocation.address}</p>
-            <a href={mapLinkUrl} target="_blank" rel="noreferrer">
-              GOOGLE MAPS에서 보기 ↗
-            </a>
-          </div>
-        </div>
-        <div className="rp-contact-map" role="tabpanel">
-          <iframe
-            key={activeLocation.id}
-            title={`XAIKOREA ${activeLocation.label} 위치`}
-            src={mapEmbedUrl}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
+      <section id="contact-next" className="rp-contact-next">
+        <p>NEXT STEP</p>
+        <h2>
+          프로젝트의 현재 단계와
+          <br />
+          해결하고 싶은 문제를 알려주세요.
+        </h2>
+        <Link to="/#contact">
+          문의 양식 작성하기 <span>↗</span>
+        </Link>
       </section>
     </>
   );

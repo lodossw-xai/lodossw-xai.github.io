@@ -1,11 +1,5 @@
 import { useEffect, useRef, type ReactElement } from 'react';
 
-type ContactStellarHeroProps = {
-  address: string;
-  phone: string;
-  email: string;
-};
-
 type Particle = {
   x: number;
   y: number;
@@ -22,11 +16,7 @@ function clamp(value: number, minimum = 0, maximum = 1): number {
   return Math.min(maximum, Math.max(minimum, value));
 }
 
-export default function ContactStellarHero({
-  address,
-  phone,
-  email,
-}: ContactStellarHeroProps): ReactElement {
+export default function ContactStellarHero(): ReactElement {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -228,36 +218,7 @@ export default function ContactStellarHero({
             <br />
             적합한 적용 방식부터 함께 검토하겠습니다.
           </span>
-          <div className="rp-stellar-hero__actions">
-            <a href="#inquiry-types">
-              문의 분야 선택하기 <b>↘</b>
-            </a>
-            <a href="#project-inquiry-form">
-              바로 문의하기 <b>↘</b>
-            </a>
-          </div>
         </div>
-        <dl className="rp-stellar-hero__quick">
-          <div>
-            <dt>OFFICE</dt>
-            <dd>{address}</dd>
-          </div>
-          <div>
-            <dt>PHONE</dt>
-            <dd>
-              <a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a>
-            </dd>
-          </div>
-          <div>
-            <dt>EMAIL</dt>
-            <dd>
-              <a href={`mailto:${email}`}>{email}</a>
-            </dd>
-          </div>
-        </dl>
-        <a className="rp-stellar-hero__scroll" href="#inquiry-types">
-          SCROLL TO START <i aria-hidden="true" />
-        </a>
       </div>
     </section>
   );

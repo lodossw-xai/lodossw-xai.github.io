@@ -998,16 +998,15 @@
 
 .rp-stellar-hero {
   position: relative;
-  height: 126svh;
-  min-height: 850px;
+  height: 92svh;
+  min-height: 720px;
   color: #fff;
   background: #0d0e0d;
 }
 .rp-stellar-hero__stage {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  min-height: 720px;
+  position: relative;
+  height: 100%;
+  min-height: inherit;
   overflow: hidden;
   isolation: isolate;
 }
@@ -1040,10 +1039,11 @@
 }
 .rp-stellar-hero__content {
   position: absolute;
-  left: clamp(70px, 10.5vw, 170px);
-  top: 49%;
-  width: min(790px, 56vw);
-  transform: translateY(-48%);
+  left: 50%;
+  top: 50%;
+  width: min(1100px, calc(100% - 48px));
+  text-align: center;
+  transform: translate(-50%, -50%);
 }
 .rp-stellar-hero__content > p,
 .rp-inquiry-types__heading > p,
@@ -1071,7 +1071,7 @@
 .rp-stellar-hero__content > span {
   display: block;
   max-width: 630px;
-  margin-top: 32px;
+  margin: 32px auto 0;
   color: rgba(255, 255, 255, 0.7);
   font-size: clamp(15px, 1.2vw, 19px);
   line-height: 1.75;
@@ -1465,7 +1465,10 @@
   font-weight: 700;
 }
 .rp-contact-map {
-  min-height: 660px;
+  position: relative;
+  height: 560px;
+  min-height: 0;
+  margin: 0;
   background: #ddd;
   overflow: hidden;
 }
@@ -1473,9 +1476,44 @@
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 660px;
+  min-height: 0;
   border: 0;
-  filter: grayscale(0.2) saturate(0.7) contrast(0.96);
+  filter: grayscale(0.15) contrast(0.95);
+}
+.rp-contact-map > a {
+  position: absolute;
+  right: 28px;
+  bottom: 25px;
+  padding: 14px 18px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.rp-contact-next {
+  padding: 140px clamp(80px, 12.5vw, 200px);
+  background: var(--rp-paper);
+}
+.rp-contact-next > p {
+  color: var(--rp-red);
+  font-size: 11px;
+  letter-spacing: 0.17em;
+}
+.rp-contact-next h2 {
+  margin: 25px 0 60px;
+  font-size: clamp(44px, 5vw, 80px);
+  line-height: 1.12;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+.rp-contact-next a {
+  display: flex;
+  justify-content: space-between;
+  width: min(480px, 100%);
+  padding: 20px 0;
+  border-bottom: 1px solid #111;
+  font-size: 17px;
 }
 
 .rp-footer {
@@ -1621,7 +1659,7 @@
     padding-left: 24px;
   }
   .rp-stellar-hero__content {
-    width: min(700px, 67vw);
+    width: min(900px, calc(100% - 48px));
   }
   .rp-inquiry-types,
   .rp-contact-inquiry {
@@ -1865,11 +1903,11 @@
     margin-top: 65px;
   }
   .rp-stellar-hero {
-    height: 110svh;
-    min-height: 720px;
+    height: 92svh;
+    min-height: 690px;
   }
   .rp-stellar-hero__stage {
-    min-height: 650px;
+    min-height: inherit;
   }
   .rp-stellar-hero canvas {
     background: radial-gradient(
@@ -1888,11 +1926,11 @@
     );
   }
   .rp-stellar-hero__content {
-    left: 24px;
-    right: 24px;
-    top: 43%;
-    width: auto;
-    transform: translateY(-48%);
+    left: 50%;
+    right: auto;
+    top: 50%;
+    width: calc(100% - 48px);
+    transform: translate(-50%, -50%);
   }
   .rp-stellar-hero__content > p {
     margin-bottom: 18px;
@@ -2003,6 +2041,19 @@
   .rp-contact-map iframe {
     min-height: 400px;
   }
+  .rp-contact-map {
+    height: 470px;
+  }
+  .rp-contact-map > a {
+    right: 16px;
+    bottom: 16px;
+  }
+  .rp-contact-next {
+    padding: 95px 24px;
+  }
+  .rp-contact-next h2 {
+    font-size: 45px;
+  }
   .rp-footer__image {
     height: 190px;
   }
@@ -2035,12 +2086,12 @@
     transform: none;
   }
   .rp-stellar-hero {
-    height: auto;
-    min-height: 820px;
+    height: 92svh;
+    min-height: 720px;
   }
   .rp-stellar-hero__stage {
     position: relative;
-    min-height: 820px;
+    min-height: inherit;
   }
 }
 
