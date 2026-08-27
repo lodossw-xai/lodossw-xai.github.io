@@ -962,11 +962,11 @@
   height: 17px;
   margin: 1px 0 0;
   padding: 0;
+  appearance: auto;
+  -webkit-appearance: checkbox;
   border: 1px solid rgba(16, 16, 15, 0.45);
   accent-color: var(--ra-red);
-}
-.ra-form-consent a {
-  border-bottom: 1px solid currentColor;
+  cursor: pointer;
 }
 .ra-form-honeypot {
   position: absolute !important;

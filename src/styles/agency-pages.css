@@ -1371,10 +1371,10 @@
   width: 17px;
   height: 17px;
   margin: 1px 0 0;
+  appearance: auto;
+  -webkit-appearance: checkbox;
   accent-color: var(--rp-red);
-}
-.rp-form-consent a {
-  border-bottom: 1px solid currentColor;
+  cursor: pointer;
 }
 .rp-form-honeypot {
   position: absolute !important;

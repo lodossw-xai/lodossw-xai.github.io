@@ -10,7 +10,7 @@ import {
   Turnstile,
   type TurnstileInstance,
 } from '@marsidev/react-turnstile';
-import { Link } from 'react-router-dom';
+import './ProjectInquiryForm.css';
 
 export type InquiryFormCopy = {
   name: string;
@@ -99,6 +99,8 @@ export default function ProjectInquiryForm({
   const [formData, setFormData] = useState<InquiryFormData>(initialFormData);
   const [turnstileToken, setTurnstileToken] = useState('');
   const [inquiryId, setInquiryId] = useState('');
+  const [hasConsent, setHasConsent] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const startedAtRef = useRef<number | undefined>(undefined);
   const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
   const contactEndpoint =
@@ -126,6 +128,23 @@ export default function ProjectInquiryForm({
     }));
   }, [selectedInquiryType]);
 
+  useEffect(() => {
+    if (!isPrivacyOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        setIsPrivacyOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isPrivacyOpen]);
+
   const handleChange = (
     event: ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -147,7 +166,7 @@ export default function ProjectInquiryForm({
     event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (!isConfigured || turnstileToken === '') {
+    if (!isConfigured || turnstileToken === '' || !hasConsent) {
       setSubmission('error');
       return;
     }
@@ -163,7 +182,7 @@ export default function ProjectInquiryForm({
           source,
           turnstileToken,
           startedAt: startedAtRef.current ?? Date.now(),
-          consent: true,
+          consent: hasConsent,
         }),
       });
       const data: unknown = await response.json().catch(() => null);
@@ -173,6 +192,7 @@ export default function ProjectInquiryForm({
       setSubmission('sent');
       setInquiryId(data.inquiryId ?? '');
       setFormData(initialFormData);
+      setHasConsent(false);
       setTurnstileToken('');
       startedAtRef.current = undefined;
       turnstileRef.current?.reset();
@@ -290,17 +310,124 @@ export default function ProjectInquiryForm({
           required
         />
       </label>
-      <label className={`${prefix}-form-consent`}>
-        <input type="checkbox" required />
-        <span>
-          {language === 'ko'
-            ? '문의 답변을 위한 개인정보 수집·이용에 동의합니다.'
-            : 'I agree to the collection and use of personal data for this inquiry.'}{' '}
-          <Link to="/privacy">
+      <div className={`${prefix}-form-consent`}>
+        <input
+          id={`${id}-consent`}
+          type="checkbox"
+          checked={hasConsent}
+          onChange={(event) => {
+            setHasConsent(event.target.checked);
+            if (submission === 'error') {
+              setSubmission('idle');
+            }
+          }}
+          required
+        />
+        <span className="xai-consent-copy">
+          <label htmlFor={`${id}-consent`}>
+            {language === 'ko'
+              ? '문의 답변을 위한 개인정보 수집·이용에 동의합니다.'
+              : 'I agree to the collection and use of personal data for this inquiry.'}
+          </label>{' '}
+          <button
+            className="xai-privacy-trigger"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded={isPrivacyOpen}
+            onClick={() => {
+              setIsPrivacyOpen(true);
+            }}
+          >
             {language === 'ko' ? '자세히 보기' : 'Learn more'}
-          </Link>
+          </button>
         </span>
-      </label>
+      </div>
+      {isPrivacyOpen && (
+        <div
+          className="xai-privacy-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={`${id}-privacy-title`}
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              setIsPrivacyOpen(false);
+            }
+          }}
+        >
+          <section className="xai-privacy-dialog__panel">
+            <button
+              className="xai-privacy-dialog__close"
+              type="button"
+              aria-label={language === 'ko' ? '안내 닫기' : 'Close details'}
+              onClick={() => {
+                setIsPrivacyOpen(false);
+              }}
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+            <p className="xai-privacy-dialog__eyebrow">
+              {language === 'ko' ? 'PRIVACY NOTICE' : 'PRIVACY NOTICE'}
+            </p>
+            <h2 id={`${id}-privacy-title`}>
+              {language === 'ko'
+                ? '문의 개인정보 수집·이용 안내'
+                : 'Inquiry privacy notice'}
+            </h2>
+            <dl>
+              <div>
+                <dt>{language === 'ko' ? '수집 항목' : 'Information collected'}</dt>
+                <dd>
+                  {language === 'ko'
+                    ? '이름, 회사·기관명, 이메일, 연락처, 관심 분야, 예상 범위, 문의 내용'
+                    : 'Name, organization, email, phone, inquiry type, expected range, and message'}
+                </dd>
+              </div>
+              <div>
+                <dt>{language === 'ko' ? '이용 목적' : 'Purpose'}</dt>
+                <dd>
+                  {language === 'ko'
+                    ? '문의 확인, 상담 진행 및 답변 제공'
+                    : 'To review, respond to, and follow up on your inquiry'}
+                </dd>
+              </div>
+              <div>
+                <dt>{language === 'ko' ? '보유 기간' : 'Retention'}</dt>
+                <dd>
+                  {language === 'ko'
+                    ? '문의 처리 목적 달성 후 파기하며, 관련 법령 또는 업무상 필요한 경우 최대 3년간 보관'
+                    : 'Deleted after the inquiry is resolved, or retained for up to three years when required by law or business needs'}
+                </dd>
+              </div>
+              <div>
+                <dt>{language === 'ko' ? '처리 경로' : 'Processing services'}</dt>
+                <dd>
+                  {language === 'ko'
+                    ? 'Cloudflare(보안 확인·전송 중계), Google Workspace Gmail(문의 메일 전달)'
+                    : 'Cloudflare (security and relay) and Google Workspace Gmail (email delivery)'}
+                </dd>
+              </div>
+            </dl>
+            <p className="xai-privacy-dialog__note">
+              {language === 'ko'
+                ? '동의를 거부할 수 있으나 온라인 문의 접수가 제한됩니다.'
+                : 'You may decline, but the online inquiry cannot be submitted.'}
+            </p>
+            <button
+              className="xai-privacy-dialog__confirm"
+              type="button"
+              onClick={() => {
+                setHasConsent(true);
+                setIsPrivacyOpen(false);
+                if (submission === 'error') {
+                  setSubmission('idle');
+                }
+              }}
+            >
+              {language === 'ko' ? '확인하고 동의하기' : 'Confirm and agree'}
+            </button>
+          </section>
+        </div>
+      )}
       <div className={`${prefix}-form-security`}>
         {turnstileSiteKey !== undefined ? (
           <Turnstile
