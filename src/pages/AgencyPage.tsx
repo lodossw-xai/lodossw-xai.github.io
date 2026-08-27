@@ -832,7 +832,7 @@ function ContactPage(): ReactElement {
     <>
       <ContactStellarHero />
       <section
-        className="rp-contact-hero"
+        className="rp-contact-hero rp-reveal rp-reveal--slow"
         aria-labelledby="original-contact-title"
       >
         <div>
@@ -873,7 +873,10 @@ function ContactPage(): ReactElement {
           </div>
         </dl>
       </section>
-      <section id="contact-map" className="rp-contact-map rp-reveal">
+      <section
+        id="contact-map"
+        className="rp-contact-map rp-reveal rp-reveal--slow"
+      >
         <iframe
           title="XAIKOREA 판교 오피스 위치"
           src={mapEmbedUrl}
@@ -884,7 +887,10 @@ function ContactPage(): ReactElement {
           GOOGLE MAPS에서 크게 보기 ↗
         </a>
       </section>
-      <section id="contact-next" className="rp-contact-next">
+      <section
+        id="contact-next"
+        className="rp-contact-next rp-reveal rp-reveal--slow"
+      >
         <p>NEXT STEP</p>
         <h2>
           프로젝트의 현재 단계와

@@ -416,6 +416,9 @@
   opacity: 1;
   transform: translateY(0);
 }
+.rp-reveal--slow {
+  transition-duration: 1.15s, 1.25s;
+}
 
 .rp-business {
   background: #fff;
@@ -1001,8 +1004,8 @@
   --rp-stellar-copy-blur: 16px;
   --rp-stellar-copy-scale: 0.94;
   position: relative;
-  height: 620svh;
-  min-height: 4100px;
+  height: 950svh;
+  min-height: 6300px;
   color: #fff;
   background: #0d0e0d;
 }
@@ -1958,8 +1961,8 @@
     margin-top: 65px;
   }
   .rp-stellar-hero {
-    height: 520svh;
-    min-height: 3300px;
+    height: 760svh;
+    min-height: 5000px;
   }
   .rp-stellar-hero__stage {
     min-height: 0;
