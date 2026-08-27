@@ -1,10 +1,21 @@
-import { useEffect, useRef, useState, type ReactElement } from 'react';
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  type ReactElement,
+} from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ContactStellarHero from '../components/contact/ContactStellarHero';
 import ProjectInquiryForm, {
   type InquiryFormCopy,
 } from '../components/contact/ProjectInquiryForm';
 import '../styles/agency-pages.css';
+
+const ContactLogoFinale = lazy(
+  () => import('../components/contact/ContactLogoFinale')
+);
 
 type AgencyPageType = 'about' | 'work' | 'careers' | 'contact';
 type ProjectCategory = 'ALL' | 'RESEARCH' | 'TAX' | 'GOVERNANCE';
@@ -471,13 +482,26 @@ function AgencyFooter(): ReactElement {
 
   return (
     <footer className="rp-footer">
-      <div className="rp-footer__image" aria-hidden="true">
-        <img
-          src="/assets/images/company/baemin-square-night.jpg"
-          alt=""
-          loading="lazy"
-        />
-      </div>
+      {location.pathname === '/contact' ? (
+        <Suspense
+          fallback={
+            <div
+              className="rp-logo-finale rp-logo-finale--loading"
+              aria-hidden="true"
+            />
+          }
+        >
+          <ContactLogoFinale />
+        </Suspense>
+      ) : (
+        <div className="rp-footer__image" aria-hidden="true">
+          <img
+            src="/assets/images/company/baemin-square-night.jpg"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+      )}
       <div className="rp-footer__grid">
         <div className="rp-footer__company">
           <img

@@ -1631,6 +1631,158 @@
   object-fit: cover;
   opacity: 0.82;
 }
+
+.rp-logo-finale {
+  position: relative;
+  min-height: clamp(520px, 64svh, 680px);
+  overflow: hidden;
+  color: #f7f5ef;
+  background:
+    radial-gradient(
+      circle at 71% 48%,
+      rgba(201, 216, 122, 0.08),
+      transparent 32%
+    ),
+    #050707;
+  isolation: isolate;
+}
+
+.rp-logo-finale--loading {
+  min-height: clamp(520px, 64svh, 680px);
+}
+
+.rp-logo-finale__canvas,
+.rp-logo-finale__canvas > div,
+.rp-logo-finale__canvas canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.rp-logo-finale__canvas {
+  z-index: 0;
+}
+
+.rp-logo-finale__veil {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 7, 7, 0.94) 0%,
+      rgba(5, 7, 7, 0.63) 36%,
+      transparent 63%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(5, 7, 7, 0.55),
+      transparent 30%,
+      transparent 76%,
+      rgba(5, 7, 7, 0.3)
+    );
+}
+
+.rp-logo-finale__copy {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: max(6vw, calc((100vw - 1600px) / 2));
+  width: min(620px, 43vw);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.rp-logo-finale__copy p {
+  margin: 0 0 30px;
+  color: #c9d87a;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+}
+
+.rp-logo-finale__copy h2 {
+  margin: 0;
+  max-width: 13.5em;
+  font-size: clamp(38px, 4.2vw, 70px);
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
+.rp-logo-finale__copy span {
+  display: inline-block;
+  min-width: 176px;
+  margin-top: 34px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(247, 245, 239, 0.34);
+  color: rgba(247, 245, 239, 0.74);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.rp-logo-finale__index {
+  position: absolute;
+  z-index: 2;
+  right: clamp(26px, 4vw, 76px);
+  bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: rgba(247, 245, 239, 0.44);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  pointer-events: none;
+}
+
+.rp-logo-finale__index i {
+  width: 42px;
+  height: 1px;
+  background: rgba(201, 216, 122, 0.62);
+}
+
+.rp-logo-finale__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(
+      circle at 70% 50%,
+      rgba(201, 216, 122, 0.1),
+      transparent 28%
+    ),
+    #050707;
+}
+
+.rp-logo-finale__fallback span {
+  position: absolute;
+  left: 70%;
+  width: min(44vw, 500px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(247, 245, 239, 0.32);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow:
+    0 0 0 22px rgba(201, 216, 122, 0.018),
+    0 0 70px rgba(201, 216, 122, 0.08);
+}
+
+.rp-logo-finale__fallback img {
+  position: absolute;
+  left: 70%;
+  width: min(14vw, 150px);
+  transform: translateX(-50%);
+  filter: brightness(4)
+    drop-shadow(0 0 18px rgba(201, 216, 122, 0.24));
+}
 .rp-footer__grid {
   display: grid;
   grid-template-columns: 0.7fr 1.8fr 0.9fr 0.8fr;
@@ -2173,6 +2325,59 @@
   }
   .rp-footer__image {
     height: 190px;
+  }
+  .rp-logo-finale,
+  .rp-logo-finale--loading {
+    min-height: clamp(420px, 58svh, 520px);
+  }
+  .rp-logo-finale__veil {
+    background:
+      linear-gradient(
+        0deg,
+        rgba(5, 7, 7, 0.94) 0%,
+        rgba(5, 7, 7, 0.7) 43%,
+        transparent 78%
+      ),
+      linear-gradient(90deg, rgba(5, 7, 7, 0.32), transparent);
+  }
+  .rp-logo-finale__copy {
+    top: auto;
+    right: 24px;
+    bottom: 34px;
+    left: 24px;
+    width: auto;
+    transform: none;
+  }
+  .rp-logo-finale__copy p {
+    margin-bottom: 14px;
+    font-size: 10px;
+  }
+  .rp-logo-finale__copy h2 {
+    max-width: 11.8em;
+    font-size: clamp(30px, 8.8vw, 44px);
+    line-height: 1.17;
+  }
+  .rp-logo-finale__copy span {
+    min-width: 138px;
+    margin-top: 20px;
+    padding-top: 12px;
+    font-size: 11px;
+  }
+  .rp-logo-finale__index {
+    display: none;
+  }
+  .rp-logo-finale__fallback span,
+  .rp-logo-finale__fallback img {
+    top: 46%;
+    left: 50%;
+  }
+  .rp-logo-finale__fallback span {
+    width: min(74vw, 350px);
+    transform: translate(-50%, -50%);
+  }
+  .rp-logo-finale__fallback img {
+    width: min(25vw, 116px);
+    transform: translate(-50%, -50%);
   }
   .rp-footer__grid {
     display: grid;
