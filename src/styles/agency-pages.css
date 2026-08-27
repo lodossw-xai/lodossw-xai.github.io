@@ -997,7 +997,7 @@
 }
 
 .rp-stellar-hero {
-  --rp-stellar-copy-opacity: 0.02;
+  --rp-stellar-copy-opacity: 0;
   --rp-stellar-copy-blur: 16px;
   --rp-stellar-copy-scale: 0.94;
   position: relative;
@@ -1046,7 +1046,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: min(1100px, calc(100% - 48px));
+  width: min(720px, calc(100% - 72px));
   opacity: var(--rp-stellar-copy-opacity);
   filter: blur(var(--rp-stellar-copy-blur));
   text-align: center;
@@ -1067,7 +1067,7 @@
 .rp-stellar-hero__content h1 {
   margin: 0;
   color: #fff;
-  font-size: clamp(52px, 6vw, 96px);
+  font-size: clamp(46px, 4.3vw, 68px);
   font-weight: 800;
   line-height: 1.04;
   letter-spacing: -0.05em;
@@ -1986,7 +1986,7 @@
     left: 50%;
     right: auto;
     top: 50%;
-    width: calc(100% - 48px);
+    width: calc(100% - 56px);
     transform: translate(-50%, -50%) scale(var(--rp-stellar-copy-scale));
   }
   .rp-stellar-hero__content > p {
@@ -1994,7 +1994,7 @@
     font-size: 9px;
   }
   .rp-stellar-hero__content h1 {
-    font-size: clamp(43px, 12.4vw, 63px);
+    font-size: clamp(29px, 8.2vw, 38px);
     line-height: 1.04;
   }
   .rp-stellar-hero__content > span {

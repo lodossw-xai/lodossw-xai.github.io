@@ -59,7 +59,7 @@ export default function ContactStellarHero(): ReactElement {
         : width < 760
           ? Math.min(1900, Math.max(1250, Math.round((width * height) / 610)))
           : Math.min(4300, Math.max(3000, Math.round((width * height) / 510)));
-      const baseRadius = Math.min(width, height) * (width < 760 ? 0.31 : 0.36);
+      const baseRadius = Math.min(width, height) * (width < 760 ? 0.43 : 0.44);
 
       particles = Array.from({ length: count }, () => {
         const shell = Math.pow(Math.random(), 2.2);
@@ -103,34 +103,47 @@ export default function ContactStellarHero(): ReactElement {
       const bounds = section.getBoundingClientRect();
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
       scrollProgress = reducedMotion ? 1 : clamp(-bounds.top / travel);
-      const copyProgress = reducedMotion
-        ? 1
-        : smooth((scrollProgress - 0.7) / 0.23);
+      const copyIn = reducedMotion ? 1 : smooth((scrollProgress - 0.61) / 0.16);
+      const copyOut = reducedMotion
+        ? 0
+        : smooth((scrollProgress - 0.84) / 0.07);
+      const copyProgress = copyIn * (1 - copyOut);
       section.style.setProperty(
         '--rp-stellar-copy-opacity',
-        String(0.02 + copyProgress * 0.98)
+        String(copyProgress)
       );
       section.style.setProperty(
         '--rp-stellar-copy-blur',
-        `${String((1 - copyProgress) * 16)}px`
+        `${String((1 - copyIn) * 16 + copyOut * 8)}px`
       );
       section.style.setProperty(
         '--rp-stellar-copy-scale',
-        String(0.94 + copyProgress * 0.06)
+        String(0.94 + copyIn * 0.06 - copyOut * 0.035)
       );
     };
 
     const draw = (time = 0): void => {
       drawingContext.clearRect(0, 0, width, height);
-      const gather = smooth((scrollProgress - 0.09) / 0.7);
-      const settle = smooth((scrollProgress - 0.71) / 0.22);
-      const complete = smooth((scrollProgress - 0.86) / 0.1);
+      const gather = smooth((scrollProgress - 0.07) / 0.62);
+      const settle = smooth((scrollProgress - 0.62) / 0.16);
+      const complete = smooth((scrollProgress - 0.72) / 0.09);
       const whirlIn = smooth((scrollProgress - 0.12) / 0.21);
-      const whirlOut = smooth((scrollProgress - 0.62) / 0.24);
+      const whirlOut = smooth((scrollProgress - 0.55) / 0.19);
       const whirl = whirlIn * (1 - whirlOut);
+      const axialTurn = reducedMotion
+        ? 0
+        : smooth((scrollProgress - 0.915) / 0.075);
+      const axialAngle = axialTurn * Math.PI * 2;
+      const rawAxialProjection = Math.cos(axialAngle);
+      const axialProjection =
+        Math.abs(rawAxialProjection) < 0.045
+          ? rawAxialProjection < 0
+            ? -0.045
+            : 0.045
+          : rawAxialProjection;
       const centerX = width * 0.5 + pointerX * 10;
       const centerY = height * 0.5 + pointerY * 7;
-      const baseRadius = Math.min(width, height) * (width < 760 ? 0.31 : 0.36);
+      const baseRadius = Math.min(width, height) * (width < 760 ? 0.43 : 0.44);
       const glowRadius = baseRadius * 1.45;
       const glow = drawingContext.createRadialGradient(
         centerX,
@@ -231,16 +244,19 @@ export default function ContactStellarHero(): ReactElement {
           (1 - settle);
         const orbitRadius =
           startRadius * (1 - gather) + targetRadius * gather + spiralPulse;
-        const orbitX = centerX + Math.cos(angle) * orbitRadius;
+        const orbitX =
+          centerX + Math.cos(angle) * orbitRadius * axialProjection;
         const orbitY = centerY + Math.sin(angle) * orbitRadius;
         const x = scatterX * (1 - gather) + orbitX * gather;
         const y = scatterY * (1 - gather) + orbitY * gather;
+        const axialDepth = Math.sin(angle) * Math.sin(axialAngle);
         const twinkle =
           0.82 + Math.sin(time * 0.0011 * particle.speed + particle.seed) * 0.18;
         const alpha = clamp(
           (0.48 + particle.depth * 0.58 + complete * 0.1) *
             particle.brightness *
-            twinkle,
+            twinkle *
+            (1 - axialTurn * 0.22 + axialDepth * 0.22),
           0.3,
           1
         );
@@ -251,7 +267,8 @@ export default function ContactStellarHero(): ReactElement {
             (0.034 + whirl * 0.055) * (0.68 + particle.speed) * gather;
           drawingContext.beginPath();
           drawingContext.moveTo(
-            centerX + Math.cos(trailAngle) * orbitRadius,
+            centerX +
+              Math.cos(trailAngle) * orbitRadius * axialProjection,
             centerY + Math.sin(trailAngle) * orbitRadius
           );
           drawingContext.lineTo(x, y);
@@ -307,6 +324,7 @@ export default function ContactStellarHero(): ReactElement {
         drawingContext.save();
         drawingContext.translate(centerX, centerY);
         drawingContext.rotate(time * 0.00007);
+        drawingContext.scale(axialProjection, 1);
         drawingContext.globalCompositeOperation = 'lighter';
         [0.82, 1, 1.19].forEach((scale, index) => {
           drawingContext.save();
@@ -328,16 +346,17 @@ export default function ContactStellarHero(): ReactElement {
         });
         drawingContext.restore();
 
+        const coreOpacity = orbitOpacity * (1 - axialTurn);
         const core = drawingContext.createRadialGradient(
           centerX,
           centerY,
           0,
           centerX,
           centerY,
-          baseRadius * 0.5
+          baseRadius * 0.88
         );
-        core.addColorStop(0, `rgba(0,0,0,${String(orbitOpacity * 0.76)})`);
-        core.addColorStop(0.62, `rgba(8,9,8,${String(orbitOpacity * 0.42)})`);
+        core.addColorStop(0, `rgba(0,0,0,${String(coreOpacity * 0.86)})`);
+        core.addColorStop(0.72, `rgba(8,9,8,${String(coreOpacity * 0.58)})`);
         core.addColorStop(1, 'rgba(0,0,0,0)');
         drawingContext.fillStyle = core;
         drawingContext.fillRect(0, 0, width, height);
