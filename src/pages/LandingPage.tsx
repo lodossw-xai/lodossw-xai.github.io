@@ -21,6 +21,7 @@ type OfficeLocationId = 'headOffice' | 'seongbukBranch';
 type SectionId =
   | 'top'
   | 'solutions'
+  | 'intelligence-core'
   | 'work'
   | 'process'
   | 'experts'
@@ -141,6 +142,7 @@ const menuPreviewVisuals: Record<string, string> = {
 const sectionIndicator: ReadonlyArray<{ id: SectionId; label: string }> = [
   { id: 'top', label: 'Intro' },
   { id: 'solutions', label: 'Evidence' },
+  { id: 'intelligence-core', label: 'Core' },
   { id: 'work', label: 'Work' },
   { id: 'process', label: 'Process' },
   { id: 'experts', label: 'Network' },
@@ -247,6 +249,16 @@ const copy = {
         '개정과 신규 데이터를 반영하며 결과 품질을 점검합니다.',
       ],
     ],
+    coreEyebrow: 'XAIKOREA INTELLIGENCE CORE',
+    coreTitle: (
+      <>
+        지식의 흐름을
+        <br />
+        <em>설명 가능한 구조로.</em>
+      </>
+    ),
+    coreText:
+      '질문을 읽고, 관련 근거를 연결하고, 검토 이력을 남기는 XAIKOREA의 지능형 업무 흐름입니다.',
     casesEyebrow: 'SELECTED WORK',
     casesTitle: (
       <>
@@ -555,6 +567,16 @@ const copy = {
         'New information and regulatory updates are reflected while answer quality is continuously reviewed.',
       ],
     ],
+    coreEyebrow: 'XAIKOREA INTELLIGENCE CORE',
+    coreTitle: (
+      <>
+        Turn knowledge flows into
+        <br />
+        <em>explainable structures.</em>
+      </>
+    ),
+    coreText:
+      'XAIKOREA reads the question, links relevant evidence, and preserves review history in one intelligent work flow.',
     casesEyebrow: 'SELECTED WORK',
     casesTitle: (
       <>
@@ -1543,6 +1565,92 @@ export default function LandingPage(): ReactElement {
         </section>
 
         <section
+          id="intelligence-core"
+          className="ra-section ra-core"
+          aria-labelledby="intelligence-core-title"
+          data-section="INTELLIGENCE CORE"
+          onPointerEnter={() => {
+            setIsCasePaused(true);
+          }}
+          onPointerLeave={() => {
+            setIsCasePaused(false);
+          }}
+          onFocus={() => {
+            setIsCasePaused(true);
+          }}
+          onBlur={() => {
+            setIsCasePaused(false);
+          }}
+        >
+          <img
+            className="ra-core__fallback"
+            src="/assets/images/company/codebase-intelligence-platform.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            aria-hidden="true"
+          />
+          <Suspense fallback={null}>
+            {activeSection === 'intelligence-core' ? (
+              <IntelligenceCoreCanvas stateIndex={activeCase} />
+            ) : null}
+          </Suspense>
+          <span className="ra-core__veil" aria-hidden="true" />
+          <span
+            className="ra-vertical-label ra-vertical-label--light"
+            aria-hidden="true"
+          >
+            INTELLIGENCE CORE
+          </span>
+          <div className="ra-shell ra-core__inner">
+            <div className="ra-core__intro">
+              <p className="ra-eyebrow">{content.coreEyebrow}</p>
+              <h2 id="intelligence-core-title">{content.coreTitle}</h2>
+              <p>{content.coreText}</p>
+            </div>
+            <div
+              id="intelligence-core-panel"
+              className="ra-core__state"
+              role="tabpanel"
+              aria-live="polite"
+            >
+              <span>{activeStudy.tag}</span>
+              <strong>{activeStudy.panelTitle}</strong>
+              <small>{activeStudy.panelMeta}</small>
+            </div>
+            <div
+              className="ra-core-switcher"
+              role="tablist"
+              aria-label={content.coreEyebrow}
+            >
+              {content.cases.map((study, index) => (
+                <button
+                  key={study.label}
+                  type="button"
+                  role="tab"
+                  aria-controls="intelligence-core-panel"
+                  aria-selected={index === activeCase}
+                  className={index === activeCase ? 'is-active' : ''}
+                  onPointerEnter={() => {
+                    setActiveCase(index);
+                  }}
+                  onFocus={() => {
+                    setActiveCase(index);
+                  }}
+                  onClick={() => {
+                    setActiveCase(index);
+                  }}
+                >
+                  <span>0{index + 1}</span>
+                  {study.label}
+                  <i aria-hidden="true" />
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section
           id="work"
           className="ra-section ra-work"
           aria-labelledby="work-title"
@@ -1609,11 +1717,6 @@ export default function LandingPage(): ReactElement {
                   src={caseVisuals[activeCase] ?? caseVisuals[0]}
                   alt=""
                 />
-                <Suspense fallback={null}>
-                  {activeSection === 'work' ? (
-                    <IntelligenceCoreCanvas stateIndex={activeCase} />
-                  ) : null}
-                </Suspense>
                 <span className="ra-orb ra-orb--one" />
                 <span className="ra-orb ra-orb--two" />
                 <span className="ra-grid-lines" />

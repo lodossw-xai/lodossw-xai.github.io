@@ -1473,7 +1473,7 @@
   animation: ra-preview-in 0.48s both;
 }
 
-/* The standalone XAIKOREA 3D brand engine, synchronized with the WORK tabs. */
+/* Full-bleed XAIKOREA 3D intelligence core, synchronized with the work states. */
 .ra-intelligence-core {
   position: absolute;
   inset: 0;
@@ -1505,22 +1505,200 @@
   width: 100% !important;
   height: 100% !important;
 }
-.ra-case__art .ra-orb,
-.ra-case__art .ra-grid-lines {
-  opacity: 0;
+
+.ra-core {
+  position: relative;
+  min-height: clamp(660px, 86vh, 920px);
+  padding: 0;
+  overflow: hidden;
+  color: #fff;
+  background: #080b0b;
 }
-.ra-case__art::after {
-  z-index: 1;
+.ra-core__fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  filter: saturate(0.72) contrast(1.08) brightness(0.58);
 }
-.ra-case__window {
-  z-index: 3 !important;
-  border-color: rgba(255, 255, 255, 0.36);
-  background: rgba(13, 15, 15, 0.3);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(11px) saturate(0.86);
+.ra-core__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(5, 7, 7, 0.8), transparent 58%),
+    linear-gradient(0deg, rgba(5, 7, 7, 0.86), transparent 48%),
+    radial-gradient(circle at 58% 45%, transparent 24%, rgba(5, 7, 7, 0.2) 78%);
 }
-.ra-case__window-header {
-  background: rgba(10, 12, 12, 0.32);
+.ra-core__inner {
+  position: relative;
+  z-index: 3;
+  min-height: clamp(660px, 86vh, 920px);
+  padding-top: clamp(92px, 12vh, 132px);
+  padding-bottom: 44px;
+}
+.ra-core__intro {
+  max-width: 760px;
+}
+.ra-core__intro .ra-eyebrow {
+  color: var(--ra-lime);
+}
+.ra-core__intro h2 {
+  max-width: 760px;
+  margin: 24px 0 0;
+  font-size: clamp(48px, 6vw, 88px);
+  line-height: 0.98;
+  letter-spacing: -0.075em;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+.ra-core__intro h2 em {
+  color: var(--ra-lime);
+  font-style: normal;
+}
+.ra-core__intro > p:last-child {
+  max-width: 540px;
+  margin: 25px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  line-height: 1.72;
+  text-wrap: pretty;
+  word-break: keep-all;
+}
+.ra-core__state {
+  position: absolute;
+  left: 24px;
+  bottom: 150px;
+  display: grid;
+  gap: 7px;
+  max-width: 470px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.52);
+}
+.ra-core__state span {
+  color: var(--ra-lime);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ra-core__state strong {
+  font-size: clamp(22px, 2.3vw, 34px);
+  line-height: 1.18;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+.ra-core__state small {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+.ra-core-switcher {
+  position: absolute;
+  right: 24px;
+  bottom: 42px;
+  left: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255, 255, 255, 0.34);
+}
+.ra-core-switcher button {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 17px 0 0;
+  color: rgba(255, 255, 255, 0.48);
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.35s ease;
+}
+.ra-core-switcher button > span {
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
+.ra-core-switcher button > i {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+}
+.ra-core-switcher button > i::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ra-lime);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s ease;
+}
+.ra-core-switcher button.is-active {
+  color: #fff;
+}
+.ra-core-switcher button.is-active > i::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 960px) {
+  .ra-core,
+  .ra-core__inner {
+    min-height: 760px;
+  }
+  .ra-core__intro {
+    max-width: 650px;
+  }
+  .ra-core__state {
+    right: 24px;
+    max-width: 430px;
+  }
+}
+
+@media (max-width: 680px) {
+  .ra-core,
+  .ra-core__inner {
+    min-height: 720px;
+  }
+  .ra-core__inner {
+    padding-top: 92px;
+  }
+  .ra-core__intro h2 {
+    font-size: clamp(39px, 11vw, 52px);
+    line-height: 1.02;
+  }
+  .ra-core__intro > p:last-child {
+    max-width: 88%;
+    font-size: 12px;
+  }
+  .ra-core__state {
+    right: 16px;
+    bottom: 154px;
+    left: 16px;
+  }
+  .ra-core__state strong {
+    max-width: 340px;
+    font-size: 23px;
+  }
+  .ra-core-switcher {
+    right: 16px;
+    bottom: 32px;
+    left: 16px;
+  }
+  .ra-core-switcher button {
+    grid-template-columns: 1fr;
+    gap: 5px;
+    padding-top: 14px;
+    font-size: 10px;
+  }
 }
 .ra-case__art::after {
   content: '';
@@ -3260,6 +3438,12 @@ html {
   line-height: 0.98;
 }
 
+.ra-site .ra-core__intro h2 {
+  max-width: 760px;
+  font-size: clamp(48px, 6vw, 88px);
+  line-height: 0.98;
+}
+
 .ra-principles__intro h2 {
   max-width: 760px;
   font-size: clamp(42px, 4.15vw, 60px);
@@ -3298,6 +3482,11 @@ html {
     font-size: clamp(36px, 10.5vw, 46px);
     line-height: 1.04;
     letter-spacing: -0.065em;
+  }
+
+  .ra-site .ra-core__intro h2 {
+    font-size: clamp(39px, 11vw, 52px);
+    line-height: 1.02;
   }
 }
 
