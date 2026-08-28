@@ -318,6 +318,8 @@ function scrollToContactInquiry(): void {
 
 function AgencyFooter(): ReactElement {
   const location = useLocation();
+  const normalizedPathname = location.pathname.replace(/\/+$/, '') || '/';
+  const isContactRoute = normalizedPathname === '/contact';
 
   return (
     <footer className="rp-footer">
@@ -355,7 +357,7 @@ function AgencyFooter(): ReactElement {
           <Link
             to="/contact#contact-inquiry"
             onClick={() => {
-              if (location.pathname === '/contact') {
+              if (isContactRoute) {
                 window.setTimeout(scrollToContactInquiry, 0);
               }
             }}
@@ -366,7 +368,7 @@ function AgencyFooter(): ReactElement {
             to="/contact?type=company-profile#contact-inquiry"
             onClick={() => {
               if (
-                location.pathname === '/contact' &&
+                isContactRoute &&
                 location.search === '?type=company-profile'
               ) {
                 window.setTimeout(scrollToContactInquiry, 0);
@@ -384,7 +386,7 @@ function AgencyFooter(): ReactElement {
           <Link to="/terms">TERMS</Link>
         </div>
       </div>
-      {location.pathname === '/contact' ? (
+      {isContactRoute ? (
         <Suspense
           fallback={
             <div
