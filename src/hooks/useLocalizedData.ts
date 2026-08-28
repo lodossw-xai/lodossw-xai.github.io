@@ -12,10 +12,22 @@ import {
 } from '../data';
 import useLanguageStore from '../store/languageStore';
 
+interface LocalizedData {
+  hero: (typeof heroData)[Language];
+  services: (typeof servicesData)[Language];
+  advisors: (typeof advisorsData)[Language];
+  team: (typeof teamData)[Language];
+  faq: (typeof faqData)[Language];
+  contact: (typeof contactData)[Language];
+  navigation: (typeof navigationData)[Language];
+  footer: (typeof footerData)[Language];
+  language: Language;
+}
+
 /**
  * Hook to get localized data based on current language
  */
-export function useLocalizedData() {
+export function useLocalizedData(): LocalizedData {
   const { language } = useLanguageStore();
   const lang = language as Language;
 
