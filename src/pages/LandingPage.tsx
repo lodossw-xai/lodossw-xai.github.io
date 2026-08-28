@@ -1192,6 +1192,7 @@ export default function LandingPage(): ReactElement {
 
       <nav
         className={`ra-section-indicator ${isScrolled ? 'is-visible' : ''}`}
+        data-ra-brand-nav="section-indicator"
         aria-label={language === 'ko' ? '현재 섹션' : 'Current section'}
       >
         {sectionIndicator.map(({ id, label }, index) => (
@@ -1243,7 +1244,10 @@ export default function LandingPage(): ReactElement {
                 </a>
               </div>
             </div>
-            <nav aria-label="Mobile navigation">
+            <nav
+              data-ra-brand-nav="fullscreen-menu"
+              aria-label="Mobile navigation"
+            >
               {globalNavigation.map(([label, target], index) => (
                 <Link
                   to={target}
