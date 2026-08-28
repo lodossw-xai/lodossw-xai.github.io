@@ -321,35 +321,13 @@ function AgencyFooter(): ReactElement {
 
   return (
     <footer className="rp-footer">
-      {location.pathname === '/contact' ? (
-        <>
-          <Suspense
-            fallback={
-              <div
-                className="rp-logo-finale rp-logo-finale--loading"
-                aria-hidden="true"
-              />
-            }
-          >
-            <ContactLogoFinale />
-          </Suspense>
-          <div className="rp-footer__image" aria-hidden="true">
-            <img
-              src="/assets/images/company/baemin-square-night.jpg"
-              alt=""
-              loading="lazy"
-            />
-          </div>
-        </>
-      ) : (
-        <div className="rp-footer__image" aria-hidden="true">
-          <img
-            src="/assets/images/company/baemin-square-night.jpg"
-            alt=""
-            loading="lazy"
-          />
-        </div>
-      )}
+      <div className="rp-footer__image" aria-hidden="true">
+        <img
+          src="/assets/images/company/baemin-square-night.jpg"
+          alt=""
+          loading="lazy"
+        />
+      </div>
       <div className="rp-footer__grid">
         <div className="rp-footer__company">
           <img
@@ -406,6 +384,18 @@ function AgencyFooter(): ReactElement {
           <Link to="/terms">TERMS</Link>
         </div>
       </div>
+      {location.pathname === '/contact' ? (
+        <Suspense
+          fallback={
+            <div
+              className="rp-logo-finale rp-logo-finale--loading"
+              aria-hidden="true"
+            />
+          }
+        >
+          <ContactLogoFinale />
+        </Suspense>
+      ) : null}
     </footer>
   );
 }
