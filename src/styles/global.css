@@ -346,8 +346,12 @@ button,
     border-color: rgb(55, 65, 81);
   }
 
-  /* Navigation */
-  :root.dark nav {
+  /* Legacy fixed navigation only.
+     The redesigned site has several semantic <nav> elements (including the
+     full-screen brand menu) whose backgrounds are owned by redesign.css.
+     Targeting every nav here caused the menu column to turn navy whenever a
+     visitor's OS or saved preference enabled dark mode. */
+  :root.dark nav.fixed {
     background-color: rgba(15, 23, 42, 0.9);
     border-bottom-color: rgb(31, 41, 55);
   }
